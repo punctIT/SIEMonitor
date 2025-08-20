@@ -2,65 +2,80 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <thread>
 #include <arpa/inet.h>
+#include <iostream>
+#include "ClientListener.h"
 
-#define PORT 12345
-#define BUFFER_SIZE 1024
 
-int start_client() {
-    int server_fd, client_fd;
-    struct sockaddr_in server_addr, client_addr;
-    socklen_t client_len = sizeof(client_addr);
-    char buffer[BUFFER_SIZE];
-
-    // 1. Creare socket
+ClientListener::ClientListener(){
+    std::cout<<"ClientListenerServer start"<<std::endl;
+}
+ClientListener& ClientListener::set_port(int port){
+    this->port=port;
+    return *this;
+}
+void ClientListener::server_configure(){
+    struct sockaddr_in server_addr;
+    // Create Socket
     if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
-        perror("socket failed");
-        exit(EXIT_FAILURE);
+        throw std::runtime_error("Error socket");
     }
 
-    // 2. Setare adresa server
+    // Set server adress
     server_addr.sin_family = AF_INET;
-    server_addr.sin_addr.s_addr = INADDR_ANY; // orice IP
-    server_addr.sin_port = htons(PORT);
+    server_addr.sin_addr.s_addr = INADDR_ANY;
+    server_addr.sin_port = htons(this->port);
 
     // 3. Bind socket
     if (bind(server_fd, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0) {
-        perror("bind failed");
-        close(server_fd);
-        exit(EXIT_FAILURE);
+        throw std::runtime_error("Error bind");
     }
 
-    // 4. Listen pentru conexiuni
+    // 4. Listen for conextions
     if (listen(server_fd, 1) < 0) {
-        perror("listen failed");
-        close(server_fd);
-        exit(EXIT_FAILURE);
+        throw std::runtime_error("Error listen ");
     }
-
-    printf("Server TCP ascultă pe portul %d...\n", PORT);
-
-    // 5. Accept conexiune
-    if ((client_fd = accept(server_fd, (struct sockaddr *)&client_addr, &client_len)) < 0) {
-        perror("accept failed");
-        close(server_fd);
-        exit(EXIT_FAILURE);
+}
+void ClientListener::send_receive(int client_fd){
+    const int buffer_size=1024;
+    char buffer[buffer_size];
+    while(true){
+        int bytes_read = read(client_fd, buffer, buffer_size - 1);
+        if (bytes_read > 0) {
+            buffer[bytes_read] = '\0';
+            printf("Am primit: %s\n", buffer);
+        } else if (bytes_read == 0) {
+            // clientul s-a închis normal
+            printf("Client deconectat.\n");
+            close(client_fd);
+            break; // iesim din bucla clientului
+        } else {
+            // eroare la read
+            perror("read");
+            close(client_fd);
+            break;
+        }
     }
+}
+void ClientListener::start_listen(){
+    printf("Server TCP ascultă pe portul %d...\n", this->port);
+    sockaddr_in client_addr;
+    socklen_t client_len = sizeof(client_addr);
+    int client_fd;
 
-    printf("Client conectat!\n");
+    while(true){
+        if ((client_fd = accept(server_fd, (struct sockaddr *)&client_addr, &client_len)) < 0) {
+            perror("accept failed");
+            continue;
+        }
 
-    // 6. Citire date de la client
-    int bytes_read;
-    while ((bytes_read = read(client_fd, buffer, BUFFER_SIZE - 1)) > 0) {
-        buffer[bytes_read] = '\0'; // terminator string
-        printf("Am primit: %s\n", buffer);
+        printf("Client connected!\n");
+        std::thread client_thread(&ClientListener::send_receive, this, client_fd);
+        client_thread.detach(); 
+        
     }
-
-    printf("Client deconectat.\n");
-
-    // 7. Închidere socket-uri
-    close(client_fd);
+    
+    
     close(server_fd);
-
-    return 0;
 }

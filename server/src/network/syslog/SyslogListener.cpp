@@ -7,6 +7,7 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <poll.h>
+#include <unordered_map>
 
 SyslogListener::SyslogListener(){
     std::cout<<"OK";
@@ -17,6 +18,10 @@ SyslogListener& SyslogListener::set_port(int port){
 }
 SyslogListener& SyslogListener::set_maximum_clients(int clients_number){
     this->max_clients=clients_number;
+    return *this;
+}
+SyslogListener& SyslogListener::set_thread_safe_quere(ThreadSafeQueue <std::string>* queue){
+    this->queue= queue;
     return *this;
 }
 SyslogListener& SyslogListener::configure_server(){
@@ -39,12 +44,34 @@ SyslogListener& SyslogListener::configure_server(){
     }
     return *this;
 }
+
+/*read in chunks , and write in queue , message by message , (message end with \n)*/
+void SyslogListener::write_logs_in_queue(int fd){
+    const int buffer_size=4096;
+    char buffer[buffer_size];
+    int n = read(fd, buffer, buffer_size - 1);
+    std::unordered_map<int, std::string> client_buffers;
+    if (n > 0) {
+        buffer[n] = '\0';
+        client_buffers[fd] += buffer;
+        std::string& client_buffer = client_buffers[fd];
+        size_t pos = 0;
+        while ((pos = client_buffer.find('\n')) != std::string::npos) {
+            std::string complete_message = client_buffer.substr(0, pos);
+            if (!complete_message.empty()) {
+                this->queue->push(complete_message);
+            }
+            client_buffer.erase(0, pos + 1);
+        }
+    }
+    else {
+        perror("read error");
+    }
+}
 void SyslogListener::listen_for_logs(){
     std::cout << "[INFO] Server listen at " << this->port << std::endl;
-    
-    const int buffer_size=100;
-    char buffer[buffer_size];
     std::vector<pollfd> fds;
+
     pollfd server_poll;
     server_poll.fd = this->server_fd;
     server_poll.events = POLLIN;
@@ -69,16 +96,7 @@ void SyslogListener::listen_for_logs(){
                         std::cout << "[INFO] Client connected: fd=" << client_fd << std::endl;
                     }
                 } else {
-                    int n = read(fds[i].fd, buffer, buffer_size - 1);
-                    if (n <= 0) {
-                        std::cout << "[INFO] Client disconnected: fd=" << fds[i].fd << std::endl;
-                        close(fds[i].fd);
-                        fds.erase(fds.begin() + i);
-           
-                    } else {
-                        buffer[n] = '\0';
-                        std::cout << "[LOG] " << buffer;
-                    }
+                    write_logs_in_queue( fds[i].fd);
                 }
             }
         }
