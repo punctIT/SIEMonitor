@@ -2,13 +2,15 @@
 
 #include <string>
 #include "../../log_parser/ThreadSafeQueue.h"
+#include <unordered_map>
 class SyslogListener{
     private:
         int port;
         int max_clients;
         int server_fd;
         ThreadSafeQueue <std::string> *queue;
-        void write_logs_in_queue(int fd);
+        std::unordered_map<int, std::string> client_buffers;
+        bool write_logs_in_queue(int fd);
     public:
         SyslogListener();
         SyslogListener& set_port(int port);
