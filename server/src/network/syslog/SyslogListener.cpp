@@ -7,10 +7,10 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <poll.h>
-#include <unordered_map>
+
 
 SyslogListener::SyslogListener(){
-    std::cout<<"OK";
+    std::cout<<"Start SyslogListener"<<std::endl;
 }
 SyslogListener& SyslogListener::set_port(int port){
     this->port=port;
@@ -30,6 +30,12 @@ SyslogListener& SyslogListener::configure_server(){
     if (this->server_fd < 0) {
         throw std::runtime_error("Error socket");
     }
+
+    int opt = 1;
+    if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0) {
+        throw std::runtime_error("Error setsockopt");
+    }
+    
     memset(&addr, 0, sizeof(addr));
     addr.sin_family = AF_INET;
     addr.sin_port = htons(this->port);
@@ -46,11 +52,10 @@ SyslogListener& SyslogListener::configure_server(){
 }
 
 /*read in chunks , and write in queue , message by message , (message end with \n)*/
-void SyslogListener::write_logs_in_queue(int fd){
+bool SyslogListener::write_logs_in_queue(int fd){
     const int buffer_size=4096;
     char buffer[buffer_size];
     int n = read(fd, buffer, buffer_size - 1);
-    std::unordered_map<int, std::string> client_buffers;
     if (n > 0) {
         buffer[n] = '\0';
         client_buffers[fd] += buffer;
@@ -64,9 +69,19 @@ void SyslogListener::write_logs_in_queue(int fd){
             client_buffer.erase(0, pos + 1);
         }
     }
-    else {
-        perror("read error");
+     else if (n == 0) {
+        // Client disconnected gracefully
+        std::cout << "[INFO] Client disconnected: fd=" << fd << std::endl;
+        client_buffers.erase(fd);
+        return false; // Close connection
     }
+    else {
+        // Error occurred
+        perror("read error");
+        client_buffers.erase(fd);
+        return false; // Close connection
+    }
+    return true;
 }
 void SyslogListener::listen_for_logs(){
     std::cout << "[INFO] Server listen at " << this->port << std::endl;
@@ -96,7 +111,11 @@ void SyslogListener::listen_for_logs(){
                         std::cout << "[INFO] Client connected: fd=" << client_fd << std::endl;
                     }
                 } else {
-                    write_logs_in_queue( fds[i].fd);
+                    if (!write_logs_in_queue(fds[i].fd)) {
+                        // Client disconnected or error - close and remove
+                        close(fds[i].fd);
+                        fds.erase(fds.begin() + i);
+                    }
                 }
             }
         }
