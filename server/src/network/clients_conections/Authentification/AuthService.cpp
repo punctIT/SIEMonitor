@@ -2,7 +2,7 @@
 #include <sqlite3.h>
 #include <iostream>
 #include <filesystem>
-
+#include <optional>
 AuthService::AuthService(){
    
     const char *sql = 
@@ -30,6 +30,6 @@ AuthService&  AuthService::set_password_db(std::string path){
     }
     return *this;
 }
-bool AuthService::check_login(std::string username,std::string password){
-    return true;
+std::optional<std::string> AuthService::check_login(std::string username,std::string password){
+    return std::nullopt;
 }

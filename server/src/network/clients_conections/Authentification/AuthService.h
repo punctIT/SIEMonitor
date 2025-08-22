@@ -3,6 +3,8 @@
 #include <sqlite3.h>
 #include <string>
 #include "../../../utils/DBComandExecutor.h"
+#include <optional>
+
 class AuthService{
     private:
         DBComandExecutor password_db;
@@ -10,5 +12,5 @@ class AuthService{
     public:
         AuthService();
         AuthService& set_password_db(std::string);
-        bool check_login(std::string ,std::string);
+        std::optional<std::string>  check_login(std::string ,std::string);
 };

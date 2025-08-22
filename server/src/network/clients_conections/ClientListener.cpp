@@ -10,7 +10,14 @@
 
 ClientListener::ClientListener(){
     std::cout<<"ClientListenerServer start"<<std::endl;
-    auth.set_password_db("Password.db");
+    try{
+        auth.set_password_db("Password.db");
+    }
+    catch (std::exception &e) {
+        std::cout<<e.what()<<std::endl;
+        exit(2);
+    }
+    
 }
 ClientListener& ClientListener::set_port(int port){
     this->port=port;
@@ -41,18 +48,19 @@ void ClientListener::server_configure(){
 void ClientListener::send_receive(int client_fd){
     const int buffer_size=1024;
     char buffer[buffer_size];
+    std::string username="";
     while(true){
         int bytes_read = read(client_fd, buffer, buffer_size - 1);
         if (bytes_read > 0) {
             buffer[bytes_read] = '\0';
             printf("Am primit: %s\n", buffer);
         } else if (bytes_read == 0) {
-            // clientul s-a închis normal
+            // clientul closes normali
             printf("Client deconectat.\n");
             close(client_fd);
-            break; // iesim din bucla clientului
+            break; 
         } else {
-            // eroare la read
+            // read error
             perror("read");
             close(client_fd);
             break;
@@ -60,7 +68,7 @@ void ClientListener::send_receive(int client_fd){
     }
 }
 void ClientListener::start_listen(){
-    printf("Server TCP ascultă pe portul %d...\n", this->port);
+    printf("Server TCP for clients listen at %d...\n", this->port);
     sockaddr_in client_addr;
     socklen_t client_len = sizeof(client_addr);
     int client_fd;
