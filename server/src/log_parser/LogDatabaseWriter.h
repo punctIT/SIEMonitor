@@ -1,13 +1,14 @@
 #pragma once 
 
-#include "ThreadSafeQueue.h"
+#include "../utils/ThreadSafeQueue.h"
+#include "../utils/DBComandExecutor.h"
 #include <string>
 #include <sqlite3.h>
 
 
 class LogDatabaseWriter{
     ThreadSafeQueue <std::string> *queue;
-    sqlite3* db;
+    DBComandExecutor db;
     public:
         LogDatabaseWriter();
         LogDatabaseWriter& set_thread_safe_quere(ThreadSafeQueue <std::string>*);

@@ -1,6 +1,5 @@
 #include "LogDatabaseWriter.h"
 #include <iostream>
-#include <sqlite3.h>
 #include <sstream>
 
 #include <chrono>
@@ -8,9 +7,6 @@
 
 LogDatabaseWriter::LogDatabaseWriter(){
     std::cout<<"Start writing log in DataBase"<<std::endl;
-    char *errMsg = 0;
-    int rc = sqlite3_open("logsData.db", &db);
-
     const char *sql = 
         "CREATE TABLE IF NOT EXISTS logs("
         "id INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -21,12 +17,8 @@ LogDatabaseWriter::LogDatabaseWriter(){
         "severity TEXT,"
         "message TEXT"
         ");";
-
-    rc = sqlite3_exec(db, sql, 0, 0, &errMsg);
-    if (rc != SQLITE_OK) {
-        std::cerr << "Create table error " << errMsg << std::endl;
-        sqlite3_free(errMsg);
-    } 
+    db.set_new_database_path("logsData.db")
+      .run_command(sql);
 }
 LogDatabaseWriter& LogDatabaseWriter::set_thread_safe_quere(ThreadSafeQueue <std::string>* queue){
     this->queue=queue;
@@ -135,8 +127,6 @@ std::string get_sql_command(std::vector <std::string> logs){
 //this function get the SQL command for log (if is posible) and write it in the database
 void LogDatabaseWriter::write_logs(int number){
     //open the database (for each thread is a diferent connection)
-    int rc = sqlite3_open("logsData.db", &db);
-    char *errMsg = 0;
     while(true){
         //wait until is something in the queue
         auto log_data=this->queue->pop();
@@ -148,11 +138,12 @@ void LogDatabaseWriter::write_logs(int number){
                 continue;
             }
             //try to insert log in database
-            rc = sqlite3_exec(db, insert_sql.c_str(), 0, 0, &errMsg);
-            if (rc != SQLITE_OK) {
-                std::cerr << "INSERT ERROR: " << errMsg << std::endl;
-                sqlite3_free(errMsg);
-            } 
+            try{
+                this->db.run_command(insert_sql.c_str());
+            }
+             catch (const std::exception& e) {
+                std::cout<<e.what()<<std::endl;
+             }
         }
     }
 }
