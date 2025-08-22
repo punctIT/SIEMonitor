@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include "../../log_parser/ThreadSafeQueue.h"
+#include "../../utils/ThreadSafeQueue.h"
 #include <unordered_map>
 class SyslogListener{
     private:

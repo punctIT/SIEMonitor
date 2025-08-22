@@ -1,9 +1,9 @@
 #include <iostream>
 #include <thread> 
-#include "syslog/SyslogListener.h"
+#include "syslog_connections/SyslogListener.h"
 #include <unistd.h>
 #include "clients_conections/ClientListener.h"
-#include "../log_parser/ThreadSafeQueue.h"
+#include "../utils/ThreadSafeQueue.h"
 #include "../log_parser/LogDatabaseWriter.h"
 
 class SyslogServer{

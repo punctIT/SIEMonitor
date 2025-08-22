@@ -68,6 +68,8 @@
         "format": "cpp",
         "iomanip": "cpp",
         "span": "cpp",
-        "variant": "cpp"
+        "variant": "cpp",
+        "codecvt": "cpp",
+        "shared_mutex": "cpp"
     }
 }

@@ -10,6 +10,7 @@
 
 ClientListener::ClientListener(){
     std::cout<<"ClientListenerServer start"<<std::endl;
+    auth.set_password_db("Password.db");
 }
 ClientListener& ClientListener::set_port(int port){
     this->port=port;
