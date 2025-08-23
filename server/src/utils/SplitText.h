@@ -41,8 +41,10 @@ class SplitTest{
                 //     printf("[%d]",i);
                 // }
                 // std::cout<<std::endl;
-                if(arg.size()>2&&arg[arg.size()-1]=='\n'&&arg[arg.size()-2]=='\r')
+                if(arg.size()>2&&arg[arg.size()-1]=='\n'&&arg[arg.size()-2]=='\r')//for windows cli
                     args.push_back(arg.substr(0, arg.size() - 2));
+                else if(arg.size()>1&&arg[arg.size()-1]=='\n')//for linux CLI
+                    args.push_back(arg.substr(0, arg.size() - 1));
                 else {
                     args.push_back(arg);
                 }

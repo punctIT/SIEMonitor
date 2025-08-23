@@ -46,6 +46,7 @@ class DBComandExecutor{
             sqlite3_close(db);
             return *this;
         }
+        //this function is hard to explain
         static int callback(void* data, int argc, char** argv, char** colName) {
             auto* results = reinterpret_cast<std::vector<std::string>*>(data);
 
@@ -58,6 +59,10 @@ class DBComandExecutor{
             results->push_back(row);
             return 0;
         }
+        //read data from database 
+        //is use EXPLCIT FOR SELECT
+        //DON T USE IT WITH delete, insert , (use run_command insted)
+        //because it use shared_lock , and the result may be unprectibible
         std::vector<std::string> get_data(const char *cmd){
             std::shared_lock lock(db_rwmutex);
             if ((rc=sqlite3_open(path.c_str(), &db)) != SQLITE_OK) {
@@ -77,6 +82,9 @@ class DBComandExecutor{
             sqlite3_close(db);
             return rows;
         }
+        //this funciton is use for delete/insert/create table , etc
+        //it is use unicqlock , that means is thread safe 
+        //only one thread can write / inseret etc at one moment
         DBComandExecutor& run_command(const char* cmd){
             std::unique_lock lock(db_rwmutex);
             if ((rc=sqlite3_open(path.c_str(), &db)) != SQLITE_OK) {
