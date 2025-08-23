@@ -7,7 +7,7 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <unistd.h>
-
+#include <thread>
 
 
 ServerConection::ServerConection(){
@@ -39,15 +39,37 @@ ServerConection& ServerConection::configure_connection(){
     }
     return *this;
 }
-void ServerConection::sent_receive(){
-    write(server_fd, "Salut server!", 13);
+void ServerConection::receive(){
     char buffer[1024];
-    int bytes = read(server_fd, buffer, sizeof(buffer) - 1);
-    if (bytes > 0) {
-        buffer[bytes] = '\0';
-        printf("Raspuns de la server: %s\n", buffer);
+    while(true){
+        int bytes = read(server_fd, buffer, sizeof(buffer) - 1);
+        if (bytes > 0) {
+            buffer[bytes] = '\0';
+            std::cout<<buffer<<std::endl;
+        }
+        else if (bytes == 0) {
+            std::cout << "server closed.\n";
+            break;
+        } else {
+            perror("read");
+            break;
+        }
     }
-
+    
+}
+void ServerConection::sent(){
+    std::string input;
+    while(true){
+        std::getline(std::cin, input);
+        input.push_back('\n');
+        write(server_fd, input.c_str(), input.size());
+    }
+}
+void ServerConection::sent_receive(){
+    std::thread t1(&ServerConection::receive, this);
+    std::thread t2(&ServerConection::sent, this);
+    t1.join();
+    t2.join();
 }
 void ServerConection::close_connection(){
     close(server_fd);

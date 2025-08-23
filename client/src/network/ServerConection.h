@@ -12,6 +12,8 @@ class ServerConection{
         ServerConection& set_server_adress(std::string);
         ServerConection& set_server_port(int);
         ServerConection& configure_connection();
+        void receive();
+        void sent();
         void sent_receive();
         
 };

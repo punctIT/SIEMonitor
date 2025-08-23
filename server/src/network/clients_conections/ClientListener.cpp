@@ -60,6 +60,9 @@ void ClientListener::send_receive(const int client_fd){
             std::string input_str(buffer, bytes_read);
             SplitTest input(input_str);
             auto args=input.get_splited();
+            // for(auto i in args){
+            //     std::cout<<'['<<i<<"]\n";
+            // }
             if (username.has_value()){
                 try{
                     cmd.run(args);
