@@ -5,8 +5,12 @@
 #include <thread>
 #include <arpa/inet.h>
 #include <iostream>
+#include <optional>
 #include "ClientListener.h"
+#include "../../utils/SplitText.h"
+#include "../../command_handler/command_handler.h"
 
+#define in :
 
 ClientListener::ClientListener(){
     std::cout<<"ClientListenerServer start"<<std::endl;
@@ -19,7 +23,7 @@ ClientListener::ClientListener(){
     }
     
 }
-ClientListener& ClientListener::set_port(int port){
+ClientListener& ClientListener::set_port(const int port){
     this->port=port;
     return *this;
 }
@@ -45,18 +49,56 @@ void ClientListener::server_configure(){
         throw std::runtime_error("Error listen ");
     }
 }
-void ClientListener::send_receive(int client_fd){
+void ClientListener::send_receive(const int client_fd){
     const int buffer_size=1024;
     char buffer[buffer_size];
-    std::string username="";
+    std::optional<std::string> username=std::nullopt;
+    HandleCommand cmd;
     while(true){
         int bytes_read = read(client_fd, buffer, buffer_size - 1);
         if (bytes_read > 0) {
-            buffer[bytes_read] = '\0';
-            printf("Am primit: %s\n", buffer);
+            std::string input_str(buffer, bytes_read);
+            SplitTest input(input_str);
+            auto args=input.get_splited();
+            if (username.has_value()){
+                try{
+                    cmd.run(args);
+                }
+                catch (std::exception &e){
+                    std::cout<<e.what()<<std::endl;
+                }
+            }
+            else {
+                if(args[0]=="login" &&args.size() >=3){
+                    username=auth.check_login(args[1],args[2]);
+                    if(username.has_value()){
+                        username=auth.check_online_status(args[1]);
+                        if(username.has_value()){
+                            write(client_fd,"Login Succesul\n",15);
+                            cmd.set_file_descriptor(client_fd)
+                               .set_username(args[2]); 
+                        }
+                        else {
+                            write(client_fd,"Already connected\n",18);
+                        }
+                    }
+                    else {
+                        write(client_fd,"Incorect\n",9);
+                    }
+                }
+                else {
+                    write(client_fd,"MUST LOGIN FIRST\n",17);
+                }
+               
+            }
         } else if (bytes_read == 0) {
             // clientul closes normali
+
             printf("Client deconectat.\n");
+            if(username.has_value()){
+                auth.delete_online_user(username.value());
+            }
+            
             close(client_fd);
             break; 
         } else {

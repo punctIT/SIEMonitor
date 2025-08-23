@@ -6,7 +6,7 @@ TARGET = $(TARGET_DIR)/program
 SRC := $(shell find src -name "*.cpp")
 
 # Biblioteca SQLite3
-LIBS = -lsqlite3
+LIBS = -lsqlite3 /usr/local/lib/bcrypt.a
 
 all: $(TARGET)
 
