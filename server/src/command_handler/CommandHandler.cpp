@@ -2,8 +2,10 @@
 #include <string>
 #include <unistd.h> 
 #include <vector>
+
 #include "commands/test.h"
 #include "commands/OnlineUsers.hpp"
+#include "commands/ListHosts.hpp"
 
 HandleCommand& HandleCommand::set_file_descriptor(int fd){
     this->fd=fd;
@@ -33,7 +35,25 @@ void HandleCommand::run(std::vector<std::string> args){
         return;
     }
     if(args[0]=="hosts"){
-        
+        try{
+            ListHosts host;
+            host.set_fd(fd)
+                .get_hosts();
+        }
+         catch(std::exception &err){
+            write(fd,unexpected_error.c_str(),unexpected_error.size());
+        }
+        return;
+    }
+    if(args[0]=="source"){
+        try{
+            ListHosts host;
+            host.set_fd(fd)
+                .get_sources(args[1]);
+        }
+         catch(std::exception &err){
+            write(fd,unexpected_error.c_str(),unexpected_error.size());
+        }
         return;
     }
     std::string msg="error , invalid command";
