@@ -1,9 +1,10 @@
 #pragma once 
 #include <unistd.h>
 #include <arpa/inet.h>
-#include "Authentification/AuthService.h"
+#include "Authentication/AuthService.h"
+#include "../../utils/ProtocolHandler.h"
 
-class ClientListener{
+class ClientListener:public ProtocolHandler{
     private:
         int port;
         int server_fd;
@@ -12,6 +13,6 @@ class ClientListener{
     public:
     ClientListener();
     ClientListener& set_port(int);
-    void server_configure();
-    void start_listen();
+    ClientListener& server_configure();
+    ClientListener& start_listen();
 };
