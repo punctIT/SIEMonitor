@@ -1,3 +1,4 @@
 BCrypt
 Qt
 sqlite3
+moc- sudo apt install qt6-base-dev

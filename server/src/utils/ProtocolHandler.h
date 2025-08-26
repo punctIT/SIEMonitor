@@ -5,10 +5,10 @@
 
 class ProtocolHandler{
     protected:
-        const std::string invalid_login_username="Incorect username or password";
-        const std::string succesful_login="Login Succesul";
-        const std::string user_already_connected="Error , user already connected";
-        const std::string unautehntificated="Must Login";
+        const std::string invalid_login_username="[login]Incorect username or password";
+        const std::string succesful_login="[login]Login Succesul";
+        const std::string user_already_connected="[login]Error , user already connected";
+        const std::string unautehntificated="[login]Must Login";
         const std::string unexpected_error="error";
 
 
