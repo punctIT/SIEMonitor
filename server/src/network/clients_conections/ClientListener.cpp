@@ -8,7 +8,7 @@
 #include <optional>
 #include "ClientListener.h"
 #include "../../utils/SplitText.h"
-#include "../../command_handler/command_handler.h"
+#include "../../command_handler/CommandHandler.h"
 
 #define in :
 
@@ -27,7 +27,7 @@ ClientListener& ClientListener::set_port(const int port){
     this->port=port;
     return *this;
 }
-void ClientListener::server_configure(){
+ClientListener& ClientListener::server_configure(){
     struct sockaddr_in server_addr;
     // Create Socket
     if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
@@ -48,6 +48,7 @@ void ClientListener::server_configure(){
     if (listen(server_fd, 1) < 0) {
         throw std::runtime_error("Error listen ");
     }
+    return *this;
 }
 void ClientListener::send_receive(const int client_fd){
     const int buffer_size=1024;
@@ -77,20 +78,20 @@ void ClientListener::send_receive(const int client_fd){
                     if(username.has_value()){
                         username=auth.check_online_status(args[1]);
                         if(username.has_value()){
-                            write(client_fd,"Login Succesul\n",15);
+                            write(client_fd,succesful_login.c_str(),succesful_login.size());
                             cmd.set_file_descriptor(client_fd)
                                .set_username(args[2]); 
                         }
                         else {
-                            write(client_fd,"Already connected\n",18);
+                            write(client_fd,user_already_connected.c_str(),user_already_connected.size());
                         }
                     }
                     else {
-                        write(client_fd,"Incorect\n",9);
+                        write(client_fd,invalid_login_username.c_str(),invalid_login_username.size());
                     }
                 }
                 else {
-                    write(client_fd,"MUST LOGIN FIRST\n",17);
+                    write(client_fd,unautehntificated.c_str(),unautehntificated.size());
                 }
                
             }
@@ -112,7 +113,7 @@ void ClientListener::send_receive(const int client_fd){
         }
     }
 }
-void ClientListener::start_listen(){
+ClientListener& ClientListener::start_listen(){
     printf("Server TCP for clients listen at %d...\n", this->port);
     sockaddr_in client_addr;
     socklen_t client_len = sizeof(client_addr);
@@ -129,7 +130,7 @@ void ClientListener::start_listen(){
         client_thread.detach(); 
         
     }
-    
+    return *this;
     
     close(server_fd);
 }

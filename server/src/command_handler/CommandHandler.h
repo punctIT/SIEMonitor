@@ -3,8 +3,9 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include "../utils/ProtocolHandler.h"
 
-class HandleCommand{
+class HandleCommand:public ProtocolHandler {
     private:
         int fd;
         std::string username;

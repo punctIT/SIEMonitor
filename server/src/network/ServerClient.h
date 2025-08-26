@@ -4,8 +4,8 @@ class ClientReceiverServer{
     ClientListener clients;
     public:
         void start_server(){
-            clients.set_port(12345);
-            clients.server_configure();
-            clients.start_listen();
+            clients.set_port(12345)
+                   .server_configure()
+                   .start_listen();
         }
 };

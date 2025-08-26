@@ -3,11 +3,12 @@
 #include <iostream>
 #include <unistd.h> 
 #include <vector>
+#include <thread>
 #include "../../utils/ProtocolHandler.h"
 
 class Test : public ProtocolHandler{
     public:
-        void test(int fd){
+        void write_e(int fd){
             for(int i=0;i<10;i++){
                 std::string msg="test ";
                 msg+=char('0'+i);
@@ -17,5 +18,9 @@ class Test : public ProtocolHandler{
                 }
                 sleep(1);
             }
+        }
+        void test(int fd){
+            std::thread t1(&Test::write_e,this,fd);
+            t1.detach();
         }
 };

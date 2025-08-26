@@ -1,4 +1,5 @@
 #include "ServerConection.h"
+#include "../utils/ThreadSafeQueue.h"
 #include <string>
 #include <iostream>
 #include <stdio.h>
@@ -45,11 +46,11 @@ void ServerConection::receive(){
         int bytes = read(server_fd, buffer, sizeof(buffer) - 1);
         if (bytes > 0) {
             buffer[bytes] = '\0';
-            std::cout<<buffer<<std::endl;
+            responses.push(buffer);
         }
         else if (bytes == 0) {
             std::cout << "server closed.\n";
-            break;
+            exit(0);
         } else {
             perror("read");
             break;
@@ -57,19 +58,15 @@ void ServerConection::receive(){
     }
     
 }
-void ServerConection::sent(){
-    std::string input;
-    while(true){
-        std::getline(std::cin, input);
-        input.push_back('\n');
-        write(server_fd, input.c_str(), input.size());
-    }
+std::optional<std::string> ServerConection::get_response(){
+    return responses.pop();
 }
-void ServerConection::sent_receive(){
+void ServerConection::sent(std::string cmd){    
+    write(server_fd, cmd.c_str(), cmd.size());
+}
+void ServerConection::receive_start(){
     std::thread t1(&ServerConection::receive, this);
-    std::thread t2(&ServerConection::sent, this);
-    t1.join();
-    t2.join();
+    t1.detach();
 }
 void ServerConection::close_connection(){
     close(server_fd);
