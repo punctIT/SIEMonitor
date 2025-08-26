@@ -1,6 +1,6 @@
 
 #pragma once
-#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QWidget>
 
 class GUI;
 
@@ -9,5 +9,5 @@ private:
     GUI& gui;
 public:
     SIEMWindow(GUI &srv) : gui(srv) {}
-    QGridLayout* get_window(QWidget *parent);
+    QWidget* get_window();
 };

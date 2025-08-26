@@ -3,13 +3,15 @@
 #include <QtWidgets/QMainWindow>
 #include "../backend/ServerConection.h"
 #include "window/login.hpp"
-#include "window/siem.hpp"
+#include "window/SIEM/siem.hpp"
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QStackedWidget>
 
 class GUI{
     private:
         ServerConection server;
-        QWidget *central;
-        
+        QStackedWidget *stack;
+        QMainWindow *window;
         SIEMWindow *siem;
         LoginWindow *login;
     public:
@@ -19,3 +21,4 @@ class GUI{
         GUI& set_siem_window();
         GUI& set_login_window();
 };
+

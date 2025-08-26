@@ -1,5 +1,4 @@
 #include "ServerConection.h"
-#include "../utils/ThreadSafeQueue.h"
 #include <string>
 #include <iostream>
 #include <stdio.h>
@@ -35,7 +34,7 @@ ServerConection& ServerConection::configure_connection(){
        throw std::runtime_error("init pton");
     }
 
-    if (connect(server_fd, (struct sockaddr*)&server_addr, sizeof(server_addr)) < 0) {
+    if (::connect(server_fd, (struct sockaddr*)&server_addr, sizeof(server_addr)) < 0) {
         throw std::runtime_error("connect");
     }
     return *this;
@@ -46,7 +45,13 @@ void ServerConection::receive(){
         int bytes = read(server_fd, buffer, sizeof(buffer) - 1);
         if (bytes > 0) {
             buffer[bytes] = '\0';
-            responses.push(buffer);
+            QString msg = QString::fromUtf8(buffer);
+            if (msg.startsWith("[login]")){
+                emit loginResponse(msg.mid(QString("[login]").length()));
+            } 
+            else {
+                emit genericResponse(msg);
+            }
         }
         else if (bytes == 0) {
             std::cout << "server closed.\n";
@@ -57,9 +62,6 @@ void ServerConection::receive(){
         }
     }
     
-}
-std::optional<std::string> ServerConection::get_response(){
-    return responses.pop();
 }
 void ServerConection::sent(std::string cmd){    
     write(server_fd, cmd.c_str(), cmd.size());
