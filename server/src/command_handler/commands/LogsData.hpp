@@ -15,7 +15,7 @@ class LogsData:ProtocolHandler{
         LogsData();
         LogsData& set_fd(const int fd);
         LogsData& get_logs_after_timestamp(const std::string timestamp=DEFAULT_DATE);
-        LogsData& get_logs_number();
+        LogsData& get_logs_number(const std::string timestamp=DEFAULT_DATE);
         LogsData& get_logs_by_host(const std::string hostname,
                                    const std::string timestamp=DEFAULT_DATE);
         LogsData& get_logs_by_host_and_source(const std::string host ,

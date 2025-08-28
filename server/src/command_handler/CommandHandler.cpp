@@ -56,7 +56,96 @@ void HandleCommand::run(std::vector<std::string> args){
         }
         return;
     }
-    if(args[0]=="logs"){
+    if(args[0]=="GLAT"){
+        try{
+            LogsData logs;
+            if(args.size()==3){
+                const std::string timestamp=args[1]+' '+args[2];
+                logs.set_fd(fd)
+                    .get_logs_after_timestamp(timestamp);
+            }
+            else {
+                logs.set_fd(fd)
+                    .get_logs_after_timestamp();
+            }
+           
+        }
+        catch(std::exception &err){
+            write(fd,unexpected_error.c_str(),unexpected_error.size());
+        }
+        return;
+    }
+    if(args[0]=="GLN"){
+        try{
+            LogsData logs;
+            if(args.size()==3){
+                const std::string timestamp=args[1]+' '+args[2];
+                logs.set_fd(fd)
+                    .get_logs_number(timestamp);
+            }
+            else {
+                logs.set_fd(fd)
+                .get_logs_number();
+            }
+            
+        }
+        catch(std::exception &err){
+            write(fd,unexpected_error.c_str(),unexpected_error.size());
+        }
+        return;
+    }
+    if(args[0]=="GLH"){
+        try{
+            LogsData logs;
+            if(args.size()==4){
+                const std::string timestamp=args[2]+' '+args[3];
+                logs.set_fd(fd)
+                    .get_logs_by_host(args[1],timestamp);
+            }
+            else {
+                logs.set_fd(fd)
+                   .get_logs_by_host(args[1]);
+            }
+        }
+        catch(std::exception &err){
+            write(fd,unexpected_error.c_str(),unexpected_error.size());
+        }
+        return;
+    }
+    if(args[0]=="GLHSo"){
+        try{
+            LogsData logs;
+            logs.set_fd(fd)
+                .get_logs_after_timestamp();
+        }
+        catch(std::exception &err){
+            write(fd,unexpected_error.c_str(),unexpected_error.size());
+        }
+        return;
+    }
+    if(args[0]=="GLSe"){
+        try{
+            LogsData logs;
+            logs.set_fd(fd)
+                .get_logs_after_timestamp();
+        }
+        catch(std::exception &err){
+            write(fd,unexpected_error.c_str(),unexpected_error.size());
+        }
+        return;
+    }
+    if(args[0]=="GLHSe"){
+        try{
+            LogsData logs;
+            logs.set_fd(fd)
+                .get_logs_after_timestamp();
+        }
+        catch(std::exception &err){
+            write(fd,unexpected_error.c_str(),unexpected_error.size());
+        }
+        return;
+    }
+    if(args[0]=="GLHSoSe"){
         try{
             LogsData logs;
             logs.set_fd(fd)
