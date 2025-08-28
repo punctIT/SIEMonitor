@@ -48,7 +48,7 @@ GUI& GUI::set_login_window() {
 
 GUI& GUI::set_siem_window() {
     stack->setCurrentIndex(1); 
-    window->showMaximized();
+    //window->showMaximized();
     return *this;
 }
 

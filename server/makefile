@@ -1,4 +1,4 @@
-CXX = g++
+CXX = g++ -std=c++20 
 
 TARGET_DIR = target
 TARGET = $(TARGET_DIR)/program

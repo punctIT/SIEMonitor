@@ -1,13 +1,14 @@
 #include "LogDatabaseWriter.h"
 #include <iostream>
 #include <sstream>
-
+#include <string>
 #include <chrono>
 #include <ctime>
+#include <format>
 
 LogDatabaseWriter::LogDatabaseWriter(){
     std::cout<<"Start writing log in DataBase"<<std::endl;
-    const char *sql = 
+    const std::string sql = 
         "CREATE TABLE IF NOT EXISTS logs("
         "id INTEGER PRIMARY KEY AUTOINCREMENT,"
         "pri INT,"
@@ -18,7 +19,7 @@ LogDatabaseWriter::LogDatabaseWriter(){
         "message TEXT"
         ");";
     db.set_new_database_path("logsData.db")
-      .run_command(sql);
+      .run_command(sql.c_str());
 }
 LogDatabaseWriter& LogDatabaseWriter::set_thread_safe_quere(ThreadSafeQueue <std::string>* queue){
     this->queue=queue;
@@ -64,7 +65,7 @@ std::vector<std::string> get_splited_log(std::string log){
     c=0;
     std::istringstream iss(log);
     int count = 0;
-    //next 4 MOUNTH DAY TIME HOSTNAME ...
+    //next 4 (MOUNTH DAY TIME HOSTNAME ...
     while (count < 5 && iss >> word) {
         logs.push_back(word);
         c+=(1+word.length());
@@ -116,10 +117,16 @@ std::string get_sql_command(std::vector <std::string> logs){
         else escaped += c;
     }
     
-    std::string sql = "INSERT INTO logs(pri, timestamp, hostname, source, severity, message) VALUES (" +
-                  logs[0] + ", '" + get_date(logs[1],logs[2],logs[3]) + "', '" +
-                  logs[4] + "', '" + logs[5] + "', '" + 
-                  severity + "', '" + escaped + "');";
+    const std::string sql = std::format(
+        "INSERT INTO logs(pri, timestamp, hostname, source, severity, message) "
+        "VALUES ({}, '{}', '{}', '{}', '{}', '{}');",
+        logs[0],
+        get_date(logs[1], logs[2], logs[3]),
+        logs[4],
+        logs[5],
+        severity,
+        escaped
+    );
 
     return sql;
 }

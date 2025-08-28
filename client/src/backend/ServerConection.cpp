@@ -41,24 +41,31 @@ ServerConection& ServerConection::configure_connection(){
 }
 void ServerConection::receive(){
     char buffer[1024];
-    while(true){
+    std::string recvBuffer;
+
+    while (true) {
         int bytes = read(server_fd, buffer, sizeof(buffer) - 1);
-        if (bytes > 0) {
-            buffer[bytes] = '\0';
-            QString msg = QString::fromUtf8(buffer);
+        if (bytes <= 0) {
+            std::cerr << "Connection closed or error\n";
+            exit(0);
+        }
+
+        buffer[bytes] = '\0';
+        recvBuffer.append(buffer, bytes);
+        size_t pos;
+        while ((pos = recvBuffer.find("\n\r\n\r")) != std::string::npos) {
+            std::string message = recvBuffer.substr(0, pos);
+
+            QString msg = QString::fromUtf8(message);
+
             if (msg.startsWith("[login]")){
                 emit loginResponse(msg.mid(QString("[login]").length()));
             } 
             else {
                 emit genericResponse(msg);
             }
-        }
-        else if (bytes == 0) {
-            std::cout << "server closed.\n";
-            exit(0);
-        } else {
-            perror("read");
-            break;
+            
+            recvBuffer.erase(0, pos + 4);
         }
     }
     

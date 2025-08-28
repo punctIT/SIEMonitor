@@ -3,6 +3,7 @@
 #include <iostream>
 #include <filesystem>
 #include <optional>
+#include <format>
 #include "BCrypt.h"
 
 #define in :
@@ -37,8 +38,8 @@ AuthService&  AuthService::set_password_db(const std::string path){
 std::optional<std::string> AuthService::check_login(const std::string username,const std::string password){
     try{
         Bcrypt crypt;
-        std::string sql="select password from Users where username=";
-        sql+="'";sql+=username;sql+="';";
+        const std::string sql=std::format("SELECT password FROM Users WHERE username='{}';",
+                                    username);
         auto status=password_db.get_data(sql.c_str());
         if(status.size()!=0 and crypt.checkPassword(password,status[0])){
             return username;
@@ -52,12 +53,12 @@ std::optional<std::string> AuthService::check_login(const std::string username,c
  std::optional<std::string> AuthService::check_online_status(const std::string username){
      try{
         Bcrypt crypt;
-        std::string sql="select username from Users where username=";
-        sql+="'";sql+=username;sql+="';";
+        const std::string sql=std::format("SELECT * FROM Users WHERE username='{}';",
+                                    username);
         auto status=this->active_users_db.get_data(sql.c_str());
         if(status.empty()){
-            std::string sql2 = "INSERT INTO Users (username, timestamp) VALUES ('" 
-                + username + "', datetime('now'));";
+            const std::string sql2 = std::format("INSERT INTO Users (username, timestamp) VALUES ('{}',datetime('now'));",
+                                                 username); 
             active_users_db.run_command(sql2.c_str());
             return username;
         }  
@@ -68,6 +69,7 @@ std::optional<std::string> AuthService::check_login(const std::string username,c
     return std::nullopt;
  }
  void AuthService::delete_online_user(const std::string username){
-    std::string sql = "DELETE FROM Users WHERE username='" + username + "';";
+    std::string sql = std::format("DELETE FROM Users WHERE username='{}';",
+                                  username );
     active_users_db.get_data(sql.c_str());
  }
