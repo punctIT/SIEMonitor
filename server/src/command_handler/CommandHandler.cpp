@@ -6,7 +6,7 @@
 #include "commands/test.h"
 #include "commands/OnlineUsers.hpp"
 #include "commands/ListHosts.hpp"
-
+#include "commands/LogsData.hpp"
 HandleCommand& HandleCommand::set_file_descriptor(int fd){
     this->fd=fd;
     return *this;
@@ -52,6 +52,17 @@ void HandleCommand::run(std::vector<std::string> args){
                 .get_sources(args[1]);
         }
          catch(std::exception &err){
+            write(fd,unexpected_error.c_str(),unexpected_error.size());
+        }
+        return;
+    }
+    if(args[0]=="logs"){
+        try{
+            LogsData logs;
+            logs.set_fd(fd)
+                .get_logs_after_timestamp();
+        }
+        catch(std::exception &err){
             write(fd,unexpected_error.c_str(),unexpected_error.size());
         }
         return;
