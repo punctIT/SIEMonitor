@@ -31,5 +31,18 @@ class LogsData:ProtocolHandler{
                                                    const std::string souce,
                                                    const std::string severity,
                                                    const std::string timestamp=DEFAULT_DATE);
-
+        LogsData& get_logs_number_host(const std::string host,
+                                       const std::string timestamp=DEFAULT_DATE);
+        LogsData& get_logs_number_severity(const std::string severity,
+                                           const std::string timestamp=DEFAULT_DATE);
+        LogsData& get_logs_number_severity_host(const std::string severity,
+                                                const std::string host,
+                                                const std::string timestamp=DEFAULT_DATE);
+        LogsData& get_logs_number_severity_host_source(const std::string severity,
+                                                       const std::string host,
+                                                       const std::string source,
+                                                       const std::string timestamp=DEFAULT_DATE);
+        LogsData& get_logs_number_host_source(const std::string host,
+                                              const std::string source,
+                                              const std::string timestamp=DEFAULT_DATE);
 };
