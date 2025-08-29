@@ -39,7 +39,20 @@ std::string get_date(std::string month,std::string day,std::string time){
             std::tm tm = *std::localtime(&t);
             std::string year= std::to_string(tm.tm_year + 1900); 
             //create standard SQL datetime formmat YYYY:MM:DD HH:HH:HH
-            std::string result=year+"-"+std::to_string(i + 1)+"-"+day+" "+time;
+            std::string result;
+            if(i+1>9 and day.size()==2)
+                result=std::format("{}-{}-{} {}",year,std::to_string(i+1),day,time);
+            else {
+                if (day.size()==1){
+                    day='0'+day;
+                }
+                std::string month = std::to_string(i+1);
+                if(month.size()==1){
+                    month='0'+month;
+                }
+                result=std::format("{}-{}-{} {}",year,month,day,time);
+            }
+                
             return result;
         }
     }

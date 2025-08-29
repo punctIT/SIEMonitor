@@ -115,8 +115,16 @@ void HandleCommand::run(std::vector<std::string> args){
     if(args[0]=="GLHSo"){
         try{
             LogsData logs;
-            logs.set_fd(fd)
-                .get_logs_after_timestamp();
+            if(args.size()==5){
+                const std::string timestamp=args[3]+" "+args[4];
+                logs.set_fd(fd)
+                    .get_logs_by_host_and_source(args[1],args[2],timestamp);
+            }
+            else {
+                logs.set_fd(fd)
+                    .get_logs_by_host_and_source(args[1],args[2]);
+            }
+            
         }
         catch(std::exception &err){
             write(fd,unexpected_error.c_str(),unexpected_error.size());
@@ -126,8 +134,15 @@ void HandleCommand::run(std::vector<std::string> args){
     if(args[0]=="GLSe"){
         try{
             LogsData logs;
-            logs.set_fd(fd)
-                .get_logs_after_timestamp();
+            if(args.size()==4){
+                const std::string timestamp=args[2]+" "+args[3];
+                logs.set_fd(fd)
+                    .get_logs_by_severity(args[1],timestamp);
+            }
+            else {
+                logs.set_fd(fd)
+                    .get_logs_by_severity(args[1]);
+            }
         }
         catch(std::exception &err){
             write(fd,unexpected_error.c_str(),unexpected_error.size());
@@ -137,8 +152,15 @@ void HandleCommand::run(std::vector<std::string> args){
     if(args[0]=="GLHSe"){
         try{
             LogsData logs;
-            logs.set_fd(fd)
-                .get_logs_after_timestamp();
+            if(args.size()==5){
+                const std::string timestamp=args[3]+" "+args[4];
+                logs.set_fd(fd)
+                    .get_logs_by_host_and_severity(args[1],args[2],timestamp);
+            }
+            else {
+                logs.set_fd(fd)
+                    .get_logs_by_host_and_severity(args[1],args[2]);
+            }
         }
         catch(std::exception &err){
             write(fd,unexpected_error.c_str(),unexpected_error.size());
@@ -148,8 +170,15 @@ void HandleCommand::run(std::vector<std::string> args){
     if(args[0]=="GLHSoSe"){
         try{
             LogsData logs;
-            logs.set_fd(fd)
-                .get_logs_after_timestamp();
+            if(args.size()==6){
+                const std::string timestamp=args[4]+" "+args[5];
+                logs.set_fd(fd)
+                    .get_logs_by_host_source_severity(args[1],args[2],args[3],timestamp);
+            }
+            else {
+                logs.set_fd(fd)
+                    .get_logs_by_host_source_severity(args[1],args[2],args[3]);
+            }
         }
         catch(std::exception &err){
             write(fd,unexpected_error.c_str(),unexpected_error.size());

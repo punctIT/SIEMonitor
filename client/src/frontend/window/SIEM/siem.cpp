@@ -5,7 +5,7 @@
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QLineEdit>
 #include "../../gui.hpp"
-
+#include "../../../backend/SplitLogs.hpp"
 
 QWidget * SIEMWindow::get_window(){
     QWidget *container= new QWidget();
@@ -21,7 +21,13 @@ QWidget * SIEMWindow::get_window(){
     });
     
     QObject::connect(&gui.get_server(),&ServerConection::genericResponse,[this](QString resp){
-        qDebug() <<resp<<"\n\n";     
+        SplitLog split;
+        split.set_log(resp.toStdString())
+             .split();
+        for(auto l : split.get_splited_log()){
+            qDebug() <<QString::fromStdString(l)<<"\n"; 
+        }
+        qDebug()<<"\n\n"; 
     });
 
     layout->addWidget(cmd, 1, 0);        
