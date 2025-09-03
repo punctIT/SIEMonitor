@@ -8,7 +8,7 @@
 
 #define DEFAULT_DATE "2000-01-01 00:00:00"
 
-class LogsData:ProtocolHandler{
+class LogsData: ProtocolHandler{
     int fd;
     DBComandExecutor logs_db;
     public:

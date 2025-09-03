@@ -12,7 +12,7 @@ LogsData& LogsData:: get_logs_after_timestamp(const std::string timestamp){
     const std::string sql="SELECT * FROM logs;";
     auto logs=logs_db.get_data(sql.c_str());
     for(auto log :logs){
-        std::string text=log_text_protocol(log);
+        std::string text=log_text_protocol(log,"GLAT");
         write(fd,text.c_str(),text.length());
     }
     return *this;
@@ -21,7 +21,7 @@ LogsData& LogsData:: get_logs_number(const std::string timestamp){
     const std::string sql=std::format("SELECT COUNT(*) FROM logs WHERE timestamp >'{}';"
                                       ,timestamp);
     auto logs=logs_db.get_data(sql.c_str());
-    std::string text=log_text_protocol(logs[0]);
+    std::string text=log_text_protocol(logs[0],"GLN");
     write(fd,text.c_str(),text.length());
     return *this;
 }
@@ -33,7 +33,7 @@ LogsData& LogsData::get_logs_by_host(const std::string hostname,
                                        hostname);
     auto logs=logs_db.get_data(sql.c_str());
     for(auto log :logs){
-        std::string text=log_text_protocol(log);
+        std::string text=log_text_protocol(log,"GLH");
         write(fd,text.c_str(),text.length());
     }                 
     return *this;
@@ -48,7 +48,7 @@ LogsData& LogsData::get_logs_by_host_and_source(const std::string hostname ,
                                       );
     auto logs=logs_db.get_data(sql.c_str());
     for(auto log :logs){
-        std::string text=log_text_protocol(log);
+        std::string text=log_text_protocol(log,"GLHSo");
         write(fd,text.c_str(),text.length());
     }  
     return *this;
@@ -63,7 +63,7 @@ LogsData& LogsData:: get_logs_by_host_and_severity(const std::string hostname ,
                                       );
     auto logs=logs_db.get_data(sql.c_str());
     for(auto log :logs){
-        std::string text=log_text_protocol(log);
+        std::string text=log_text_protocol(log,"GLHSe");
         write(fd,text.c_str(),text.length());
     }  
     return *this;
@@ -76,7 +76,7 @@ LogsData& LogsData:: get_logs_by_severity(const std::string severity,
                                       );
     auto logs=logs_db.get_data(sql.c_str());
     for(auto log :logs){
-        std::string text=log_text_protocol(log);
+        std::string text=log_text_protocol(log,"GLSe");
         write(fd,text.c_str(),text.length());
     }  
     return *this;
@@ -93,7 +93,7 @@ LogsData& LogsData::get_logs_by_host_source_severity(const std::string hostname,
                                       );
     auto logs=logs_db.get_data(sql.c_str());
     for(auto log :logs){
-        std::string text=log_text_protocol(log);
+        std::string text=log_text_protocol(log,"GLSoSe");
         write(fd,text.c_str(),text.length());
     }  
     return *this;
@@ -108,11 +108,11 @@ LogsData& LogsData:: get_logs_number_severity(const std::string severity,
                                     );
     auto logs=logs_db.get_data(sql.c_str());
     if(logs.size()){
-        std::string text=log_text_protocol(logs[0]);
+        std::string text=log_text_protocol(logs[0],"GLNSe");
         write(fd,text.c_str(),text.length());
     }
     else {
-        std::string text=log_text_protocol("0");
+        std::string text=log_text_protocol("0","GLNSe");
         write(fd,text.c_str(),text.length());
     }
     return *this;
@@ -127,11 +127,11 @@ LogsData& LogsData:: get_logs_number_severity_host(const std::string severity,
                                        );
     auto logs=logs_db.get_data(sql.c_str());
     if(logs.size()){
-        std::string text=log_text_protocol(logs[0]);
+        std::string text=log_text_protocol(logs[0],"GLNSeH");
         write(fd,text.c_str(),text.length());
     }
     else {
-        std::string text=log_text_protocol("0");
+        std::string text=log_text_protocol("0","GLNSeH");
         write(fd,text.c_str(),text.length());
     }
     
@@ -149,11 +149,11 @@ LogsData& LogsData:: get_logs_number_severity_host_source(const std::string seve
                                        );
     auto logs=logs_db.get_data(sql.c_str());
     if(logs.size()){
-        std::string text=log_text_protocol(logs[0]);
+        std::string text=log_text_protocol(logs[0],"GLNSeHSo");
         write(fd,text.c_str(),text.length());
     }
     else {
-        std::string text=log_text_protocol("0");
+        std::string text=log_text_protocol("0","GLNSeHSo");
         write(fd,text.c_str(),text.length());
     }
     return *this;
@@ -167,11 +167,11 @@ LogsData& LogsData::get_logs_number_host(const std::string host,
                                     );
     auto logs=logs_db.get_data(sql.c_str());
     if(logs.size()){
-        std::string text=log_text_protocol(logs[0]);
+        std::string text=log_text_protocol(logs[0],"GLNH");
         write(fd,text.c_str(),text.length());
     }
     else {
-        std::string text=log_text_protocol("0");
+        std::string text=log_text_protocol("0","GLNH");
         write(fd,text.c_str(),text.length());
     }
     return *this;
@@ -187,11 +187,11 @@ LogsData& LogsData::get_logs_number_host_source(const std::string host,
                                     );
     auto logs=logs_db.get_data(sql.c_str());
     if(logs.size()){
-        std::string text=log_text_protocol(logs[0]);
+        std::string text=log_text_protocol(logs[0],"GLNHSo");
         write(fd,text.c_str(),text.length());
     }
     else {
-        std::string text=log_text_protocol("0");
+        std::string text=log_text_protocol("0","GLNHSo");
         write(fd,text.c_str(),text.length());
     }
     return *this;

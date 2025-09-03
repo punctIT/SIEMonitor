@@ -60,7 +60,10 @@ void ServerConection::receive(){
 
             if (msg.startsWith("[login]")){
                 emit loginResponse(msg.mid(QString("[login]").length()));
-            } 
+            }
+            if (msg.startsWith("[LOG]")){
+                emit logData(msg.mid(QString("[LOG]").length()));
+            }
             else {
                 emit genericResponse(msg);
             }
