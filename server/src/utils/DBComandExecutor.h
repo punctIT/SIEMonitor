@@ -3,74 +3,99 @@
 #include <string>
 #include <vector>
 #include <filesystem>
-#include <shared_mutex>
 #include <mutex>
 
 class DBComandExecutor{
     private:
-        sqlite3* db;
-        int rc;
+        sqlite3* db = nullptr;
         std::string path;
-        std::shared_mutex db_rwmutex;//is inspired from RUST [RWLOCK which is much better ]
-        //is it use for db , more readers , one modifiy
+        mutable std::mutex db_mutex;
+        
     public:
-        DBComandExecutor(){
-           
-        }
+        DBComandExecutor() = default;
+        
         ~DBComandExecutor() {
+            std::lock_guard<std::mutex> lock(db_mutex);
             if (db) {
                 sqlite3_close(db);
             }
         }
-        //this function is use for set an existing database 
-        //for example , Password DataBase
-        DBComandExecutor& set_database_path(std::string path){
-            std::unique_lock lock(db_rwmutex);
-            this->path=path;
+        
+        DBComandExecutor& set_database_path(const std::string& db_path) {
+            std::lock_guard<std::mutex> lock(db_mutex);
+            
+            if (db) {
+                sqlite3_close(db);
+                db = nullptr;
+            }
+            
+            this->path = db_path;
             if (!std::filesystem::exists(path)) {
-                throw std::runtime_error("FATAL ERROR ,Database path is invalid");  
-            } 
-            if ((rc=sqlite3_open(path.c_str(), &db)) != SQLITE_OK) {
-                throw std::runtime_error("FATAL ERROR , can't open Database");   
+                throw std::runtime_error("Database path is invalid");  
             }
-            sqlite3_close(db);
+            
+            if (sqlite3_open(path.c_str(), &db) != SQLITE_OK) {
+                throw std::runtime_error("Can't open Database");   
+            }
+            
+                char *errMsg = nullptr;
+            sqlite3_exec(db, "PRAGMA journal_mode=WAL;", nullptr, nullptr, &errMsg);
+            if (errMsg) {
+                sqlite3_free(errMsg);
+            }
+            
+            // Setează timeout pentru lock-uri
+            sqlite3_busy_timeout(db, 5000); // 5 secunde timeout
+            
             return *this;
         }
-        //this function is to create a new database
-        DBComandExecutor& set_new_database_path(std::string path){
-            std::unique_lock lock(db_rwmutex);
-            this->path=path;
-            if ((rc=sqlite3_open(path.c_str(), &db)) != SQLITE_OK) {
-                throw std::runtime_error("FATAL ERROR , can't open Database");   
+        
+        DBComandExecutor& set_new_database_path(const std::string& db_path) {
+            std::lock_guard<std::mutex> lock(db_mutex);
+            
+            if (db) {
+                sqlite3_close(db);
+                db = nullptr;
             }
-            sqlite3_close(db);
+            
+            this->path = db_path;
+            
+            if (sqlite3_open(path.c_str(), &db) != SQLITE_OK) {
+                throw std::runtime_error("Can't open Database");   
+            }
+            char *errMsg = nullptr;
+            sqlite3_exec(db, "PRAGMA journal_mode=WAL;", nullptr, nullptr, &errMsg);
+            if (errMsg) {
+                sqlite3_free(errMsg);
+            }
+            
+            sqlite3_busy_timeout(db, 5000);
+            
             return *this;
         }
-        //this function is hard to explain
+        
         static int callback(void* data, int argc, char** argv, char** colName) {
             auto* results = reinterpret_cast<std::vector<std::string>*>(data);
-
             std::string row;
             for (int i = 0; i < argc; i++) {
                 row += (argv[i] ? argv[i] : "NULL");
                 if (i < argc - 1) row += " "; 
             }
-
             results->push_back(row);
             return 0;
         }
-        //read data from database 
-        //is use EXPLCIT FOR SELECT
-        //DON T USE IT WITH delete, insert , (use run_command insted)
-        //because it use shared_lock , and the result may be unprectibible
-        std::vector<std::string> get_data(const char *cmd){
-            std::shared_lock lock(db_rwmutex);
-            if ((rc=sqlite3_open(path.c_str(), &db)) != SQLITE_OK) {
-                throw std::runtime_error("FATAL ERROR , can't open Database");   
+        
+        std::vector<std::string> get_data(const char *cmd) {
+            std::lock_guard<std::mutex> lock(db_mutex);
+            
+            if (!db) {
+                throw std::runtime_error("Database not connected");
             }
+            
             std::vector<std::string> rows;
-            char *errMsg=0;
-            rc = sqlite3_exec(db, cmd, callback, &rows, &errMsg);
+            char *errMsg = nullptr;
+            int rc = sqlite3_exec(db, cmd, callback, &rows, &errMsg);
+            
             if (rc != SQLITE_OK) {
                 std::string error = "SQL error: ";
                 if (errMsg) {
@@ -79,19 +104,20 @@ class DBComandExecutor{
                 }
                 throw std::runtime_error(error);
             }
-            sqlite3_close(db);
+            
             return rows;
         }
-        //this funciton is use for delete/insert/create table , etc
-        //it is use unicqlock , that means is thread safe 
-        //only one thread can write / inseret etc at one moment
-        DBComandExecutor& run_command(const char* cmd){
-            std::unique_lock lock(db_rwmutex);
-            if ((rc=sqlite3_open(path.c_str(), &db)) != SQLITE_OK) {
-                throw std::runtime_error("FATAL ERROR , can't open Database");   
+        
+        DBComandExecutor& run_command(const char* cmd) {
+            std::lock_guard<std::mutex> lock(db_mutex);
+            
+            if (!db) {
+                throw std::runtime_error("Database not connected");
             }
-            char *errMsg=0;
-            rc = sqlite3_exec(db, cmd,0,0 ,&errMsg);
+            
+            char *errMsg = nullptr;
+            int rc = sqlite3_exec(db, cmd, nullptr, nullptr, &errMsg);
+            
             if (rc != SQLITE_OK) {
                 std::string error = "SQL error: ";
                 if (errMsg) {
@@ -100,7 +126,7 @@ class DBComandExecutor{
                 }
                 throw std::runtime_error(error);
             }
-            sqlite3_close(db);
+            
             return *this;
         }
 };

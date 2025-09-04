@@ -19,6 +19,7 @@ class InfoChart{
         QLabel *Alert;
         QLabel *Critical;
         QLabel *Warning;
+        
     public:
         InfoChart();
         QWidget* get_chart();

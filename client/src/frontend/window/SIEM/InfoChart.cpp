@@ -65,55 +65,67 @@ InfoChart& InfoChart::update(){
 }
 
 InfoChart& InfoChart::set_total(int n){
+    std::lock_guard<std::mutex> lock(infoChartMutex);
     total_logs=n;
     return *this;
 }
 InfoChart& InfoChart::count_total(){
+    std::lock_guard<std::mutex> lock(infoChartMutex);
     total_logs+=1;
     return *this;
 }
 
 InfoChart& InfoChart::set_error(int n){
+    std::lock_guard<std::mutex> lock(infoChartMutex);
     error=n;
     return *this;
 }
 InfoChart& InfoChart::count_error(){
+    std::lock_guard<std::mutex> lock(infoChartMutex);
     error+=1;
     return *this;
 }
 
 InfoChart& InfoChart::set_emergenty(int n){
+    std::lock_guard<std::mutex> lock(infoChartMutex);
     emergency=n;
     return *this;
 }
 InfoChart& InfoChart::count_emergenty(){
+    std::lock_guard<std::mutex> lock(infoChartMutex);
     emergency+=1;
     return *this;
 }
 
 InfoChart& InfoChart::set_alert(int n){
+    std::lock_guard<std::mutex> lock(infoChartMutex);
     alert=n;
     return *this;
 }
 InfoChart& InfoChart::count_alert(){
+    std::lock_guard<std::mutex> lock(infoChartMutex);
     alert+=1;
     return *this;
 
 }
 InfoChart& InfoChart::set_warning(int n){
+    std::lock_guard<std::mutex> lock(infoChartMutex);
     warning=n;
     return *this;
 }
 InfoChart& InfoChart::count_warning(){
+    std::lock_guard<std::mutex> lock(infoChartMutex);
     warning+=1;
     return *this;
 }
 
 InfoChart& InfoChart::set_critical(int n){
+    std::lock_guard<std::mutex> lock(infoChartMutex);
     critical=n;
     return *this;
 }
 InfoChart& InfoChart::count_critial(){
+    std::lock_guard<std::mutex> lock(infoChartMutex);
     critical+=1;
     return *this;
 }
