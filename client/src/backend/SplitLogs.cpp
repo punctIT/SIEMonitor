@@ -43,6 +43,30 @@ std::string SplitLog::get_severity(){
     }
     return "";
 }
+std::string SplitLog::get_message(){
+    if(splited_log.size()>=7){
+        return splited_log[7];
+    }
+    return "";
+}
+std::string SplitLog::get_time(){
+    if(splited_log.size()>=6){
+        return splited_log[3];
+    }
+    return "";
+}
+std::string SplitLog::get_host(){
+    if(splited_log.size()>=6){
+        return splited_log[4];
+    }
+    return "";
+}
+std::string SplitLog::get_source(){
+    if(splited_log.size()>=6){
+        return splited_log[5];
+    }
+    return "";
+}
 std::vector<std::string> SplitLog::get_splited_log(){
     return splited_log;
 }

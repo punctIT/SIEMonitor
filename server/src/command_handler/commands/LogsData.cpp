@@ -53,7 +53,7 @@ LogsData& LogsData:: get_logs_after_timestamp(const std::string timestamp,const 
         std::string text=log_text_protocol(log,"GLAT");
         write(fd,text.c_str(),text.length());
     }
-    std::cout<<timestamp<<" "<<get_final_date(timestamp_end)<<std::endl;
+    //std::cout<<timestamp<<" "<<get_final_date(timestamp_end)<<std::endl;
     return *this;
 }
 LogsData& LogsData:: get_logs_number(const std::string timestamp,const std::string timestamp_end){

@@ -16,6 +16,7 @@ class SplitLog{
         std::string get_message();
         std::string get_host();
         std::string get_source();
+        std::string get_time();
         int get_id();
         int get_pri();
 };
