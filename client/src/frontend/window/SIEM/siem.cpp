@@ -34,6 +34,7 @@ void update_info_chart(InfoChart* infoChart,const std::string severity){
 
 QWidget * SIEMWindow::get_window(){
     infoChart = new InfoChart();
+    logsTable = new LogsTable();
 
     QWidget *container= new QWidget();
     QGridLayout *layout = new QGridLayout(container);
@@ -64,11 +65,18 @@ QWidget * SIEMWindow::get_window(){
         split.set_log(resp.toStdString())
              .split_log();
         update_info_chart(infoChart,split.get_severity());
+        // logsTable->add_log(split.get_host(),
+        //                    split.get_time(),
+        //                    split.get_source(),
+        //                    split.get_severity(),
+        //                    split.get_message()
+        //                 );
         //qDebug()<<"ok\n"; 
     });
-    layout->addWidget(infoChart->get_chart(), 0, 0);    
-    layout->addWidget(cmd, 1, 0);        
-    layout->addWidget(run, 1, 1);  
+    layout->addWidget(infoChart->get_chart(), 0, 0); 
+    layout->addWidget(logsTable->get_chart(),1,0);   
+    layout->addWidget(cmd, 1, 1);        
+    layout->addWidget(run, 1, 2);  
     
     
     return container;
