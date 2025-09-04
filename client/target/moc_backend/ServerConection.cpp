@@ -26,15 +26,17 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 namespace {
 struct qt_meta_stringdata_ServerConection_t {
-    uint offsetsAndSizes[16];
+    uint offsetsAndSizes[20];
     char stringdata0[16];
     char stringdata1[14];
     char stringdata2[1];
     char stringdata3[5];
-    char stringdata4[10];
-    char stringdata5[5];
-    char stringdata6[11];
-    char stringdata7[16];
+    char stringdata4[8];
+    char stringdata5[4];
+    char stringdata6[10];
+    char stringdata7[5];
+    char stringdata8[11];
+    char stringdata9[16];
 };
 #define QT_MOC_LITERAL(ofs, len) \
     uint(sizeof(qt_meta_stringdata_ServerConection_t::offsetsAndSizes) + ofs), len 
@@ -44,15 +46,19 @@ Q_CONSTINIT static const qt_meta_stringdata_ServerConection_t qt_meta_stringdata
         QT_MOC_LITERAL(16, 13),  // "loginResponse"
         QT_MOC_LITERAL(30, 0),  // ""
         QT_MOC_LITERAL(31, 4),  // "resp"
-        QT_MOC_LITERAL(36, 9),  // "usersData"
-        QT_MOC_LITERAL(46, 4),  // "data"
-        QT_MOC_LITERAL(51, 10),  // "alertsData"
-        QT_MOC_LITERAL(62, 15)   // "genericResponse"
+        QT_MOC_LITERAL(36, 7),  // "logData"
+        QT_MOC_LITERAL(44, 3),  // "log"
+        QT_MOC_LITERAL(48, 9),  // "usersData"
+        QT_MOC_LITERAL(58, 4),  // "data"
+        QT_MOC_LITERAL(63, 10),  // "alertsData"
+        QT_MOC_LITERAL(74, 15)   // "genericResponse"
     },
     "ServerConection",
     "loginResponse",
     "",
     "resp",
+    "logData",
+    "log",
     "usersData",
     "data",
     "alertsData",
@@ -67,24 +73,26 @@ Q_CONSTINIT static const uint qt_meta_data_ServerConection[] = {
       10,       // revision
        0,       // classname
        0,    0, // classinfo
-       4,   14, // methods
+       5,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       4,       // signalCount
+       5,       // signalCount
 
  // signals: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    1,   38,    2, 0x06,    1 /* Public */,
-       4,    1,   41,    2, 0x06,    3 /* Public */,
-       6,    1,   44,    2, 0x06,    5 /* Public */,
-       7,    1,   47,    2, 0x06,    7 /* Public */,
+       1,    1,   44,    2, 0x06,    1 /* Public */,
+       4,    1,   47,    2, 0x06,    3 /* Public */,
+       6,    1,   50,    2, 0x06,    5 /* Public */,
+       8,    1,   53,    2, 0x06,    7 /* Public */,
+       9,    1,   56,    2, 0x06,    9 /* Public */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::QString,    3,
     QMetaType::Void, QMetaType::QString,    5,
-    QMetaType::Void, QMetaType::QString,    5,
-    QMetaType::Void, QMetaType::QString,    5,
+    QMetaType::Void, QMetaType::QString,    7,
+    QMetaType::Void, QMetaType::QString,    7,
+    QMetaType::Void, QMetaType::QString,    7,
 
        0        // eod
 };
@@ -99,6 +107,9 @@ Q_CONSTINIT const QMetaObject ServerConection::staticMetaObject = { {
         // Q_OBJECT / Q_GADGET
         QtPrivate::TypeAndForceComplete<ServerConection, std::true_type>,
         // method 'loginResponse'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<QString, std::false_type>,
+        // method 'logData'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         QtPrivate::TypeAndForceComplete<QString, std::false_type>,
         // method 'usersData'
@@ -121,9 +132,10 @@ void ServerConection::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int 
         (void)_t;
         switch (_id) {
         case 0: _t->loginResponse((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
-        case 1: _t->usersData((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
-        case 2: _t->alertsData((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
-        case 3: _t->genericResponse((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
+        case 1: _t->logData((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
+        case 2: _t->usersData((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
+        case 3: _t->alertsData((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
+        case 4: _t->genericResponse((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -137,22 +149,29 @@ void ServerConection::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int 
         }
         {
             using _t = void (ServerConection::*)(QString );
-            if (_t _q_method = &ServerConection::usersData; *reinterpret_cast<_t *>(_a[1]) == _q_method) {
+            if (_t _q_method = &ServerConection::logData; *reinterpret_cast<_t *>(_a[1]) == _q_method) {
                 *result = 1;
                 return;
             }
         }
         {
             using _t = void (ServerConection::*)(QString );
-            if (_t _q_method = &ServerConection::alertsData; *reinterpret_cast<_t *>(_a[1]) == _q_method) {
+            if (_t _q_method = &ServerConection::usersData; *reinterpret_cast<_t *>(_a[1]) == _q_method) {
                 *result = 2;
                 return;
             }
         }
         {
             using _t = void (ServerConection::*)(QString );
-            if (_t _q_method = &ServerConection::genericResponse; *reinterpret_cast<_t *>(_a[1]) == _q_method) {
+            if (_t _q_method = &ServerConection::alertsData; *reinterpret_cast<_t *>(_a[1]) == _q_method) {
                 *result = 3;
+                return;
+            }
+        }
+        {
+            using _t = void (ServerConection::*)(QString );
+            if (_t _q_method = &ServerConection::genericResponse; *reinterpret_cast<_t *>(_a[1]) == _q_method) {
+                *result = 4;
                 return;
             }
         }
@@ -178,13 +197,13 @@ int ServerConection::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 4)
+        if (_id < 5)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 4;
+        _id -= 5;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 4)
+        if (_id < 5)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 4;
+        _id -= 5;
     }
     return _id;
 }
@@ -197,24 +216,31 @@ void ServerConection::loginResponse(QString _t1)
 }
 
 // SIGNAL 1
-void ServerConection::usersData(QString _t1)
+void ServerConection::logData(QString _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 1, _a);
 }
 
 // SIGNAL 2
-void ServerConection::alertsData(QString _t1)
+void ServerConection::usersData(QString _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 2, _a);
 }
 
 // SIGNAL 3
-void ServerConection::genericResponse(QString _t1)
+void ServerConection::alertsData(QString _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 3, _a);
+}
+
+// SIGNAL 4
+void ServerConection::genericResponse(QString _t1)
+{
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
+    QMetaObject::activate(this, &staticMetaObject, 4, _a);
 }
 QT_WARNING_POP
 QT_END_MOC_NAMESPACE

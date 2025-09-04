@@ -9,7 +9,8 @@ class SplitLog{
         std::vector<std::string> splited_log; 
     public:
         SplitLog& set_log(std::string log);
-        SplitLog& split();
+        SplitLog& split_log();
+        SplitLog& split_all();
         std::vector<std::string> get_splited_log();
         std::string get_severity();
         std::string get_message();

@@ -20,10 +20,11 @@ GUI::GUI(){
 GUI& GUI::init_window(){
     int argc = 0;
     char *argv[] = {};
-    QApplication app(argc, argv);
     window=new QMainWindow();  
 
     siem = new SIEMWindow(*this);
+
+
     login = new LoginWindow(*this);
 
     stack = new QStackedWidget();
@@ -37,7 +38,7 @@ GUI& GUI::init_window(){
     window->setCentralWidget(stack);
     window->resize(400, 200);
     window->show();
-    app.exec();
+    
     return *this;
 }
 
@@ -48,6 +49,7 @@ GUI& GUI::set_login_window() {
 
 GUI& GUI::set_siem_window() {
     stack->setCurrentIndex(1); 
+    siem->start_update_thread();
     //window->showMaximized();
     return *this;
 }

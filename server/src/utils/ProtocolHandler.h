@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <format>
 
 class ProtocolHandler{
     protected:
@@ -22,8 +23,8 @@ class ProtocolHandler{
             }
             return out+end_msg;
         }
-        std::string log_text_protocol(std::string data){
-            return data+end_msg;
+        std::string log_text_protocol(std::string data,const std::string type){
+            return "[LOG]"+std::format("[{}]",type)+data+end_msg;
         }
 
 };

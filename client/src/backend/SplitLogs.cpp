@@ -8,7 +8,7 @@ SplitLog& SplitLog::set_log(std::string log ){
     this->log=log;
     return *this;
 }
-SplitLog& SplitLog::split(){
+SplitLog& SplitLog::split_log(){
     std::istringstream iss(log);
     std::vector<std::string> logs;
     std::string word="";
@@ -23,11 +23,25 @@ SplitLog& SplitLog::split(){
     if (pos != -1) {
         std::string rest = log.substr(pos);
         logs.push_back(rest);
-    } else {
-        logs.push_back("");
     }
     splited_log=logs;
     return *this;
+}
+SplitLog& SplitLog::split_all(){
+    std::istringstream iss(log);
+    std::vector<std::string> logs;
+    std::string word="";
+    while (iss >> word) {
+        logs.push_back(word);
+    }
+    splited_log=logs;
+    return *this;
+}
+std::string SplitLog::get_severity(){
+    if(splited_log.size()>=6){
+        return splited_log[6];
+    }
+    return "";
 }
 std::vector<std::string> SplitLog::get_splited_log(){
     return splited_log;

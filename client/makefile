@@ -18,7 +18,7 @@ CXXFLAGS = -I/usr/include/x86_64-linux-gnu/qt6 \
            -std=c++20
 
 # Librării
-LIBS = -lsqlite3 -lQt6Widgets -lQt6Core -lQt6Gui
+LIBS = -lsqlite3 -lQt6Widgets -lQt6Core -lQt6Gui 
 
 all: $(TARGET)
 
