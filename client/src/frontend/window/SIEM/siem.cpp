@@ -4,10 +4,10 @@
 #include <QtCore/QObject>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QLineEdit>
+#include <QtCore/QTimer>  
 
-#include "siem.hpp"
+#include "siem.h"
 #include "../../gui.hpp"
-#include "../../../backend/SplitLogs.hpp"
 #include "../../../backend/Utils.hpp"
 
 
@@ -42,6 +42,7 @@ QWidget * SIEMWindow::get_window(){
     QLineEdit *cmd = new QLineEdit(container);
     QPushButton *run = new QPushButton("run",container);
 
+
     QObject::connect(run, &QPushButton::clicked, [this,cmd](){
         std::string c= cmd->text().toStdString();
         gui.get_server().sent(c);
@@ -50,7 +51,6 @@ QWidget * SIEMWindow::get_window(){
     });
     
     QObject::connect(&gui.get_server(),&ServerConection::genericResponse,[this](QString resp){
-        SplitLog split;
         split.set_log(resp.toStdString())
              .split_log();
     
@@ -60,17 +60,46 @@ QWidget * SIEMWindow::get_window(){
          
     });
 
+    QObject::connect(this, &SIEMWindow::infoChart_update,[this]{
+        infoChart->update();
+        if(!split.empty()){
+             logsTable->add_log(split.get_host(),
+                     split.get_time(),
+                     split.get_source(),
+                     split.get_severity(),
+                     split.get_message()
+                 );
+             logsTable->add_log(split.get_host(),
+                     split.get_time(),
+                     split.get_source(),
+                     split.get_severity(),
+                     split.get_message()
+                 );
+             logsTable->add_log(split.get_host(),
+                     split.get_time(),
+                     split.get_source(),
+                     split.get_severity(),
+                     split.get_message()
+                 );
+             logsTable->add_log(split.get_host(),
+                     split.get_time(),
+                     split.get_source(),
+                     split.get_severity(),
+                     split.get_message()
+                 );
+             logsTable->add_log(split.get_host(),
+                     split.get_time(),
+                     split.get_source(),
+                     split.get_severity(),
+                     split.get_message()
+                 );
+            //split.clear();
+        }
+    });
     QObject::connect(&gui.get_server(),&ServerConection::logData,[this](QString resp){
-        SplitLog split;
         split.set_log(resp.toStdString())
              .split_log();
         update_info_chart(infoChart,split.get_severity());
-        // logsTable->add_log(split.get_host(),
-        //                    split.get_time(),
-        //                    split.get_source(),
-        //                    split.get_severity(),
-        //                    split.get_message()
-        //                 );
         //qDebug()<<"ok\n"; 
     });
     layout->addWidget(infoChart->get_chart(), 0, 0); 
@@ -83,16 +112,17 @@ QWidget * SIEMWindow::get_window(){
 }
 SIEMWindow& SIEMWindow::update(){
     gui.get_server().sent("GLAT");
-    infoChart->update();
     datetime= get_current_time();
+    emit infoChart_update();
     while(true){
         sleep(2);
         qDebug()<<QString::fromStdString(datetime)<<"\n";
         gui.get_server().sent(std::format("GLAT {}",datetime));
-        infoChart->update();
+        emit infoChart_update();
         datetime= get_current_time();
     }  
 }
+
 SIEMWindow& SIEMWindow::start_update_thread(){
     update_thread = std::unique_ptr<std::thread>(new std::thread(&SIEMWindow::update, this));
     update_thread->detach();

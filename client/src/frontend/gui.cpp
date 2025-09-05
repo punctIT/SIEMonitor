@@ -5,12 +5,14 @@
 #include <iostream>
 #include <QtWidgets/QStackedWidget>
 
-
+#include <QtCore/QThread>
+#include <QtCore/QDebug>
 
 
 
 
 GUI::GUI(){
+
     server.set_server_adress("127.0.0.1")
           .set_server_port(12345)
           .configure_connection();

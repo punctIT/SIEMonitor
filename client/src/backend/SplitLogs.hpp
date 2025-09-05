@@ -11,7 +11,10 @@ class SplitLog{
         SplitLog& set_log(std::string log);
         SplitLog& split_log();
         SplitLog& split_all();
+        SplitLog& clear();
+        bool empty();
         std::vector<std::string> get_splited_log();
+
         std::string get_severity();
         std::string get_message();
         std::string get_host();

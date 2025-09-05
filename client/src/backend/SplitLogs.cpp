@@ -37,6 +37,13 @@ SplitLog& SplitLog::split_all(){
     splited_log=logs;
     return *this;
 }
+bool SplitLog::empty(){
+    return log.empty();
+}
+SplitLog& SplitLog::clear(){
+    log.clear();
+    return *this;
+}
 std::string SplitLog::get_severity(){
     if(splited_log.size()>=6){
         return splited_log[6];
