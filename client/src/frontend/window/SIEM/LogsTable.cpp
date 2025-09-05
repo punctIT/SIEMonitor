@@ -1,6 +1,10 @@
 #include "LogsTable.hpp"
 #include <QtWidgets/QPushButton>
 #include <string>
+
+
+
+
 LogsTable::LogsTable(){
 
 }

@@ -4,7 +4,8 @@ TARGET_DIR = target
 TARGET = $(TARGET_DIR)/program
 
 SRC := $(shell find src -name "*.cpp")
-MOC_HEADERS := src/backend/ServerConection.h
+MOC_HEADERS := src/backend/ServerConection.h\
+               src/frontend/window/SIEM/siem.h
 
 MOCS := $(MOC_HEADERS:src/%.h=$(TARGET_DIR)/moc_%.cpp)
 
