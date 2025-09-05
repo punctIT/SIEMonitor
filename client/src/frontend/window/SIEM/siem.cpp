@@ -33,10 +33,10 @@ void update_info_chart(InfoChart* infoChart,const std::string severity){
 
 
 QWidget * SIEMWindow::get_window(){
-    infoChart = new InfoChart();
-    logsTable = new LogsTable();
+    infoChart = new InfoChart(window);
+    logsTable = new LogsTable(window);
 
-    QWidget *container= new QWidget();
+    QWidget *container= new QWidget(window);
     QGridLayout *layout = new QGridLayout(container);
 
     QLineEdit *cmd = new QLineEdit(container);
@@ -100,7 +100,7 @@ QWidget * SIEMWindow::get_window(){
         split.set_log(resp.toStdString())
              .split_log();
         update_info_chart(infoChart,split.get_severity());
-        //qDebug()<<"ok\n"; 
+        qDebug()<<"\n"; 
     });
     layout->addWidget(infoChart->get_chart(), 0, 0); 
     layout->addWidget(logsTable->get_chart(),1,0);   
@@ -111,19 +111,25 @@ QWidget * SIEMWindow::get_window(){
     return container;
 }
 SIEMWindow& SIEMWindow::update(){
-    gui.get_server().sent("GLAT");
-    datetime= get_current_time();
-    emit infoChart_update();
-    while(true){
-        sleep(2);
-        qDebug()<<QString::fromStdString(datetime)<<"\n";
-        gui.get_server().sent(std::format("GLAT {}",datetime));
-        emit infoChart_update();
-        datetime= get_current_time();
-    }  
+    
+    while(true) {
+        sleep(2);  // thread worker
+        datetime = get_current_time();
+        QMetaObject::invokeMethod(this, [this]{
+            gui.get_server().sent(std::format("GLAT {}", datetime));
+            emit infoChart_update();  // emit signal în threadul principal
+        }, Qt::QueuedConnection);
+    }
+    return *this; 
 }
 
 SIEMWindow& SIEMWindow::start_update_thread(){
+     QMetaObject::invokeMethod(this, [this]{
+        gui.get_server().sent("GLAT");
+        datetime= get_current_time();
+        emit infoChart_update();
+    }, Qt::QueuedConnection);
+
     update_thread = std::unique_ptr<std::thread>(new std::thread(&SIEMWindow::update, this));
     update_thread->detach();
     return *this;

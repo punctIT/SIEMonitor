@@ -24,7 +24,7 @@ GUI& GUI::init_window(){
     char *argv[] = {};
     window=new QMainWindow();  
 
-    siem = new SIEMWindow(*this);
+    siem = new SIEMWindow(*this,window);
 
 
     login = new LoginWindow(*this);

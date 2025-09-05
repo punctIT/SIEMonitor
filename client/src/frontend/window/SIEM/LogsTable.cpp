@@ -1,15 +1,16 @@
 #include "LogsTable.hpp"
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QMainWindow>
 #include <string>
 
 
 
 
-LogsTable::LogsTable(){
-
+LogsTable::LogsTable(QMainWindow *win){
+    window=win;
 }
 QWidget* LogsTable::get_chart(){
-    QWidget *container = new QWidget();
+    QWidget *container = new QWidget(window);
     QGridLayout* layout = new QGridLayout(container);
     logTree= new QTreeWidget(container);
     logTree->setColumnCount(5);

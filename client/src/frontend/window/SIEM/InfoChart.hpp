@@ -1,10 +1,12 @@
 #pragma once 
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QLabel>
+#include <QtWidgets/QMainWindow>
 #include <mutex>
 
 class InfoChart{
     private:
+        QMainWindow *window;
         std::mutex infoChartMutex;
         int total_logs;
         int error;
@@ -21,7 +23,7 @@ class InfoChart{
         QLabel *Warning;
         
     public:
-        InfoChart();
+        InfoChart(QMainWindow *win);
         QWidget* get_chart();
         InfoChart& update();
 

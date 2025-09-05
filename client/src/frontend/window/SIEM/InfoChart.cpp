@@ -1,7 +1,8 @@
 #include "InfoChart.hpp"
 #include <format>
 
-InfoChart::InfoChart(){
+InfoChart::InfoChart( QMainWindow * win){
+    window=win;
     total_logs=0;
     error=0;
     emergency=0;
@@ -10,7 +11,7 @@ InfoChart::InfoChart(){
     warning=0;
 }
 QWidget* InfoChart::get_chart() {
-    QWidget *container = new QWidget();
+    QWidget *container = new QWidget(window);
     QGridLayout* layout = new QGridLayout(container);
 
     QString total_string = QString::fromStdString(std::format("Total {}", total_logs));
