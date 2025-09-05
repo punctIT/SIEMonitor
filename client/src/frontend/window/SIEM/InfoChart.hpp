@@ -45,5 +45,7 @@ class InfoChart{
         InfoChart& set_warning(int n);
         InfoChart& count_warning();
 
+        InfoChart& update_info_data(const std::string category);
+        InfoChart& set_data(const std::string number);
         
 };

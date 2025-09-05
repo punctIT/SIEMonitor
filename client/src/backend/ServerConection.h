@@ -23,6 +23,7 @@ class ServerConection : public QObject {
     signals:
         void loginResponse(QString resp);  
         void logData(QString log);
+        void logDataNumbers(QString log);
         void usersData(QString data);      
         void alertsData(QString data);      
         void genericResponse(QString data); 

@@ -11,38 +11,15 @@
 #include "../../../backend/Utils.hpp"
 
 
-void update_info_chart(InfoChart* infoChart,const std::string severity){
-    if(severity=="Alert"){
-        infoChart->count_alert();
-    }
-    if(severity=="Emergency"){
-        infoChart->count_emergenty();
-    }
-    if(severity=="Error"){
-        infoChart->count_error();
-    }
-    if(severity=="Warning"){
-        infoChart->count_warning();
-    }
-    if(severity=="Critical"){
-        infoChart->count_critial();
-    }
-    infoChart->count_total();
-    //          .update();
-}
-
-
 QWidget * SIEMWindow::get_window(){
     infoChart = new InfoChart(window);
     logsTable = new LogsTable(window);
-
     QWidget *container= new QWidget(window);
     QGridLayout *layout = new QGridLayout(container);
 
     QLineEdit *cmd = new QLineEdit(container);
     QPushButton *run = new QPushButton("run",container);
-
-
+    
     QObject::connect(run, &QPushButton::clicked, [this,cmd](){
         std::string c= cmd->text().toStdString();
         gui.get_server().sent(c);
@@ -52,84 +29,68 @@ QWidget * SIEMWindow::get_window(){
     
     QObject::connect(&gui.get_server(),&ServerConection::genericResponse,[this](QString resp){
         split.set_log(resp.toStdString())
-             .split_log();
-    
+             .split_all();
+        
         for(auto l : split.get_splited_log()){
             qDebug() <<QString::fromStdString(l)<<"\n"; 
         }
          
     });
-
-    QObject::connect(this, &SIEMWindow::infoChart_update,[this]{
-        infoChart->update();
-        if(!split.empty()){
-             logsTable->add_log(split.get_host(),
-                     split.get_time(),
-                     split.get_source(),
-                     split.get_severity(),
-                     split.get_message()
-                 );
-             logsTable->add_log(split.get_host(),
-                     split.get_time(),
-                     split.get_source(),
-                     split.get_severity(),
-                     split.get_message()
-                 );
-             logsTable->add_log(split.get_host(),
-                     split.get_time(),
-                     split.get_source(),
-                     split.get_severity(),
-                     split.get_message()
-                 );
-             logsTable->add_log(split.get_host(),
-                     split.get_time(),
-                     split.get_source(),
-                     split.get_severity(),
-                     split.get_message()
-                 );
-             logsTable->add_log(split.get_host(),
-                     split.get_time(),
-                     split.get_source(),
-                     split.get_severity(),
-                     split.get_message()
-                 );
-            //split.clear();
-        }
+    QObject::connect(&gui.get_server(),&ServerConection::logDataNumbers,[this](QString resp){
+        split.set_log(resp.mid(11).toStdString())
+             .split_all();
+        infoChart->set_data(split.get_id())
+                  .update();
+         
     });
     QObject::connect(&gui.get_server(),&ServerConection::logData,[this](QString resp){
         split.set_log(resp.toStdString())
              .split_log();
-        update_info_chart(infoChart,split.get_severity());
-        qDebug()<<"\n"; 
+        infoChart->update_info_data(split.get_severity());
+        QMetaObject::invokeMethod(this, [this]{
+            infoChart->update();
+            if(!split.empty()){
+                logsTable->add_log(split.get_host(),
+                        split.get_time(),
+                        split.get_source(),
+                        split.get_severity(),
+                        split.get_message()
+                );
+                split.clear();
+            }
+        });
+        
     });
+    
     layout->addWidget(infoChart->get_chart(), 0, 0); 
     layout->addWidget(logsTable->get_chart(),1,0);   
     layout->addWidget(cmd, 1, 1);        
     layout->addWidget(run, 1, 2);  
     
+
+    
     
     return container;
 }
 SIEMWindow& SIEMWindow::update(){
-    
+    datetime = get_current_time();
     while(true) {
-        sleep(2);  // thread worker
+        sleep(2);
+        qDebug()<<QString::fromStdString(datetime)<<"\n";
+        gui.get_server().sent(std::format("GLAT {}", datetime));
         datetime = get_current_time();
-        QMetaObject::invokeMethod(this, [this]{
-            gui.get_server().sent(std::format("GLAT {}", datetime));
-            emit infoChart_update();  // emit signal în threadul principal
-        }, Qt::QueuedConnection);
     }
     return *this; 
 }
 
 SIEMWindow& SIEMWindow::start_update_thread(){
-     QMetaObject::invokeMethod(this, [this]{
-        gui.get_server().sent("GLAT");
-        datetime= get_current_time();
-        emit infoChart_update();
-    }, Qt::QueuedConnection);
-
+    gui.get_server().sent("GLN");
+    gui.get_server().sent("GLNSe Emergency");
+    gui.get_server().sent("GLNSe Alert");
+    gui.get_server().sent("GLNSe Critical");
+    gui.get_server().sent("GLNSe Error");
+    gui.get_server().sent("GLNSe Warning");
+    datetime= get_current_time();
     update_thread = std::unique_ptr<std::thread>(new std::thread(&SIEMWindow::update, this));
     update_thread->detach();
     return *this;

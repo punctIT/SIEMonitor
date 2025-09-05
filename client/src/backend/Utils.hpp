@@ -5,7 +5,7 @@
 #include <format>
 
 std::string get_current_time(){
-   auto now = std::chrono::system_clock::now();
+   auto now = std::chrono::system_clock::now()- std::chrono::seconds(30); 
     std::time_t t = std::chrono::system_clock::to_time_t(now);
     std::tm tm = *std::localtime(&t);
 

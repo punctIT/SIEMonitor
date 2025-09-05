@@ -20,6 +20,6 @@ class SplitLog{
         std::string get_host();
         std::string get_source();
         std::string get_time();
-        int get_id();
+        std::string get_id();
         int get_pri();
 };

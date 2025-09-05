@@ -18,7 +18,7 @@ class LogsTable{
                            const std::string Source,
                            const std::string Severity,
                            const std::string Message
-                             );
+                          );
 
         
 };

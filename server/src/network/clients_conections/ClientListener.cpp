@@ -55,45 +55,53 @@ void ClientListener::send_receive(const int client_fd){
     char buffer[buffer_size];
     std::optional<std::string> username=std::nullopt;
     HandleCommand cmd;
+    std::string recvBuffer;
     while(true){
         int bytes_read = read(client_fd, buffer, buffer_size - 1);
         if (bytes_read > 0) {
-            std::string input_str(buffer, bytes_read);
-            SplitTest input(input_str);
-            auto args=input.get_splited();
-            // for(auto i in args){
-            //     std::cout<<'['<<i<<"]\n";
-            // }
-            if (username.has_value()){
-                try{
-                    cmd.run(args);
-                }
-                catch (std::exception &e){
-                    std::cout<<e.what()<<std::endl;
-                }
-            }
-            else {
-                if(args[0]=="login" &&args.size() >=3){
-                    username=auth.check_login(args[1],args[2]);
-                    if(username.has_value()){
-                        username=auth.check_online_status(args[1]);
-                        if(username.has_value()){
-                            write(client_fd,succesful_login.c_str(),succesful_login.size());
-                            cmd.set_file_descriptor(client_fd)
-                               .set_username(args[2]); 
-                        }
-                        else {
-                            write(client_fd,user_already_connected.c_str(),user_already_connected.size());
-                        }
+            buffer[bytes_read] = '\0';
+            recvBuffer.append(buffer, bytes_read);
+            size_t pos;
+            while ((pos = recvBuffer.find("\n\r")) != std::string::npos) {
+                std::string input_str = recvBuffer.substr(0, pos);
+                recvBuffer.erase(0, pos + 2);
+                std::cout<<input_str<<std::endl;
+                SplitTest input(input_str);
+                auto args=input.get_splited();
+                // for(auto i in args){
+                //     std::cout<<'['<<i<<"]\n";
+                // }
+                if (username.has_value()){
+                    try{
+                        cmd.run(args);
                     }
-                    else {
-                        write(client_fd,invalid_login_username.c_str(),invalid_login_username.size());
+                    catch (std::exception &e){
+                        std::cout<<e.what()<<std::endl;
                     }
                 }
                 else {
-                    write(client_fd,unautehntificated.c_str(),unautehntificated.size());
+                    if(args[0]=="login" &&args.size() >=3){
+                        username=auth.check_login(args[1],args[2]);
+                        if(username.has_value()){
+                            username=auth.check_online_status(args[1]);
+                            if(username.has_value()){
+                                write(client_fd,succesful_login.c_str(),succesful_login.size());
+                                cmd.set_file_descriptor(client_fd)
+                                .set_username(args[2]); 
+                            }
+                            else {
+                                write(client_fd,user_already_connected.c_str(),user_already_connected.size());
+                            }
+                        }
+                        else {
+                            write(client_fd,invalid_login_username.c_str(),invalid_login_username.size());
+                        }
+                    }
+                    else {
+                        write(client_fd,unautehntificated.c_str(),unautehntificated.size());
+                    }
+                
                 }
-               
             }
         } else if (bytes_read == 0) {
             // clientul closes normali
