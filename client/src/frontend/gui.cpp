@@ -1,4 +1,4 @@
-#include "gui.hpp"
+#include "gui.h"
 #include <QtWidgets/QApplication>
 #include <QtCore/QObject>
 #include <QtWidgets/QGridLayout>
@@ -18,7 +18,9 @@ GUI::GUI(){
           .configure_connection();
     server.receive_start();
 }
+GUI::~GUI(){
 
+}
 GUI& GUI::init_window(){
     int argc = 0;
     char *argv[] = {};

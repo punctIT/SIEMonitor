@@ -2,7 +2,7 @@
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QPushButton>
 #include <QtCore/QObject>
-#include "../gui.hpp" 
+#include "../gui.h" 
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QLineEdit>
 #include <string>

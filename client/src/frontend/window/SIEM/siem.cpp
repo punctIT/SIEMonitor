@@ -8,7 +8,7 @@
 
 
 #include "siem.h"
-#include "../../gui.hpp"
+#include "../../gui.h"
 #include "../../../backend/Utils.hpp"
 
 
@@ -86,17 +86,12 @@ QWidget * SIEMWindow::get_window(){
     
     return container;
 }
-SIEMWindow& SIEMWindow::update(){
-        while(true) {
-            std::this_thread::sleep_for(std::chrono::seconds(2));
-            auto now = get_current_time();
-            QMetaObject::invokeMethod(this, [this, now](){
-                gui.get_server().sent(std::format("GL {} {} 10000", datetime, now))
-                                .sent("LN 10");
+void SIEMWindow::update(){
+    auto now = get_current_time();
+    gui.get_server().sent(std::format("GL {} {} 10000", datetime, now))
+                    .sent("LN 10");
                                 
-                datetime = now;
-            }, Qt::QueuedConnection);
-        }
+    datetime = now;  
 }
 
 SIEMWindow& SIEMWindow::start_update_thread(){
@@ -107,7 +102,14 @@ SIEMWindow& SIEMWindow::start_update_thread(){
                     .sent("GLNSe Error")
                     .sent("GLNSe Warning");
     datetime= get_current_time();
-    update_thread = std::unique_ptr<std::thread>(new std::thread(&SIEMWindow::update, this));
-    update_thread->detach();
+    updateThread = new QThread(this);
+    worker = new UpdateSiemData(this);
+    connect(worker, &UpdateSiemData::updateSIEM, this, &SIEMWindow::update);
+    connect(updateThread, &QThread::started, worker, &UpdateSiemData::doWork);
+    connect(updateThread, &QThread::finished, worker, &QObject::deleteLater);
+    connect(updateThread, &QThread::finished, updateThread, &QObject::deleteLater);
+
+    worker->moveToThread(updateThread);
+    updateThread->start();
     return *this;
 }

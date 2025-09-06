@@ -9,7 +9,7 @@
 #include <thread>
 #include <memory>
 #include <string>
-
+#include "UpdateSiemData.h"
 #include "../../../backend/SplitLogs.hpp"
 
 
@@ -20,12 +20,14 @@ class SIEMWindow : public QObject {
 private:
     GUI& gui;
     QMainWindow* window;
-    std::unique_ptr<std::thread> update_thread;
+    QThread* updateThread = nullptr;
+    UpdateSiemData* worker = nullptr;
+
     InfoChart* infoChart;
-    LogsTable* logsTable;
+    LogsTable* logsTable
     
+    ;
     SplitLog split;
-    SIEMWindow& update();
     std::string datetime;
 public:
     SIEMWindow(GUI &srv,QMainWindow* win) : gui(srv) , window(win){}
@@ -33,6 +35,8 @@ public:
     SIEMWindow& start_update_thread();
 signals:
     void infoChart_update(); 
-
+    
+private slots:
+    void update();
 
 };
