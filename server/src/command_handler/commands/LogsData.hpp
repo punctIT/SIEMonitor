@@ -14,32 +14,14 @@ class LogsData: ProtocolHandler{
     public:
         LogsData();
         LogsData& set_fd(const int fd);
-        LogsData& get_logs_after_timestamp(const std::string timestamp=DEFAULT_DATE,
-                                           const std::string timestamp_end=DEFALUT_DATE_END);
+        LogsData& get_logs(const std::string time_start,
+                           const std::string time_end ,
+                           const std::string nr
+        );
+        LogsData& get_last_n(const std::string n);
+
         LogsData& get_logs_number(const std::string timestamp=DEFAULT_DATE,
                                   const std::string timestamp_end=DEFALUT_DATE_END);
-
-        LogsData& get_logs_by_host(const std::string hostname,
-                                   const std::string timestamp=DEFAULT_DATE,
-                                   const std::string timestamp_end=DEFALUT_DATE_END);
-        LogsData& get_logs_by_host_and_source(const std::string host ,
-                                              const std::string source,
-                                              const std::string timestamp=DEFAULT_DATE,
-                                              const std::string timestamp_end=DEFALUT_DATE_END);
-        LogsData& get_logs_by_severity(const std::string severity,
-                                       const std::string timestamp=DEFAULT_DATE,
-                                       const std::string timestamp_end=DEFALUT_DATE_END);
-
-        LogsData& get_logs_by_host_and_severity(const std::string host , 
-                                                const std::string severity, 
-                                                const std::string timestamp=DEFAULT_DATE,
-                                                const std::string timestamp_end=DEFALUT_DATE_END);
-
-        LogsData& get_logs_by_host_source_severity(const std::string host,
-                                                   const std::string souce,
-                                                   const std::string severity,
-                                                   const std::string timestamp=DEFAULT_DATE,
-                                                   const std::string timestamp_end=DEFALUT_DATE_END);
 
         LogsData& get_logs_number_host(const std::string host,
                                        const std::string timestamp=DEFAULT_DATE,

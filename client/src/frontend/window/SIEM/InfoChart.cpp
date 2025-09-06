@@ -1,16 +1,18 @@
 #include "InfoChart.hpp"
 #include <format>
-
-InfoChart::InfoChart(){
-    total_logs=0;
-    error=0;
-    emergency=0;
-    alert=0;
-    critical=0;
-    warning=0;
+#include <string>
+#include <iostream>
+InfoChart::InfoChart( QMainWindow * win){
+    window=win;
+    total_logs=-1;
+    error=-1;
+    emergency=-1;
+    alert=-1;
+    critical=-1;
+    warning=-1;
 }
 QWidget* InfoChart::get_chart() {
-    QWidget *container = new QWidget();
+    QWidget *container = new QWidget(window);
     QGridLayout* layout = new QGridLayout(container);
 
     QString total_string = QString::fromStdString(std::format("Total {}", total_logs));
@@ -127,5 +129,58 @@ InfoChart& InfoChart::set_critical(int n){
 InfoChart& InfoChart::count_critial(){
     std::lock_guard<std::mutex> lock(infoChartMutex);
     critical+=1;
+    return *this;
+}
+InfoChart& InfoChart::update_info_data(const std::string severity){
+    if(severity=="Alert"){
+       this->count_alert();
+    }
+    if(severity=="Emergency"){
+        this->count_emergenty();
+    }
+    if(severity=="Error"){
+       this->count_error();
+    }
+    if(severity=="Warning"){
+        this->count_warning();
+    }
+    if(severity=="Critical"){
+       this->count_critial();
+    }
+    this->count_total();
+    return *this;
+}
+InfoChart& InfoChart:: set_data(const std::string number){
+     try {
+        int num = std::stoi(number);    
+        if(this->total_logs==-1){
+            total_logs=num;
+            return *this;
+        }
+        if(this->emergency==-1){
+            emergency=num;
+            return *this;
+        }
+        if(this->alert==-1){
+            alert=num;
+            return *this;
+        }
+        if(this->critical==-1){
+            critical=num;
+            return *this;
+        }
+        if(this->error==-1){
+            error=num;
+            return *this;
+        }
+        if(this->warning==-1){
+            warning=num;
+            return *this;
+        }
+    }
+    catch (const std::exception& e) {
+        qDebug() << "Error converting:" << QString::fromStdString(number);
+       
+    }
     return *this;
 }

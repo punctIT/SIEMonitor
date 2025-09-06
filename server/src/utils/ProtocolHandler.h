@@ -23,8 +23,13 @@ class ProtocolHandler{
             }
             return out+end_msg;
         }
-        std::string log_text_protocol(std::string data,const std::string type){
-            return "[LOG]"+std::format("[{}]",type)+data+end_msg;
+        std::string log_text_protocol(std::string data,std::string type,const std::string specifit_type=""){
+            while(type.size()<=8)
+                type+='0';
+                
+            if (specifit_type.empty())
+                return "[LOG]"+std::format("[{}]",type)+data+end_msg;
+            else return "[LOG]"+std::format("[{}][{}]",type,specifit_type)+data+end_msg;
         }
 
 };

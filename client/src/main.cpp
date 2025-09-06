@@ -1,5 +1,5 @@
 #include "backend/ServerConection.h"
-#include "frontend/gui.hpp"
+#include "frontend/gui.h"
 #include <QtWidgets/QApplication>
 
 

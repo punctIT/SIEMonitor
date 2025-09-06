@@ -1,4 +1,4 @@
-#include "gui.hpp"
+#include "gui.h"
 #include <QtWidgets/QApplication>
 #include <QtCore/QObject>
 #include <QtWidgets/QGridLayout>
@@ -18,13 +18,15 @@ GUI::GUI(){
           .configure_connection();
     server.receive_start();
 }
+GUI::~GUI(){
 
+}
 GUI& GUI::init_window(){
     int argc = 0;
     char *argv[] = {};
     window=new QMainWindow();  
 
-    siem = new SIEMWindow(*this);
+    siem = new SIEMWindow(*this,window);
 
 
     login = new LoginWindow(*this);

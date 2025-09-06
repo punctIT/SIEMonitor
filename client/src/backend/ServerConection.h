@@ -2,6 +2,7 @@
 #include <string>
 #include <optional>
 #include <QtCore/QObject>
+#include <QtCore/QThread>
 #include <QtCore/QString>
 
 
@@ -17,14 +18,15 @@ class ServerConection : public QObject {
         ServerConection& set_server_adress(std::string);
         ServerConection& set_server_port(int);
         ServerConection& configure_connection();
-        void receive();
-        void sent(std::string);
+        ServerConection&  sent(std::string);
         void receive_start();
     signals:
         void loginResponse(QString resp);  
         void logData(QString log);
-        void usersData(QString data);      
-        void alertsData(QString data);      
+        void logDataNumbers(QString log);
+        void logTable(QString log);     
         void genericResponse(QString data); 
+    private slots:
+        void receive(const QString& now);
         
 };

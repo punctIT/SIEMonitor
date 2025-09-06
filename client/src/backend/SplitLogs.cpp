@@ -56,6 +56,12 @@ std::string SplitLog::get_message(){
     }
     return "";
 }
+std::string SplitLog::get_id(){
+    if(splited_log.size()>=1){
+        return splited_log[0];
+    }
+    return "";
+}
 std::string SplitLog::get_time(){
     if(splited_log.size()>=6){
         return splited_log[3];

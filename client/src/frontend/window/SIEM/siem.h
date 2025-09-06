@@ -3,13 +3,13 @@
 
 #include "InfoChart.hpp"
 #include "LogsTable.hpp"
-
+#include <QtWidgets/QMainWindow>
 #include <QtWidgets/QWidget>
 #include <QtCore/QObject> 
 #include <thread>
 #include <memory>
 #include <string>
-
+#include "UpdateSiemData.h"
 #include "../../../backend/SplitLogs.hpp"
 
 
@@ -18,19 +18,25 @@ class GUI;
 class SIEMWindow : public QObject {
     Q_OBJECT
 private:
-    GUI& gui; 
-    std::unique_ptr<std::thread> update_thread;
+    GUI& gui;
+    QMainWindow* window;
+    QThread* updateThread = nullptr;
+    UpdateSiemData* worker = nullptr;
+
     InfoChart* infoChart;
-    LogsTable* logsTable;
+    LogsTable* logsTable
     
+    ;
     SplitLog split;
-    SIEMWindow& update();
     std::string datetime;
 public:
-    SIEMWindow(GUI &srv) : gui(srv){}
+    SIEMWindow(GUI &srv,QMainWindow* win) : gui(srv) , window(win){}
     QWidget* get_window();
     SIEMWindow& start_update_thread();
 signals:
     void infoChart_update(); 
+    
+private slots:
+    void update();
 
 };
