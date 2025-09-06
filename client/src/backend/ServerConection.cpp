@@ -55,7 +55,7 @@ void ServerConection::receive(){
         size_t pos;
         while ((pos = recvBuffer.find("\n\r\n\r")) != std::string::npos) {
             std::string message = recvBuffer.substr(0, pos);
-            std::cout<<message<<std::endl;
+            //std::cout<<message<<std::endl;
             QString msg = QString::fromUtf8(message);
             
             if (msg.startsWith("[login]")){
@@ -65,6 +65,10 @@ void ServerConection::receive(){
                 QString msg2=msg.mid(QString("[LOG]").length());
                 if(msg2.startsWith("[GLN")){
                     emit logDataNumbers(msg2);
+                }
+                else if(msg2.startsWith("[LN0000000]")){
+                    QString msg3=msg2.mid(QString("[LN0000000]").length());
+                    emit logTable(msg3);
                 }
                 else {
                     emit logData(msg2);
@@ -80,9 +84,10 @@ void ServerConection::receive(){
     }
     
 }
-void ServerConection::sent(std::string cmd){  
+ServerConection& ServerConection::sent(std::string cmd){  
     cmd+="\n\r";  
     write(server_fd, cmd.c_str(), cmd.size());
+    return *this;
 }
 void ServerConection::receive_start(){
     std::thread t1(&ServerConection::receive, this);

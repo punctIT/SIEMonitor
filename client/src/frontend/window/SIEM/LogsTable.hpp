@@ -13,6 +13,8 @@ class LogsTable{
         LogsTable(QMainWindow *window);
         QWidget* get_chart();
         LogsTable& update();
+        LogsTable& clear();
+        LogsTable& pop();
         LogsTable& add_log(const std::string Hostname,
                            const std::string Time,
                            const std::string Source,

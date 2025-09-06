@@ -26,6 +26,22 @@ QWidget* LogsTable::get_chart(){
     layout->addWidget(btn,0,1);
     return container;
 }
+LogsTable& LogsTable::clear(){
+     if (logTree) {
+        logTree->clear();
+    }
+    return *this;
+}
+LogsTable& LogsTable::pop(){
+    if (!logTree) return *this;
+    
+    int itemCount = logTree->topLevelItemCount();
+    if (itemCount > 0) {
+        QTreeWidgetItem* lastItem = logTree->topLevelItem(itemCount - 1);
+        delete lastItem;
+    }
+    return *this;
+}
 LogsTable& LogsTable::add_log(const std::string Hostname,
                               const std::string Time,
                               const std::string Source,
