@@ -116,6 +116,9 @@ void ClientListener::send_receive(const int client_fd){
         } else {
             // read error
             perror("read");
+            if(username.has_value()){
+                auth.delete_online_user(username.value());
+            }
             close(client_fd);
             break;
         }

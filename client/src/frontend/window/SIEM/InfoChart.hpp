@@ -2,6 +2,9 @@
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
+#include <QtCharts/QChartView>
+#include <QtCharts/QChart>
+#include <QtCharts/QPieSeries>
 #include <mutex>
 
 class InfoChart{
@@ -21,9 +24,12 @@ class InfoChart{
         QLabel *Alert;
         QLabel *Critical;
         QLabel *Warning;
+
+        QPieSeries *series;
         
     public:
         InfoChart(QMainWindow *win);
+        QWidget* get_data_chart();
         QWidget* get_chart();
         InfoChart& update();
 
