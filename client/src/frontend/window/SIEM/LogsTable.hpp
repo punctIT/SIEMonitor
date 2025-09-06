@@ -8,7 +8,8 @@
 class LogsTable{
     private: 
         QMainWindow *window;
-        QTreeWidget *logTree ;    
+        QTreeWidget *logTree ; 
+        int log_number;   
     public:
         LogsTable(QMainWindow *window);
         QWidget* get_chart();
@@ -19,8 +20,8 @@ class LogsTable{
                            const std::string Time,
                            const std::string Source,
                            const std::string Severity,
-                           const std::string Message
+                           const std::string Message,
+                           const int top=0
                           );
-
-        
+    
 };

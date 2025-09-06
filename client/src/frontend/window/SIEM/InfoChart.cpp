@@ -2,6 +2,10 @@
 #include <format>
 #include <string>
 #include <iostream>
+
+
+
+
 InfoChart::InfoChart( QMainWindow * win){
     window=win;
     total_logs=-1;
@@ -11,7 +15,27 @@ InfoChart::InfoChart( QMainWindow * win){
     critical=-1;
     warning=-1;
 }
-QWidget* InfoChart::get_chart() {
+
+QWidget* InfoChart::get_chart(){
+    series = new QPieSeries();
+    series->append("Other", total_logs-error-emergency-alert-critical-warning);
+    series->append("Error", error);
+    series->append("Emergency", emergency);
+    series->append("Alert", alert);
+    series->append("Critical", critical);
+    series->append("Warning", warning);
+
+    QChart *chart = new QChart();
+    chart->addSeries(series);
+    series->setLabelsVisible(true);
+    
+
+    QChartView *chartView = new QChartView(chart, window);
+    chartView->setRenderHint(QPainter::Antialiasing);
+
+    return chartView;
+}
+QWidget* InfoChart::get_data_chart() {
     QWidget *container = new QWidget(window);
     QGridLayout* layout = new QGridLayout(container);
 
@@ -63,6 +87,14 @@ InfoChart& InfoChart::update(){
 
     QString warning_string = QString::fromStdString(std::format("Warning {}", warning));
     Warning->setText(warning_string);
+
+    series->slices().at(0)->setValue(total_logs-error-emergency-alert-critical-warning);
+    series->slices().at(1)->setValue(error);
+    series->slices().at(2)->setValue(emergency);
+    series->slices().at(3)->setValue(alert);
+    series->slices().at(4)->setValue(critical);
+    series->slices().at(5)->setValue(warning);
+
     return *this;
 }
 

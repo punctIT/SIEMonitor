@@ -24,18 +24,15 @@ private:
     UpdateSiemData* worker = nullptr;
 
     InfoChart* infoChart;
-    LogsTable* logsTable
+    LogsTable* logsTable;
     
-    ;
     SplitLog split;
     std::string datetime;
 public:
     SIEMWindow(GUI &srv,QMainWindow* win) : gui(srv) , window(win){}
     QWidget* get_window();
-    SIEMWindow& start_update_thread();
-signals:
-    void infoChart_update(); 
-    
+    SIEMWindow& start_update_thread(); 
+
 private slots:
     void update();
 

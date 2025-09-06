@@ -58,7 +58,8 @@ LogsData& LogsData:: get_logs(const std::string time_start,const std::string tim
     return *this;
 }
 LogsData& LogsData::get_last_n(std::string nr){
-    std::string sql = std::format("SELECT * FROM logs ORDER BY id DESC LIMIT {};",nr);
+    auto time = get_current_time();
+    std::string sql = std::format("SELECT * FROM logs WHERE timestamp <'{}' ORDER BY id DESC LIMIT {};",time,nr);
     auto logs=logs_db.get_data(sql.c_str());
 
     std::string text=log_text_protocol("RESTART","LN");

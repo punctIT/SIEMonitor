@@ -29,10 +29,8 @@ QWidget * SIEMWindow::get_window(){
         else {
             gui.get_server().sent(c);
         }
-        
-        
-       
     });
+
     QObject::connect(&gui.get_server(),&ServerConection::logTable,[this](QString resp){
         if(resp=="RESTART"){
             logsTable->clear();
@@ -41,13 +39,12 @@ QWidget * SIEMWindow::get_window(){
             split.set_log(resp.toStdString())
                  .split_log();
             if(!split.empty()){
-                logsTable->pop().add_log(split.get_host(),
+                logsTable->add_log(split.get_host(),
                          split.get_time(),
                          split.get_source(),
                          split.get_severity(),
                          split.get_message()
                 );
-                sleep(0.01);
                 split.clear();
             }
         }
@@ -72,14 +69,25 @@ QWidget * SIEMWindow::get_window(){
     QObject::connect(&gui.get_server(),&ServerConection::logData,[this](QString resp){
         split.set_log(resp.toStdString())
              .split_log();
-        infoChart->update_info_data(split.get_severity());
-        QMetaObject::invokeMethod(this, [this]{
-            infoChart->update();
-        });
+        infoChart->update_info_data(split.get_severity())
+                  .update(); 
         
+        if(!split.empty()){
+                logsTable->pop().
+                           add_log(split.get_host(),
+                                   split.get_time(),
+                                   split.get_source(),
+                                   split.get_severity(),
+                                   split.get_message(),
+                                   1
+                );
+                split.clear();
+        }
+           
     });
     
-    layout->addWidget(infoChart->get_chart(), 0, 0); 
+    layout->addWidget(infoChart->get_data_chart(), 0, 0); 
+    layout->addWidget(infoChart->get_chart(), 0, 1); 
     layout->addWidget(logsTable->get_chart(),1,0);   
     layout->addWidget(cmd, 1, 1);        
     layout->addWidget(run, 1, 2);  
@@ -88,8 +96,8 @@ QWidget * SIEMWindow::get_window(){
 }
 void SIEMWindow::update(){
     auto now = get_current_time();
-    gui.get_server().sent(std::format("GL {} {} 10000", datetime, now))
-                    .sent("LN 10");
+    gui.get_server().sent(std::format("GL {} {} 10000", datetime, now));
+                   
                                 
     datetime = now;  
 }
@@ -100,7 +108,9 @@ SIEMWindow& SIEMWindow::start_update_thread(){
                     .sent("GLNSe Alert")
                     .sent("GLNSe Critical")
                     .sent("GLNSe Error")
-                    .sent("GLNSe Warning");
+                    .sent("GLNSe Warning")
+                    .sent("LN 10");
+        
     datetime= get_current_time();
     updateThread = new QThread(this);
     worker = new UpdateSiemData(this);
