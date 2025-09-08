@@ -28,7 +28,9 @@ class UpdateSiemData : public QObject {
         }
     public slots:
         void doWork(){
-                while(running){
+                while(true){
+                    if(!running)
+                        continue;
                     QThread::msleep(2000);
                     emit updateSIEM();
                 }

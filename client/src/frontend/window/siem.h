@@ -5,7 +5,7 @@
 #include <QtWidgets/QWidget>
 #include <QtCore/QObject> 
 #include <QtWidgets/QStackedWidget>
-
+#include <QtWidgets/QGridLayout>
 
 class SiemHomeWindow;
 class IncidentsWindow;
@@ -18,6 +18,11 @@ private:
     QStackedWidget* stack_window;
     SiemHomeWindow* homeWindow;
     IncidentsWindow *incidentsWindow;
+    QGridLayout *main_layout;
+    bool toggle_menu;
+    
+    QWidget* get_side_menu();
+    QWidget* get_top_menu();
 public:
     SIEMWindow(GUI &srv,QMainWindow* win) : gui(srv) , window(win){}
     QWidget* get_window();
