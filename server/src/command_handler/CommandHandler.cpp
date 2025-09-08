@@ -82,19 +82,11 @@ void HandleCommand::run(std::vector<std::string> args){
         }
         return;
     }
-    if(args[0]=="GLN"){
+    if(args[0]=="GLND"){
         try{
             LogsData logs;
-            if(args.size()==3){
-                const std::string timestamp=args[1]+' '+args[2];
-                logs.set_fd(fd)
-                    .get_logs_number(timestamp);
-            }
-            else {
-                logs.set_fd(fd)
-                .get_logs_number();
-            }
-            
+            logs.set_fd(fd)
+                .get_logs_number_data();   
         }
         catch(std::exception &err){
             write(fd,unexpected_error.c_str(),unexpected_error.size());
@@ -102,96 +94,6 @@ void HandleCommand::run(std::vector<std::string> args){
         return;
     }
     
-    if(args[0]=="GLNSe"){
-        try{
-            LogsData logs;
-            if(args.size()==4){
-                const std::string timestamp=args[2]+" "+args[3];
-                logs.set_fd(fd)
-                    .get_logs_number_severity(args[1],timestamp);
-                }
-            else {
-                logs.set_fd(fd)
-                   .get_logs_number_severity(args[1]);
-            }
-        }
-        catch(std::exception &err){
-            write(fd,unexpected_error.c_str(),unexpected_error.size());
-        }
-        return;
-    }
-     if(args[0]=="GLNSeH"){
-        try{
-            LogsData logs;
-            if(args.size()==5){
-                const std::string timestamp=args[3]+" "+args[4];
-                logs.set_fd(fd)
-                    .get_logs_number_severity_host(args[1],args[2],timestamp);
-                }
-            else {
-                logs.set_fd(fd)
-                   .get_logs_number_severity_host(args[1],args[2]);
-            }
-        }
-        catch(std::exception &err){
-            write(fd,unexpected_error.c_str(),unexpected_error.size());
-        }
-        return;
-    }
-    if(args[0]=="GLNSeHSo"){
-        try{
-            LogsData logs;
-            if(args.size()==6){
-                const std::string timestamp=args[4]+" "+args[5];
-                logs.set_fd(fd)
-                    .get_logs_number_severity_host_source(args[1],args[2],args[3],timestamp);
-                }
-            else {
-                logs.set_fd(fd)
-                   .get_logs_number_severity_host_source(args[1],args[2],args[3]);
-            }
-        }
-        catch(std::exception &err){
-            write(fd,unexpected_error.c_str(),unexpected_error.size());
-        }
-        return;
-    }
-    if(args[0]=="GLNH"){
-        try{
-            LogsData logs;
-            if(args.size()==4){
-                const std::string timestamp=args[2]+" "+args[3];
-                logs.set_fd(fd)
-                    .get_logs_number_host(args[1],timestamp);
-                }
-            else {
-                logs.set_fd(fd)
-                   .get_logs_number_host(args[1]);
-            }
-        }
-        catch(std::exception &err){
-            write(fd,unexpected_error.c_str(),unexpected_error.size());
-        }
-        return;
-    }
-    if(args[0]=="GLNHSo"){
-        try{
-            LogsData logs;
-            if(args.size()==5){
-                const std::string timestamp=args[3]+" "+args[4];
-                logs.set_fd(fd)
-                    .get_logs_number_host_source(args[1],args[2],timestamp);
-                }
-            else {
-                logs.set_fd(fd)
-                    .get_logs_number_host_source(args[1],args[2]);
-            }
-        }
-        catch(std::exception &err){
-            write(fd,unexpected_error.c_str(),unexpected_error.size());
-        }
-        return;
-    }
     std::string msg="error , invalid command";
     e=write(fd,msg.c_str(),msg.size());
     if( e < 0){

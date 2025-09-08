@@ -5,6 +5,9 @@
 #include <QtCore/QThread>
 #include <QtCore/QString>
 
+class QObject;
+class QThread;
+class QString;
 
 class ServerConection : public QObject {
     Q_OBJECT

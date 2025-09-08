@@ -11,7 +11,7 @@ ListHosts& ListHosts::set_fd(const int &fd){
 ListHosts& ListHosts::get_hosts(){
     const std::string sql="SELECT DISTINCT hostname from logs;";
     auto hosts=logs_db.get_data(sql.c_str());
-    const std::string text = get_text(hosts);
+    const std::string text = get_text(hosts,"[HOSTS]");
     write(fd,text.c_str(),text.size());
     return *this;
 }
@@ -20,7 +20,7 @@ ListHosts& ListHosts::get_sources(const std::string &host){
                                        host);
     auto hosts=logs_db.get_data(sql.c_str());
     if(hosts.empty()==false){
-        const std::string text = get_text(hosts);
+        const std::string text = get_text(hosts,"[SOURCES]");
         write(fd,text.c_str(),text.size());
     }
     else {

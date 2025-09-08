@@ -1,9 +1,10 @@
-
 #pragma once
-#include <QtWidgets/QMainWindow>
+
 #include "../backend/ServerConection.h"
 #include "window/login.hpp"
-#include "window/SIEM/siem.h"
+//#include "window/home_screen/siem_home.h"
+#include "window/siem.h"
+#include <QtWidgets/QMainWindow>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QStackedWidget>
 #include <QtCore/QThread>

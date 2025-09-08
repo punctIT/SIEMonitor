@@ -1,10 +1,9 @@
 #include "gui.h"
+
 #include <QtWidgets/QApplication>
 #include <QtCore/QObject>
 #include <QtWidgets/QGridLayout>
-#include <iostream>
 #include <QtWidgets/QStackedWidget>
-
 #include <QtCore/QThread>
 #include <QtCore/QDebug>
 
@@ -53,7 +52,7 @@ GUI& GUI::set_login_window() {
 
 GUI& GUI::set_siem_window() {
     stack->setCurrentIndex(1); 
-    siem->start_update_thread();
+    siem->start_home_thread();
     window->showMaximized();
     return *this;
 }

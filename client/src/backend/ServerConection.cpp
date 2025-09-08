@@ -1,4 +1,6 @@
 #include "ServerConection.h"
+#include "UpdateWorker.h"
+
 #include <string>
 #include <iostream>
 #include <stdio.h>
@@ -8,7 +10,6 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <thread>
-#include "UpdateWorker.h"
 
 
 ServerConection::ServerConection(){
@@ -43,23 +44,30 @@ ServerConection& ServerConection::configure_connection(){
 void ServerConection::receive(const QString& msg){
     if (msg.startsWith("[login]")){
         emit loginResponse(msg.mid(QString("[login]").length()));
+        return;
     }
     if (msg.startsWith("[LOG]")){
         QString msg2=msg.mid(QString("[LOG]").length());
-        if(msg2.startsWith("[GLN")){
-            emit logDataNumbers(msg2);
-        }
-        else if(msg2.startsWith("[LN0000000]")){
+        if(msg2.startsWith("[LN0000000]")){
             QString msg3=msg2.mid(QString("[LN0000000]").length());
             emit logTable(msg3);
         }
         else {
             emit logData(msg2);
         }
+        return;
     }
-    else {
-         emit genericResponse(msg);
-    }           
+    if (msg.startsWith("[DATA]")){
+        QString msg2=msg.mid(QString("[DATA]").length());
+         if(msg2.startsWith("[GLND]")){
+            QString msg3=msg2.mid(QString("[GLND]").length());
+            emit logDataNumbers(msg3);
+        }
+        return;
+    }
+    
+    emit genericResponse(msg);
+              
 }
 ServerConection& ServerConection::sent(std::string cmd){  
     cmd+="\n\r";  

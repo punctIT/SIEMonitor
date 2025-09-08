@@ -15,13 +15,15 @@ class ProtocolHandler{
 
         const std::string end_msg="\n\r\n\r";
     public:
-        std::string get_text(std::vector<std::string> data){
+        std::string get_text(std::vector<std::string> data,std::string type,std::string second_type=""){
             std::string out="";
             for(auto i : data){
                 out+=i;
                 out+=" ";
             }
-            return out+end_msg;
+            if (second_type.empty())    
+                return type+out+end_msg;
+            else return type+second_type+out+end_msg;
         }
         std::string log_text_protocol(std::string data,std::string type,const std::string specifit_type=""){
             while(type.size()<=8)
