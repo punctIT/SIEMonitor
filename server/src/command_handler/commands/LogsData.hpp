@@ -19,31 +19,6 @@ class LogsData: ProtocolHandler{
                            const std::string nr
         );
         LogsData& get_last_n(const std::string n);
-
-        LogsData& get_logs_number(const std::string timestamp=DEFAULT_DATE,
-                                  const std::string timestamp_end=DEFALUT_DATE_END);
-
-        LogsData& get_logs_number_host(const std::string host,
-                                       const std::string timestamp=DEFAULT_DATE,
-                                       const std::string timestamp_end=DEFALUT_DATE_END);
-
-        LogsData& get_logs_number_severity(const std::string severity,
-                                           const std::string timestamp=DEFAULT_DATE,
-                                           const std::string timestamp_end=DEFALUT_DATE_END);
-
-        LogsData& get_logs_number_severity_host(const std::string severity,
-                                                const std::string host,
-                                                const std::string timestamp=DEFAULT_DATE,
-                                                const std::string timestamp_end=DEFALUT_DATE_END);
-
-        LogsData& get_logs_number_severity_host_source(const std::string severity,
-                                                       const std::string host,
-                                                       const std::string source,
-                                                       const std::string timestamp=DEFAULT_DATE,
-                                                       const std::string timestamp_end=DEFALUT_DATE_END);
-
-        LogsData& get_logs_number_host_source(const std::string host,
-                                              const std::string source,
-                                              const std::string timestamp=DEFAULT_DATE,
-                                              const std::string timestamp_end=DEFALUT_DATE_END);
+        LogsData& get_logs_number_data();
+        
 };

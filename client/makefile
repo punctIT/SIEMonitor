@@ -7,8 +7,9 @@ SRC := $(shell find src -name "*.cpp")
 MOC_HEADERS := src/backend/ServerConection.h\
 			   src/backend/UpdateWorker.h\
 			   src/frontend/gui.h\
-               src/frontend/window/SIEM/siem.h\
-			   src/frontend/window/SIEM/UpdateSiemData.h
+               src/frontend/window/home_screen/siem_home.h\
+			   src/frontend/window/home_screen/UpdateSiemData.h\
+			   src/frontend/window/incidents_screen/incidents_home.h
 
 MOCS := $(MOC_HEADERS:src/%.h=$(TARGET_DIR)/moc_%.cpp)
 

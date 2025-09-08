@@ -3,6 +3,8 @@
 #include <string>
 #include <chrono>
 #include <ctime>
+#include <vector>
+
 
 std::string get_current_time(){
     auto now = std::chrono::system_clock::now()- std::chrono::seconds(30); 
@@ -68,126 +70,20 @@ LogsData& LogsData::get_last_n(std::string nr){
         std::string text=log_text_protocol(log,"LN");
         write(fd,text.c_str(),text.length());
     }
-    
     return *this;
-
 }
-LogsData& LogsData:: get_logs_number(const std::string timestamp,const std::string timestamp_end){
-    const std::string sql=std::format("SELECT COUNT(*) FROM logs WHERE timestamp >'{}' AND timestamp <= '{}';",
-                                      timestamp,
-                                      get_final_date(timestamp_end)
-                                    );
-    auto logs=logs_db.get_data(sql.c_str());
-    std::string text=log_text_protocol(logs[0],"GLN");
+LogsData& LogsData::get_logs_number_data(){
+    std::vector<std::string> numbers;
+    auto time = get_current_time();
+    std::string sql = std::format("SELECT COUNT(*) FROM logs WHERE timestamp < '{}';",time);
+    auto n=logs_db.get_data(sql.c_str());
+    numbers.push_back(n[0]);
+    for(auto type:{"Alert","Critical","Emergency","Error","Warning"}){
+        sql = std::format("SELECT COUNT(*) FROM logs WHERE timestamp < '{}' AND severity='{}';",time,type);
+        auto n=logs_db.get_data(sql.c_str());
+        numbers.push_back(n[0]);
+    }
+    std::string text=get_text(numbers,"[DATA]","[GLND]");
     write(fd,text.c_str(),text.length());
-    return *this;
-}
-
-
-
-LogsData& LogsData:: get_logs_number_severity(const std::string severity,
-                                              const std::string timestamp,
-                                              const std::string timestamp_end){
-    const std::string sql = std::format("SELECT COUNT(*) FROM logs WHERE timestamp > '{}' AND severity='{}' AND timestamp <='{}';",
-                                        timestamp,
-                                        severity,
-                                        get_final_date(timestamp_end)
-                                    );
-    auto logs=logs_db.get_data(sql.c_str());
-    if(logs.size()){
-        std::string text=log_text_protocol(logs[0],"GLNSe");
-        write(fd,text.c_str(),text.length());
-    }
-    else {
-        std::string text=log_text_protocol("0","GLNSe");
-        write(fd,text.c_str(),text.length());
-    }
-    return *this;
-}
-LogsData& LogsData:: get_logs_number_severity_host(const std::string severity,
-                                                   const std::string host,
-                                                   const std::string timestamp,
-                                                   const std::string timestamp_end){
-    const std::string sql = std::format("SELECT COUNT(*) FROM logs WHERE severity='{}' AND hostname='{}' AND timestamp > '{}' AND timestamp <='{}';",
-                                        severity,
-                                        host,
-                                        timestamp,
-                                        get_final_date(timestamp_end)
-                                       );
-    auto logs=logs_db.get_data(sql.c_str());
-    if(logs.size()){
-        std::string text=log_text_protocol(logs[0],"GLNSeH");
-        write(fd,text.c_str(),text.length());
-    }
-    else {
-        std::string text=log_text_protocol("0","GLNSeH");
-        write(fd,text.c_str(),text.length());
-    }
-    
-    return *this;
-}
-LogsData& LogsData:: get_logs_number_severity_host_source(const std::string severity,
-                                                          const std::string host,
-                                                          const std::string source,
-                                                          const std::string timestamp,
-                                                          const std::string timestamp_end){
-    const std::string sql = std::format("SELECT COUNT(*) FROM logs WHERE severity='{}' AND hostname='{}' and source='{}' AND timestamp > '{}' AND timestamp <='{}';",
-                                        severity,
-                                        host,
-                                        source,
-                                        timestamp,
-                                        get_final_date(timestamp_end)
-                                       );
-    auto logs=logs_db.get_data(sql.c_str());
-    if(logs.size()){
-        std::string text=log_text_protocol(logs[0],"GLNSeHSo");
-        write(fd,text.c_str(),text.length());
-    }
-    else {
-        std::string text=log_text_protocol("0","GLNSeHSo");
-        write(fd,text.c_str(),text.length());
-    }
-    return *this;
-}
-LogsData& LogsData::get_logs_number_host(const std::string host,
-                                         const std::string timestamp,
-                                         const std::string timestamp_end){
-
-   const std::string sql = std::format("SELECT COUNT(*) FROM logs WHERE timestamp > '{}' AND hostname='{}' AND timestamp <='{}';",
-                                        timestamp,
-                                        host,
-                                        get_final_date(timestamp_end)
-                                    );
-    auto logs=logs_db.get_data(sql.c_str());
-    if(logs.size()){
-        std::string text=log_text_protocol(logs[0],"GLNH");
-        write(fd,text.c_str(),text.length());
-    }
-    else {
-        std::string text=log_text_protocol("0","GLNH");
-        write(fd,text.c_str(),text.length());
-    }
-    return *this;
-}
-LogsData& LogsData::get_logs_number_host_source(const std::string host,
-                                                const std::string source,
-                                                const std::string timestamp,
-                                                const std::string timestamp_end){
-
-   const std::string sql = std::format("SELECT COUNT(*) FROM logs WHERE timestamp > '{}' AND hostname='{}' AND source='{}' AND timestamp <= '{}';",
-                                        timestamp,
-                                        host,
-                                        source,
-                                        get_final_date(timestamp_end)
-                                    );
-    auto logs=logs_db.get_data(sql.c_str());
-    if(logs.size()){
-        std::string text=log_text_protocol(logs[0],"GLNHSo");
-        write(fd,text.c_str(),text.length());
-    }
-    else {
-        std::string text=log_text_protocol("0","GLNHSo");
-        write(fd,text.c_str(),text.length());
-    }
     return *this;
 }
