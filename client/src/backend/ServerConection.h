@@ -29,6 +29,7 @@ class ServerConection : public QObject {
         void logDataNumbers(QString log);
         void logTable(QString log);     
         void genericResponse(QString data); 
+        void IncidentsResponse(QString data); 
     private slots:
         void receive(const QString& now);
         

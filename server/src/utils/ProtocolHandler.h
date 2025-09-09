@@ -33,5 +33,11 @@ class ProtocolHandler{
                 return "[LOG]"+std::format("[{}]",type)+data+end_msg;
             else return "[LOG]"+std::format("[{}][{}]",type,specifit_type)+data+end_msg;
         }
+        std::string severity_text_protocol(std::string data,std::string type){
+
+            return "[INC]"+std::format("[{}]",type)+data+end_msg;
+          
+        }
+
 
 };

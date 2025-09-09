@@ -13,15 +13,15 @@ QWidget* IncidentsWindow::get_window(){
     layout->addWidget(text);
 
 
-    QObject::connect(&gui.get_server(),&ServerConection::logTable,[this](QString resp){
-        
+    QObject::connect(&gui.get_server(),&ServerConection::IncidentsResponse,[this](QString resp){
+        qDebug()<<resp;
     });
 
     return container;
 }
 
 void IncidentsWindow::update(){
-    qDebug()<<"incidents";
+    gui.get_server().sent("GLSHS ALL NONE NONE");
 }
 
 IncidentsWindow& IncidentsWindow::create_update_thread(){
