@@ -13,13 +13,13 @@
 #include <QtCore/QString>
 
 
-class SiemHomeWindow;
+class IncidentsWindow;
 
-class UpdateSiemData : public QObject {
+class UpdateIncindetData : public QObject {
     Q_OBJECT
     
     public:
-        UpdateSiemData(SiemHomeWindow* parent = nullptr) : siem(parent),running(false){}
+        UpdateIncindetData(IncidentsWindow* parent = nullptr) : siem(parent),running(false){}
         void Start() {
             running=true;
         }
@@ -30,17 +30,17 @@ class UpdateSiemData : public QObject {
         void doWork(){
                 while(running){
                     QThread::msleep(2000);
-                    emit updateSIEM();
+                    emit updateIncident();
                 }
             
         }
         
     signals:
-        void updateSIEM();
+        void updateIncident();
         
 
     private:
         std::atomic <bool> running;
-        SiemHomeWindow* siem;
+        IncidentsWindow* siem;
         
 };

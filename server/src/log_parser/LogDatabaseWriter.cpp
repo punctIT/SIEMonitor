@@ -16,6 +16,7 @@ LogDatabaseWriter::LogDatabaseWriter(){
         "hostname TEXT,"
         "source TEXT,"
         "severity TEXT,"
+        "resolved TINYINT,"
         "message TEXT"
         ");";
     db.set_new_database_path("logsData.db")
@@ -78,8 +79,8 @@ std::vector<std::string> get_splited_log(std::string log){
     c=0;
     std::istringstream iss(log);
     int count = 0;
-    //next 4 (MOUNTH DAY TIME HOSTNAME ...
-    while (count < 5 && iss >> word) {
+    //next 5 (MOUNTH DAY TIME HOSTNAME ...
+    while (count < 6 && iss >> word) {
         logs.push_back(word);
         c+=(1+word.length());
         count++;
@@ -106,7 +107,7 @@ std::string get_severity(int pri){
 // - invalid syslog format
 // - incomplete syslog
 std::string get_sql_command(std::vector <std::string> logs){
-    if(logs.size() < 7) {
+    if(logs.size() < 8) {
         std::cerr << "ERROR: Not enough log elements, got " << logs.size() << std::endl;
         return "";
     }
@@ -125,19 +126,20 @@ std::string get_sql_command(std::vector <std::string> logs){
 
     //for a valid message , in case of ' character
     std::string escaped;
-    for(char c : logs[6]){
+    for(char c : logs[7]){
         if(c == '\'') escaped += "''";
         else escaped += c;
     }
     
     const std::string sql = std::format(
-        "INSERT INTO logs(pri, timestamp, hostname, source, severity, message) "
-        "VALUES ({}, '{}', '{}', '{}', '{}', '{}');",
+        "INSERT INTO logs(pri, timestamp, hostname, source, severity, resolved,message) "
+        "VALUES ({}, '{}', '{}', '{}', '{}','{}', '{}');",
         logs[0],
         get_date(logs[1], logs[2], logs[3]),
         logs[4],
         logs[5],
         severity,
+        0,
         escaped
     );
 
