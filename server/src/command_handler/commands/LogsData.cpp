@@ -59,6 +59,7 @@ LogsData& LogsData:: get_logs(const std::string time_start,const std::string tim
     //std::cout<<timestamp<<" "<<get_final_date(timestamp_end)<<std::endl;
     return *this;
 }
+
 LogsData& LogsData::get_last_n(std::string nr){
     auto time = get_current_time();
     std::string sql = std::format("SELECT * FROM logs WHERE timestamp <'{}' ORDER BY id DESC LIMIT {};",time,nr);
@@ -72,6 +73,7 @@ LogsData& LogsData::get_last_n(std::string nr){
     }
     return *this;
 }
+
 LogsData& LogsData::get_logs_number_data(){
     std::vector<std::string> numbers;
     auto time = get_current_time();
@@ -85,5 +87,46 @@ LogsData& LogsData::get_logs_number_data(){
     }
     std::string text=get_text(numbers,"[DATA]","[GLND]");
     write(fd,text.c_str(),text.length());
+    return *this;
+}
+
+LogsData& LogsData::get_logs_by_severity_host_source(const std::string severity,
+                                                     const std::string host,
+                                                     const std::string source
+                                            ){
+
+    std::string sql;
+    bool limit=true;
+    if(severity=="HIGH"){
+        sql=std::format("SELECT * FROM LOGS WHERE severity in ('Emergency','Alert','Critical')",severity);
+        limit=false;
+    }
+    if(severity=="MEDIUM"){
+        sql=std::format("SELECT * FROM LOGS WHERE severity in ('Error','Warning')",severity);
+    }
+    if(severity=="LOW"){
+        sql=std::format("SELECT * FROM LOGS WHERE severity in ('Notice','Informational','Debug')",severity);
+    }
+     if(severity=="ALL"){
+        sql=std::format("SELECT * FROM LOGS WHERE severity in ('Notice','Informational','Debug','Error','Warning','Emergency','Alert','Critical')",severity);
+    }
+    if(host!="NONE"){
+        sql=std::format("{} AND hostname='{}'",sql,host);
+    }
+    if(source!="NONE"){
+        sql=std::format("{} AND source='{}'",sql,source);
+    }
+    if(limit){
+        sql+="AND resolved=0 LIMIT 150;";
+    }
+    else {
+        sql+="AND resolved=0;";
+    }
+    
+    auto logs=logs_db.get_data(sql.c_str());
+    for(auto log :logs){
+        std::string text=severity_text_protocol(log,"");
+        write(fd,text.c_str(),text.length());
+    }
     return *this;
 }

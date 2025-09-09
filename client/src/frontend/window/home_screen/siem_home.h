@@ -32,8 +32,7 @@ private:
 public:
     SiemHomeWindow(GUI &srv,QMainWindow* win) : gui(srv) , window(win){}
     QWidget* get_window();
-    SiemHomeWindow& create_update_thread(); 
-    SiemHomeWindow& start_update_thread(); 
+    SiemHomeWindow& create_update_thread();  
     SiemHomeWindow& stop_update_thread();
 private slots:
     void update();

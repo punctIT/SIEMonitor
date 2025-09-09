@@ -65,7 +65,10 @@ void ServerConection::receive(const QString& msg){
         }
         return;
     }
-    
+    if (msg.startsWith("[INC]")){
+        emit IncidentsResponse(msg);
+        return;
+    }
     emit genericResponse(msg);
               
 }

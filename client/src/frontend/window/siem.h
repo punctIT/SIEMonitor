@@ -20,7 +20,7 @@ private:
     IncidentsWindow *incidentsWindow;
     QGridLayout *main_layout;
     bool toggle_menu;
-    
+
     QWidget* get_side_menu();
     QWidget* get_top_menu();
 public:

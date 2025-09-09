@@ -101,6 +101,8 @@ void SiemHomeWindow::update(){
 }
 
 SiemHomeWindow& SiemHomeWindow::create_update_thread(){
+    if(worker!=nullptr && updateThread!=nullptr)
+        return *this;
     gui.get_server().sent("GLND");
     datetime= get_current_time();
     updateThread = new QThread(this);
@@ -110,15 +112,22 @@ SiemHomeWindow& SiemHomeWindow::create_update_thread(){
     connect(updateThread, &QThread::finished, worker, &QObject::deleteLater);
     connect(updateThread, &QThread::finished, updateThread, &QObject::deleteLater);
 
+    worker->Start();
     worker->moveToThread(updateThread);
     updateThread->start();
     return *this;
 }
-SiemHomeWindow& SiemHomeWindow::start_update_thread(){
-    worker->Start();
-    return *this;
-}
 SiemHomeWindow& SiemHomeWindow::stop_update_thread(){
-    worker->Stop();
+    if (worker) {
+        worker->Stop();             
+    }
+    if (updateThread) {
+        updateThread->quit();       
+        updateThread->wait();    
+    }
+
+    worker = nullptr;
+    updateThread = nullptr;
+
     return *this;
 }

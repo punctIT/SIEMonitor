@@ -93,6 +93,17 @@ void HandleCommand::run(std::vector<std::string> args){
         }
         return;
     }
+    if(args[0]=="GLSHS"){
+        try{
+            LogsData logs;
+            logs.set_fd(fd)
+                .get_logs_by_severity_host_source(args[1],args[2],args[3]);   
+        }
+        catch(std::exception &err){
+            write(fd,unexpected_error.c_str(),unexpected_error.size());
+        }
+        return;
+    }
     
     std::string msg="error , invalid command";
     e=write(fd,msg.c_str(),msg.size());

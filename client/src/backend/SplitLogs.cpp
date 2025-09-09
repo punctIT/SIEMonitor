@@ -14,7 +14,9 @@ SplitLog& SplitLog::split_log(){
     std::string word="";
     int count = 0;
    
-    while (count < 7 && iss >> word) {
+    while (count < 8 && iss >> word) {
+        if(count == 7)
+            break;
         logs.push_back(word);
         count++;
     }
