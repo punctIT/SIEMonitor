@@ -103,6 +103,9 @@ void SiemHomeWindow::update(){
 }
 
 SiemHomeWindow& SiemHomeWindow::start_update_timer(){
+    auto now = get_current_time();
+    gui.get_server().sent(std::format("GL {} {} 10000", datetime, now));
+    gui.get_server().sent("GLND");
     updateTimer->start(2000);
     return *this;
 }

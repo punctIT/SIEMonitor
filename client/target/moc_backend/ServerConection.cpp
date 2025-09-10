@@ -37,7 +37,7 @@ struct qt_meta_stringdata_ServerConection_t {
     char stringdata7[9];
     char stringdata8[16];
     char stringdata9[5];
-    char stringdata10[18];
+    char stringdata10[23];
     char stringdata11[8];
     char stringdata12[4];
 };
@@ -55,9 +55,9 @@ Q_CONSTINIT static const qt_meta_stringdata_ServerConection_t qt_meta_stringdata
         QT_MOC_LITERAL(63, 8),  // "logTable"
         QT_MOC_LITERAL(72, 15),  // "genericResponse"
         QT_MOC_LITERAL(88, 4),  // "data"
-        QT_MOC_LITERAL(93, 17),  // "IncidentsResponse"
-        QT_MOC_LITERAL(111, 7),  // "receive"
-        QT_MOC_LITERAL(119, 3)   // "now"
+        QT_MOC_LITERAL(93, 22),  // "IncidentsResponseTable"
+        QT_MOC_LITERAL(116, 7),  // "receive"
+        QT_MOC_LITERAL(124, 3)   // "now"
     },
     "ServerConection",
     "loginResponse",
@@ -69,7 +69,7 @@ Q_CONSTINIT static const qt_meta_stringdata_ServerConection_t qt_meta_stringdata
     "logTable",
     "genericResponse",
     "data",
-    "IncidentsResponse",
+    "IncidentsResponseTable",
     "receive",
     "now"
 };
@@ -138,7 +138,7 @@ Q_CONSTINIT const QMetaObject ServerConection::staticMetaObject = { {
         // method 'genericResponse'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         QtPrivate::TypeAndForceComplete<QString, std::false_type>,
-        // method 'IncidentsResponse'
+        // method 'IncidentsResponseTable'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         QtPrivate::TypeAndForceComplete<QString, std::false_type>,
         // method 'receive'
@@ -159,7 +159,7 @@ void ServerConection::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int 
         case 2: _t->logDataNumbers((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
         case 3: _t->logTable((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
         case 4: _t->genericResponse((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
-        case 5: _t->IncidentsResponse((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
+        case 5: _t->IncidentsResponseTable((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
         case 6: _t->receive((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
         default: ;
         }
@@ -202,7 +202,7 @@ void ServerConection::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int 
         }
         {
             using _t = void (ServerConection::*)(QString );
-            if (_t _q_method = &ServerConection::IncidentsResponse; *reinterpret_cast<_t *>(_a[1]) == _q_method) {
+            if (_t _q_method = &ServerConection::IncidentsResponseTable; *reinterpret_cast<_t *>(_a[1]) == _q_method) {
                 *result = 5;
                 return;
             }
@@ -276,7 +276,7 @@ void ServerConection::genericResponse(QString _t1)
 }
 
 // SIGNAL 5
-void ServerConection::IncidentsResponse(QString _t1)
+void ServerConection::IncidentsResponseTable(QString _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 5, _a);

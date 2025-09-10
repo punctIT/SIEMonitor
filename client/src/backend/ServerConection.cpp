@@ -66,7 +66,10 @@ void ServerConection::receive(const QString& msg){
         return;
     }
     if (msg.startsWith("[INC]")){
-        emit IncidentsResponse(msg);
+        QString msg2=msg.mid(QString("[INC]").length());
+        if(msg2.startsWith("[TAB]")){
+            emit IncidentsResponseTable(msg2.mid(QString("[INC]").length()));
+        }
         return;
     }
     emit genericResponse(msg);

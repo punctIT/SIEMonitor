@@ -9,6 +9,7 @@
 #include <QtCore/QObject> 
 #include <QtCore/QThread>
 #include <QtCore/QTimer>
+#include "incidents_table.hpp"
 
 
 class GUI;
@@ -19,12 +20,20 @@ private:
     GUI& gui;
     QMainWindow* window;
     QTimer* updateTimer;
+    IncidentTable* incidentTable;
+
+
+    std::string datetime;
+    std::string hostname;
+    std::string type;
+    std::string source;
 public:
-    IncidentsWindow(GUI &srv,QMainWindow* win) : gui(srv) , window(win){}
+    IncidentsWindow(GUI &srv,QMainWindow* win) :
+                    gui(srv) , window(win),
+                    datetime("NONE NONE"),hostname("NONE"),
+                    type("ALL"),source("NONE"){}
     QWidget* get_window();
     IncidentsWindow& start_timer();
     IncidentsWindow& stop_timer();
     void update();
-signals:
-    void timer_signal();
 };
