@@ -97,6 +97,7 @@ LogsData& LogsData::get_logs_by_severity_host_source(const std::string severity,
 
     std::string sql;
     bool limit=true;
+    auto time = get_current_time();
     if(severity=="HIGH"){
         sql=std::format("SELECT * FROM LOGS WHERE severity in ('Emergency','Alert','Critical')",severity);
         limit=false;
@@ -116,6 +117,7 @@ LogsData& LogsData::get_logs_by_severity_host_source(const std::string severity,
     if(source!="NONE"){
         sql=std::format("{} AND source='{}'",sql,source);
     }
+    sql=std::format("{} AND timestamp <'{}'",sql,time);
     if(limit){
         sql+="AND resolved=0 LIMIT 150;";
     }

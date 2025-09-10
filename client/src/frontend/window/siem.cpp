@@ -16,25 +16,6 @@
 #include "home_screen/siem_home.h"
 #include "incidents_screen/incidents_home.h"
 
-void fadeToIndex(QStackedWidget *stack, int index) {
-    QWidget *current = stack->currentWidget();
-    QWidget *next = stack->widget(index);
-
-    // efect de opacitate
-    QGraphicsOpacityEffect *effect = new QGraphicsOpacityEffect(next);
-    next->setGraphicsEffect(effect);
-    effect->setOpacity(0.0);
-
-    stack->setCurrentWidget(next);
-
-    QPropertyAnimation *anim = new QPropertyAnimation(effect, "opacity");
-    anim->setDuration(400);
-    anim->setStartValue(0.0);
-    anim->setEndValue(1.0);
-    anim->setEasingCurve(QEasingCurve::InOutQuad);
-    anim->start(QAbstractAnimation::DeleteWhenStopped);
-}
-
 QWidget * SIEMWindow::get_side_menu(){
     QWidget *container= new QWidget(window);
     QGridLayout *layout = new QGridLayout(container);
@@ -46,12 +27,12 @@ QWidget * SIEMWindow::get_side_menu(){
     QPushButton* search_btn = new QPushButton("Search");
    
     QObject::connect(home_btn, &QPushButton::clicked, [this](){
-        fadeToIndex(stack_window,0);
+        stack_window->setCurrentIndex(0); 
         homeWindow->create_update_thread();
         incidentsWindow->stop_update_thread();
     });
     QObject::connect(incidents_btn, &QPushButton::clicked, [this](){
-        fadeToIndex(stack_window,1);
+        stack_window->setCurrentIndex(1); 
         homeWindow->stop_update_thread();
         incidentsWindow->create_update_thread();
     });
