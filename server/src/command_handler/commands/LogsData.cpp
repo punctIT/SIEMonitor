@@ -92,42 +92,49 @@ LogsData& LogsData::get_logs_number_data(){
 
 LogsData& LogsData::get_logs_by_severity_host_source(const std::string severity,
                                                      const std::string host,
-                                                     const std::string source
+                                                     const std::string source,
+                                                     const std::string timestamp
                                             ){
 
     std::string sql;
     bool limit=true;
     auto time = get_current_time();
     if(severity=="HIGH"){
-        sql=std::format("SELECT * FROM LOGS WHERE severity in ('Emergency','Alert','Critical')",severity);
+        sql=std::format("SELECT * FROM LOGS WHERE severity in ('Emergency','Alert','Critical')");
         limit=false;
     }
     if(severity=="MEDIUM"){
-        sql=std::format("SELECT * FROM LOGS WHERE severity in ('Error','Warning')",severity);
+        sql=std::format("SELECT * FROM LOGS WHERE severity in ('Error','Warning')");
     }
     if(severity=="LOW"){
-        sql=std::format("SELECT * FROM LOGS WHERE severity in ('Notice','Informational','Debug')",severity);
+        sql=std::format("SELECT * FROM LOGS WHERE severity in ('Notice','Informational','Debug')");
     }
      if(severity=="ALL"){
-        sql=std::format("SELECT * FROM LOGS WHERE severity in ('Notice','Informational','Debug','Error','Warning','Emergency','Alert','Critical')",severity);
+        sql=std::format("SELECT * FROM LOGS WHERE severity in ('Notice','Informational','Debug','Error','Warning','Emergency','Alert','Critical')");
     }
     if(host!="NONE"){
-        sql=std::format("{} AND hostname='{}'",sql,host);
+        sql=std::format(" {} AND hostname='{}'",sql,host);
     }
     if(source!="NONE"){
-        sql=std::format("{} AND source='{}'",sql,source);
+        sql=std::format(" {} AND source='{}'",sql,source);
     }
-    sql=std::format("{} AND timestamp <'{}'",sql,time);
-    if(limit){
-        sql+="AND resolved=0 LIMIT 150;";
+    if(timestamp=="NONE NONE"){
+        std::string text=severity_text_protocol("[RESTART]","TAB");
+        write(fd,text.c_str(),text.length());
+        sql=std::format(" {} AND timestamp < '{}'",sql,time);
     }
     else {
-        sql+="AND resolved=0;";
+        sql=std::format(" {} AND timestamp > '{}' AND timestamp <= '{}' ",sql,timestamp,time);
     }
-    
+    if(limit){
+        sql+=" AND resolved=0 ORDER BY id DESC LIMIT 150;";
+    }
+    else {
+        sql+=" AND resolved=0; ORDER BY id DESC ";
+    }
     auto logs=logs_db.get_data(sql.c_str());
     for(auto log :logs){
-        std::string text=severity_text_protocol(log,"");
+        std::string text=severity_text_protocol(log,"TAB");
         write(fd,text.c_str(),text.length());
     }
     return *this;

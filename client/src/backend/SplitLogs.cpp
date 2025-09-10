@@ -58,11 +58,11 @@ std::string SplitLog::get_message(){
     }
     return "";
 }
-std::string SplitLog::get_id(){
+int SplitLog::get_id(){
     if(splited_log.size()>=1){
-        return splited_log[0];
+        return std::stoi(splited_log[0]);
     }
-    return "";
+    return 0;
 }
 std::string SplitLog::get_time(){
     if(splited_log.size()>=6){
