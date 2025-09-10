@@ -1,7 +1,6 @@
 #pragma once
 
 #include "../../../backend/SplitLogs.hpp"
-#include "UpdateSiemData.h"
 #include "InfoChart.hpp"
 #include "LogsTable.hpp"
 
@@ -10,7 +9,7 @@
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QWidget>
 #include <QtCore/QObject> 
-
+#include <QtCore/QTimer>
 
 
 
@@ -21,8 +20,7 @@ class SiemHomeWindow : public QObject {
 private:
     GUI& gui;
     QMainWindow* window;
-    QThread* updateThread = nullptr;
-    UpdateSiemData* worker = nullptr;
+    QTimer* updateTimer;
 
     InfoChart* infoChart;
     LogsTable* logsTable;
@@ -32,8 +30,8 @@ private:
 public:
     SiemHomeWindow(GUI &srv,QMainWindow* win) : gui(srv) , window(win){}
     QWidget* get_window();
-    SiemHomeWindow& create_update_thread();  
-    SiemHomeWindow& stop_update_thread();
+    SiemHomeWindow& start_update_timer();  
+    SiemHomeWindow& stop_update_timer();
 private slots:
     void update();
 

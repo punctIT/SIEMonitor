@@ -28,13 +28,13 @@ QWidget * SIEMWindow::get_side_menu(){
    
     QObject::connect(home_btn, &QPushButton::clicked, [this](){
         stack_window->setCurrentIndex(0); 
-        homeWindow->create_update_thread();
-        incidentsWindow->stop_update_thread();
+        homeWindow->start_update_timer();
+        incidentsWindow->stop_timer();
     });
     QObject::connect(incidents_btn, &QPushButton::clicked, [this](){
         stack_window->setCurrentIndex(1); 
-        homeWindow->stop_update_thread();
-        incidentsWindow->create_update_thread();
+        homeWindow->stop_update_timer();
+        incidentsWindow->start_timer();
     });
     QObject::connect(analytic_btn, &QPushButton::clicked, [this](){
         qDebug()<<"analitic";
@@ -107,5 +107,5 @@ QWidget * SIEMWindow::get_window(){
 }
 void SIEMWindow::start_home_thread(){
     stack_window->setCurrentIndex(0); 
-    homeWindow->create_update_thread();
+    homeWindow->start_update_timer();
 }
