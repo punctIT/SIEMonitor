@@ -17,6 +17,8 @@ QWidget * SiemHomeWindow::get_window(){
     logsTable = new LogsTable(window);
     QWidget *container= new QWidget(window);
     QGridLayout *layout = new QGridLayout(container);
+    updateTimer = new QTimer(window);
+    connect(updateTimer, &QTimer::timeout, this, &SiemHomeWindow::update);
 
     QLineEdit *cmd = new QLineEdit(container);
     QPushButton *run = new QPushButton("run",container);
@@ -100,34 +102,11 @@ void SiemHomeWindow::update(){
     datetime = now;  
 }
 
-SiemHomeWindow& SiemHomeWindow::create_update_thread(){
-    if(worker!=nullptr && updateThread!=nullptr)
-        return *this;
-    gui.get_server().sent("GLND");
-    datetime= get_current_time();
-    updateThread = new QThread(this);
-    worker = new UpdateSiemData(this);
-    connect(worker, &UpdateSiemData::updateSIEM, this, &SiemHomeWindow::update);
-    connect(updateThread, &QThread::started, worker, &UpdateSiemData::doWork);
-    connect(updateThread, &QThread::finished, worker, &QObject::deleteLater);
-    connect(updateThread, &QThread::finished, updateThread, &QObject::deleteLater);
-
-    worker->Start();
-    worker->moveToThread(updateThread);
-    updateThread->start();
+SiemHomeWindow& SiemHomeWindow::start_update_timer(){
+    updateTimer->start(2000);
     return *this;
 }
-SiemHomeWindow& SiemHomeWindow::stop_update_thread(){
-    if (worker) {
-        worker->Stop();             
-    }
-    if (updateThread) {
-        updateThread->quit();       
-        updateThread->wait();    
-    }
-
-    worker = nullptr;
-    updateThread = nullptr;
-
+SiemHomeWindow& SiemHomeWindow::stop_update_timer(){
+    updateTimer->stop();
     return *this;
 }
