@@ -69,18 +69,19 @@ QWidget * SiemHomeWindow::get_window(){
          
     });
     QObject::connect(&gui.get_server(),&ServerConection::logData,[this](QString resp){
+        //qDebug()<<resp;
         split.set_log(resp.toStdString())
              .split_log();
         if(!split.empty()){
-                logsTable->pop().
-                           add_log(split.get_host(),
-                                   split.get_time(),
-                                   split.get_source(),
-                                   split.get_severity(),
-                                   split.get_message(),
-                                   1
-                );
-                split.clear();
+            logsTable->pop().
+                    add_log(split.get_host(),
+                           split.get_time(),
+                           split.get_source(),
+                           split.get_severity(),
+                           split.get_message(),
+                           1
+            );
+            split.clear();
         }
            
     });
@@ -96,7 +97,7 @@ QWidget * SiemHomeWindow::get_window(){
 void SiemHomeWindow::update(){
     auto now = get_current_time();
     gui.get_server().sent(std::format("GL {} {} 10000", datetime, now));
-    gui.get_server().sent("GLND");
+    gui.get_server().sent(std::format("GLND {}",now));
                     
                                 
     datetime = now;  
@@ -104,8 +105,8 @@ void SiemHomeWindow::update(){
 
 SiemHomeWindow& SiemHomeWindow::start_update_timer(){
     auto now = get_current_time();
-    gui.get_server().sent(std::format("GL {} {} 10000", datetime, now));
-    gui.get_server().sent("GLND");
+    gui.get_server().sent("LN 15");
+    gui.get_server().sent(std::format("GLND {}",now));
     updateTimer->start(2000);
     return *this;
 }

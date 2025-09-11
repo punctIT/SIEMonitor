@@ -23,7 +23,8 @@ class IncidentTable{
                            const std::string Source,
                            const std::string Severity,
                            const std::string Message,
-                           const int top=0
+                           const int id,
+                           const int top
                           );
     
 };

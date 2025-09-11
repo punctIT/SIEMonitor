@@ -48,8 +48,8 @@ void ServerConection::receive(const QString& msg){
     }
     if (msg.startsWith("[LOG]")){
         QString msg2=msg.mid(QString("[LOG]").length());
-        if(msg2.startsWith("[LN0000000]")){
-            QString msg3=msg2.mid(QString("[LN0000000]").length());
+        if(msg2.startsWith("[LN]")){
+            QString msg3=msg2.mid(QString("[LN]").length());
             emit logTable(msg3);
         }
         else {
