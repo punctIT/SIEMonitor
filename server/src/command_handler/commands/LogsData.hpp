@@ -19,11 +19,13 @@ class LogsData: ProtocolHandler{
                            const std::string nr
         );
         LogsData& get_last_n(const std::string n);
-        LogsData& get_logs_number_data();
+        LogsData& get_logs_number_data(const std::string time);
         LogsData& get_logs_by_severity_host_source(const std::string severity,
                                                    const std::string host,
                                                    const std::string source,
-                                                   const std::string timestamp
+                                                   const std::string time_start,
+                                                     const std::string time_end
+
                                                   );
         
 };

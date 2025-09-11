@@ -4,7 +4,7 @@
 #include <chrono>
 #include <ctime>
 #include <vector>
-
+#include <iostream>
 
 std::string get_current_time(){
     auto now = std::chrono::system_clock::now()- std::chrono::seconds(30); 
@@ -30,14 +30,6 @@ std::string get_current_time(){
     return result;
 }
 
-std::string get_final_date(const std::string& timestamp_end){
-    std::string end_date=timestamp_end;
-    if(timestamp_end.empty()){
-        end_date=get_current_time();
-    }
-    return end_date;
-}
-
 LogsData::LogsData(){
     this->logs_db.set_database_path("logsData.db");
 }
@@ -46,23 +38,24 @@ LogsData& LogsData::set_fd(const int fd){
     return *this;
 }
 LogsData& LogsData:: get_logs(const std::string time_start,const std::string time_end , const std::string nr){   
-    std::string sql=std::format("SELECT * FROM logs WHERE timestamp > '{}' AND timestamp <= '{}' ORDER BY id DESC LIMIT {};",
+    std::string sql=std::format("SELECT * FROM logs WHERE timestamp >= '{}' AND timestamp < '{}' ORDER BY id DESC LIMIT {};",
                             time_start,
                             time_end,
                             nr
                         );
+    //std::cout << "SQL: " << sql << std::endl;
     auto logs=logs_db.get_data(sql.c_str());
     for(auto log :logs){
         std::string text=log_text_protocol(log,"GL");
         write(fd,text.c_str(),text.length());
     }
-    //std::cout<<timestamp<<" "<<get_final_date(timestamp_end)<<std::endl;
+    //std::cout<<time_start<<" "<<time_end<<std::endl;
     return *this;
 }
 
 LogsData& LogsData::get_last_n(std::string nr){
     auto time = get_current_time();
-    std::string sql = std::format("SELECT * FROM logs WHERE timestamp <'{}' ORDER BY id DESC LIMIT {};",time,nr);
+    std::string sql = std::format("SELECT * FROM logs WHERE timestamp < '{}' ORDER BY id DESC LIMIT {};",time,nr);
     auto logs=logs_db.get_data(sql.c_str());
 
     std::string text=log_text_protocol("RESTART","LN");
@@ -74,9 +67,8 @@ LogsData& LogsData::get_last_n(std::string nr){
     return *this;
 }
 
-LogsData& LogsData::get_logs_number_data(){
+LogsData& LogsData::get_logs_number_data(const std::string time){
     std::vector<std::string> numbers;
-    auto time = get_current_time();
     std::string sql = std::format("SELECT COUNT(*) FROM logs WHERE timestamp < '{}';",time);
     auto n=logs_db.get_data(sql.c_str());
     numbers.push_back(n[0]);
@@ -93,12 +85,12 @@ LogsData& LogsData::get_logs_number_data(){
 LogsData& LogsData::get_logs_by_severity_host_source(const std::string severity,
                                                      const std::string host,
                                                      const std::string source,
-                                                     const std::string timestamp
+                                                     const std::string time_start,
+                                                     const std::string time_end
                                             ){
 
     std::string sql;
     bool limit=true;
-    auto time = get_current_time();
     if(severity=="HIGH"){
         sql=std::format("SELECT * FROM LOGS WHERE severity in ('Emergency','Alert','Critical')");
         limit=false;
@@ -118,24 +110,29 @@ LogsData& LogsData::get_logs_by_severity_host_source(const std::string severity,
     if(source!="NONE"){
         sql=std::format(" {} AND source='{}'",sql,source);
     }
-    if(timestamp=="NONE NONE"){
+    if(time_start=="NONE NONE"){
         std::string text=severity_text_protocol("[RESTART]","TAB");
         write(fd,text.c_str(),text.length());
-        sql=std::format(" {} AND timestamp < '{}'",sql,time);
+        sql=std::format(" {} AND timestamp < '{}' ",sql,get_current_time());
     }
     else {
-        sql=std::format(" {} AND timestamp > '{}' AND timestamp <= '{}' ",sql,timestamp,time);
+        sql=std::format(" {} AND timestamp < '{}' AND timestamp >= '{}'",sql,time_end,time_start);
+        //std::cout<<timestamp<<" "<<time<<std::endl;
     }
     if(limit){
         sql+=" AND resolved=0 ORDER BY id DESC LIMIT 150;";
     }
     else {
-        sql+=" AND resolved=0; ORDER BY id DESC ";
+        sql+=" AND resolved=0;";
     }
     auto logs=logs_db.get_data(sql.c_str());
     for(auto log :logs){
         std::string text=severity_text_protocol(log,"TAB");
         write(fd,text.c_str(),text.length());
     }
+     if(time_start=="NONE NONE"){
+        std::string text=severity_text_protocol("[TOP]","TAB");
+        write(fd,text.c_str(),text.length());
+     }
     return *this;
 }

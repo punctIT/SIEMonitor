@@ -1,5 +1,6 @@
 #include "SplitLogs.hpp"
 
+#include <iostream>
 #include <sstream>
 #include <vector>
 #include <string>
@@ -60,7 +61,14 @@ std::string SplitLog::get_message(){
 }
 int SplitLog::get_id(){
     if(splited_log.size()>=1){
-        return std::stoi(splited_log[0]);
+        try{
+            int id=std::stoi(splited_log[0]);
+            return id;
+        }
+        catch(std::exception &e){
+            std::cerr<<e.what();
+        }
+        return 0; 
     }
     return 0;
 }

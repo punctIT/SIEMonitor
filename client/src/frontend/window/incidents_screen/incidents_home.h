@@ -27,6 +27,7 @@ private:
     std::string hostname;
     std::string type;
     std::string source;
+    int top;
 public:
     IncidentsWindow(GUI &srv,QMainWindow* win) :
                     gui(srv) , window(win),

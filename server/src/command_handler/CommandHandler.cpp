@@ -74,6 +74,7 @@ void HandleCommand::run(std::vector<std::string> args){
     if(args[0]=="LN"){
         try{
             LogsData logs;
+           
             logs.set_fd(fd)
                 .get_last_n(args[1]);
         }
@@ -85,8 +86,9 @@ void HandleCommand::run(std::vector<std::string> args){
     if(args[0]=="GLND"){
         try{
             LogsData logs;
+             const std::string time_end=args[1]+' '+args[2];
             logs.set_fd(fd)
-                .get_logs_number_data();   
+                .get_logs_number_data(time_end);   
         }
         catch(std::exception &err){
             write(fd,unexpected_error.c_str(),unexpected_error.size());
@@ -97,8 +99,9 @@ void HandleCommand::run(std::vector<std::string> args){
         try{
             LogsData logs;
             std::string time= std::format("{} {}",args[4],args[5]);
+            std::string time_end= std::format("{} {}",args[6],args[7]);
             logs.set_fd(fd)
-                .get_logs_by_severity_host_source(args[1],args[2],args[3],time);   
+                .get_logs_by_severity_host_source(args[1],args[2],args[3],time,time_end);   
         }
         catch(std::exception &err){
             write(fd,unexpected_error.c_str(),unexpected_error.size());

@@ -37,7 +37,7 @@ QWidget* IncidentTable::get_chart(){
 
     QPushButton *btn = new QPushButton("add");
     QObject::connect(btn,&QPushButton::clicked,[this](){
-        add_log("","","","","");
+        add_log("","","","","",1,1);
     });
     layout->addWidget(btn,0,1);
     layout->addWidget(logTree,0,0);
@@ -47,6 +47,7 @@ IncidentTable& IncidentTable::clear(){
     logTree->clear();
     QListWidgetItem *item = new QListWidgetItem("primu");                    
     logTree->addItem(item);
+    log_number=0;
     return *this;
 }
 IncidentTable& IncidentTable::pop(){
@@ -60,15 +61,23 @@ IncidentTable& IncidentTable::add_log(const std::string Hostname,
                               const std::string Source,
                               const std::string Severity,
                               const std::string Message,
-                              const int id
+                              const int id,
+                              const int top
                              ){
-                            
+    if(log_number>150){
+        pop();
+    }
+    log_number+=1;
     std::string text = std::format("{} {} {} {}",Hostname,Time,Source,Severity);
     QListWidgetItem *item = new QListWidgetItem(QString::fromStdString(text));
     item->setFlags(item->flags() | Qt::ItemIsUserCheckable);  
     item->setCheckState(Qt::Unchecked);                      
     item->setData(Qt::UserRole,id);
     item->setData(Qt::UserRole+1,QString::fromStdString(Message));
-    logTree->insertItem(1,item);
+    if(top==1)
+        logTree->insertItem(1,item);
+    else {
+        logTree->addItem(item);   
+    }
     return *this;
 }
