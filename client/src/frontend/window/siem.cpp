@@ -10,16 +10,18 @@
 #include <QtWidgets/QGraphicsOpacityEffect>
 #include <QtCore/QParallelAnimationGroup>
 #include <QtCore/QEasingCurve>
-
+#include <QtWidgets/QVBoxLayout>
 
 #include "siem.h"
 #include "home_screen/siem_home.h"
 #include "incidents_screen/incidents_home.h"
 
 QWidget * SIEMWindow::get_side_menu(){
+
     QWidget *container= new QWidget(window);
     QGridLayout *layout = new QGridLayout(container);
 
+    QLabel* title_siem = new QLabel("Security Information and Event Management");
     QPushButton* home_btn= new QPushButton("Home");
     QPushButton* incidents_btn= new QPushButton("Incidents");
     QPushButton* analytic_btn = new QPushButton("Analytics");
@@ -45,12 +47,13 @@ QWidget * SIEMWindow::get_side_menu(){
     QObject::connect(search_btn, &QPushButton::clicked, [this](){
         qDebug()<<"search";
     });
-    layout->addWidget(home_btn,0,0);
-    layout->addWidget(incidents_btn,1,0);
-    layout->addWidget(analytic_btn,2,0);
-    layout->addWidget(threat_btn,3,0);
-    layout->addWidget(search_btn,4,0);
-
+    
+    layout->addWidget(title_siem,0,0);
+    layout->addWidget(home_btn,1,0);
+    layout->addWidget(incidents_btn,2,0);
+    layout->addWidget(analytic_btn,3,0);
+    layout->addWidget(threat_btn,4,0);
+    layout->addWidget(search_btn,5,0);
     return container;
 }
 

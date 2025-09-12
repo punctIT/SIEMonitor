@@ -25,30 +25,19 @@ QWidget* IncidentTable::get_chart(){
         int nr = item->data(Qt::UserRole).toInt();
         QString msg = item->data(Qt::UserRole+1).toString();
         qDebug()<<nr<<" "<<msg;
-        
     });
     QObject::connect(logTree, &QListWidget::itemChanged, [this](QListWidgetItem *item){
         if(item->checkState() == Qt::Checked) {
             std::string id = item->data(Qt::UserRole).toString().toStdString();
             incidentWindow->get_gui().get_server().sent(std::format("UpRe {} {}",id,1));
+            delete logTree->takeItem(logTree->row(item));
         } 
     });
-
-    QListWidgetItem *item = new QListWidgetItem("primu");                    
-    logTree->addItem(item);
-
-    QPushButton *btn = new QPushButton("add");
-    QObject::connect(btn,&QPushButton::clicked,[this](){
-        add_log("","","","","",1,1);
-    });
-    layout->addWidget(btn,0,1);
     layout->addWidget(logTree,0,0);
     return container;
 }
 IncidentTable& IncidentTable::clear(){
-    logTree->clear();
-    QListWidgetItem *item = new QListWidgetItem("primu");                    
-    logTree->addItem(item);
+    logTree->clear();                   
     log_number=0;
     return *this;
 }
@@ -77,7 +66,7 @@ IncidentTable& IncidentTable::add_log(const std::string Hostname,
     item->setData(Qt::UserRole,id);
     item->setData(Qt::UserRole+1,QString::fromStdString(Message));
     if(top==1)
-        logTree->insertItem(1,item);
+        logTree->insertItem(0,item);
     else {
         logTree->addItem(item);   
     }

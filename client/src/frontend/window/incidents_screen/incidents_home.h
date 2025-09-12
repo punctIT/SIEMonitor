@@ -32,9 +32,9 @@ private:
     std::string type="ALL";
     std::string source="NONE";
 
-
-
     int top;
+
+    void bind_signals();
 public:
     IncidentsWindow(GUI &srv,QMainWindow* win) : gui(srv) , window(win){}
     QWidget* get_window();

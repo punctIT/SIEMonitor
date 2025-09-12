@@ -96,10 +96,9 @@ QWidget * SiemHomeWindow::get_window(){
 }
 void SiemHomeWindow::update(){
     auto now = get_current_time();
-    gui.get_server().sent(std::format("GL {} {} 10000", datetime, now));
-    gui.get_server().sent(std::format("GLND {}",now));
-                    
-                                
+    gui.get_server().sent(std::format("GLND {}",now)).
+                     sent(std::format("GL {} {} 10000", datetime, now));
+                
     datetime = now;  
 }
 
@@ -107,7 +106,7 @@ SiemHomeWindow& SiemHomeWindow::start_update_timer(){
     auto now = get_current_time();
     gui.get_server().sent("LN 15");
     gui.get_server().sent(std::format("GLND {}",now));
-    updateTimer->start(2000);
+    updateTimer->start(1000);
     return *this;
 }
 SiemHomeWindow& SiemHomeWindow::stop_update_timer(){
