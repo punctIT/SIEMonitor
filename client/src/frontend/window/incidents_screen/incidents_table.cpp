@@ -1,4 +1,6 @@
 #include "incidents_table.hpp"
+#include "incidents_home.h"
+#include "../../gui.h"
 #include <string>
 #include <format>
 
@@ -7,46 +9,69 @@
 #include <QtWidgets/QTextEdit>
  
 
-
-
-IncidentTable::IncidentTable(QMainWindow *win){
-   
+std::string get_spaced(std::string name,int len){
+    if(name.size()>len){
+        name.erase(len-3,name.size());
+        name+="...";
+    }
+    else {
+        name.resize(len, ' ');
+    }
+    return name;
 }
 
-QWidget* IncidentTable::get_chart(){
-    QWidget *container = new QWidget(window);
-    QGridLayout* layout = new QGridLayout(container);
-    logTree= new QListWidget(container);
+
+IncidentTable::IncidentTable(IncidentsWindow *inc,QMainWindow *win){
+    incidentWindow=inc;
+    window=win;
+}
+void IncidentTable::bind_signals(){
     QObject::connect(logTree, &QListWidget::itemDoubleClicked,
                      [&](QListWidgetItem *item){
         int nr = item->data(Qt::UserRole).toInt();
         QString msg = item->data(Qt::UserRole+1).toString();
         qDebug()<<nr<<" "<<msg;
-        
     });
-    QObject::connect(logTree, &QListWidget::itemChanged, [&](QListWidgetItem *item){
+    QObject::connect(logTree, &QListWidget::itemChanged, [this](QListWidgetItem *item){
         if(item->checkState() == Qt::Checked) {
-            qDebug() << "Bifat:" << item->text();
-        } else {
-            qDebug() << "Debifat:" << item->text();
-        }
+            std::string id = item->data(Qt::UserRole).toString().toStdString();
+            incidentWindow->get_gui().get_server().sent(std::format("UpRe {} {}",id,1));
+            delete logTree->takeItem(logTree->row(item));
+        } 
     });
+    
+}
+QWidget* IncidentTable::get_chart(){
+    QWidget *container = new QWidget(window);
+    QGridLayout* layout = new QGridLayout(container);
+    logTree= new QListWidget(container);
 
-    QListWidgetItem *item = new QListWidgetItem("primu");                    
-    logTree->addItem(item);
-
-    QPushButton *btn = new QPushButton("add");
-    QObject::connect(btn,&QPushButton::clicked,[this](){
-        add_log("","","","","",1,1);
-    });
-    layout->addWidget(btn,0,1);
-    layout->addWidget(logTree,0,0);
+    logTree->setStyleSheet(
+        "QListWidget::item { "
+        "padding: 5px 5px 5px; "  
+        "}"
+    );
+    bind_signals();
+    std::string text = std::format("{}{} {} {} {} {} {}",
+                                    get_spaced("Resolved",12),
+                                    get_spaced("Hostname",31),
+                                    get_spaced("Time",36),
+                                    get_spaced("Date",33),
+                                    get_spaced("Source",34),
+                                    get_spaced("Severity",36),
+                                    get_spaced("Message",50)
+                                );
+    QLabel *head=new QLabel(QString::fromStdString(text));
+    head->setStyleSheet(
+        "QLabel { padding: 5px 5px; }"
+    );
+    layout->addWidget(head,0,0);
+    layout->addWidget(logTree,1,0);
+    
     return container;
 }
 IncidentTable& IncidentTable::clear(){
-    logTree->clear();
-    QListWidgetItem *item = new QListWidgetItem("primu");                    
-    logTree->addItem(item);
+    logTree->clear();                   
     log_number=0;
     return *this;
 }
@@ -58,6 +83,7 @@ IncidentTable& IncidentTable::pop(){
 }
 IncidentTable& IncidentTable::add_log(const std::string Hostname,
                               const std::string Time,
+                              const std::string Date,
                               const std::string Source,
                               const std::string Severity,
                               const std::string Message,
@@ -68,14 +94,31 @@ IncidentTable& IncidentTable::add_log(const std::string Hostname,
         pop();
     }
     log_number+=1;
-    std::string text = std::format("{} {} {} {}",Hostname,Time,Source,Severity);
+
+    std::string text = std::format("    {} {} {} {} {} {}",get_spaced(Hostname,20),
+                                                    get_spaced(Time,20),
+                                                    get_spaced(Date,20),
+                                                    get_spaced(Source,20),
+                                                    get_spaced(Severity,20),
+                                                    get_spaced(Message,50)
+                                                );
+
     QListWidgetItem *item = new QListWidgetItem(QString::fromStdString(text));
     item->setFlags(item->flags() | Qt::ItemIsUserCheckable);  
     item->setCheckState(Qt::Unchecked);                      
     item->setData(Qt::UserRole,id);
     item->setData(Qt::UserRole+1,QString::fromStdString(Message));
+
+    QPixmap spacer(20, 10);
+    spacer.fill(Qt::red);
+    item->setIcon(QIcon(spacer));
+
+    QFont monoFont("Courier New");
+    monoFont.setStyleHint(QFont::Monospace);
+    item->setFont(monoFont);
+
     if(top==1)
-        logTree->insertItem(1,item);
+        logTree->insertItem(0,item);
     else {
         logTree->addItem(item);   
     }

@@ -27,11 +27,14 @@ private:
     
     SplitLog split;
     std::string datetime;
+    int res=0;
 public:
     SiemHomeWindow(GUI &srv,QMainWindow* win) : gui(srv) , window(win){}
     QWidget* get_window();
     SiemHomeWindow& start_update_timer();  
     SiemHomeWindow& stop_update_timer();
+    void bind_signals();
+
 private slots:
     void update();
 

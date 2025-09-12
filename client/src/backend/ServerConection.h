@@ -31,6 +31,7 @@ class ServerConection : public QObject {
         void genericResponse(QString data);
          
         void IncidentsResponseTable(QString data); 
+        void HostsEnum(QString data);
     private slots:
         void receive(const QString& now);
         

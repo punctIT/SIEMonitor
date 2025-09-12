@@ -9,6 +9,8 @@
 #include <QtCore/QObject> 
 #include <QtCore/QThread>
 #include <QtCore/QTimer>
+#include <QtWidgets/QComboBox>
+
 #include "incidents_table.hpp"
 
 
@@ -22,19 +24,23 @@ private:
     QTimer* updateTimer;
     IncidentTable* incidentTable;
 
+    QComboBox *type_box;
+    QComboBox *hostname_box;
 
-    std::string datetime;
-    std::string hostname;
-    std::string type;
-    std::string source;
+    std::string datetime="NONE NONE";
+    std::string hostname="NONE";
+    std::string type="ALL";
+    std::string source="NONE";
+
     int top;
+
+    void bind_signals();
 public:
-    IncidentsWindow(GUI &srv,QMainWindow* win) :
-                    gui(srv) , window(win),
-                    datetime("NONE NONE"),hostname("NONE"),
-                    type("ALL"),source("NONE"){}
+    IncidentsWindow(GUI &srv,QMainWindow* win) : gui(srv) , window(win){}
     QWidget* get_window();
     IncidentsWindow& start_timer();
     IncidentsWindow& stop_timer();
+    GUI& get_gui();
+    void update_types();
     void update();
 };

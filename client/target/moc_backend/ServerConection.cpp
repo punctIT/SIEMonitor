@@ -26,7 +26,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 namespace {
 struct qt_meta_stringdata_ServerConection_t {
-    uint offsetsAndSizes[26];
+    uint offsetsAndSizes[28];
     char stringdata0[16];
     char stringdata1[14];
     char stringdata2[1];
@@ -38,8 +38,9 @@ struct qt_meta_stringdata_ServerConection_t {
     char stringdata8[16];
     char stringdata9[5];
     char stringdata10[23];
-    char stringdata11[8];
-    char stringdata12[4];
+    char stringdata11[10];
+    char stringdata12[8];
+    char stringdata13[4];
 };
 #define QT_MOC_LITERAL(ofs, len) \
     uint(sizeof(qt_meta_stringdata_ServerConection_t::offsetsAndSizes) + ofs), len 
@@ -56,8 +57,9 @@ Q_CONSTINIT static const qt_meta_stringdata_ServerConection_t qt_meta_stringdata
         QT_MOC_LITERAL(72, 15),  // "genericResponse"
         QT_MOC_LITERAL(88, 4),  // "data"
         QT_MOC_LITERAL(93, 22),  // "IncidentsResponseTable"
-        QT_MOC_LITERAL(116, 7),  // "receive"
-        QT_MOC_LITERAL(124, 3)   // "now"
+        QT_MOC_LITERAL(116, 9),  // "HostsEnum"
+        QT_MOC_LITERAL(126, 7),  // "receive"
+        QT_MOC_LITERAL(134, 3)   // "now"
     },
     "ServerConection",
     "loginResponse",
@@ -70,6 +72,7 @@ Q_CONSTINIT static const qt_meta_stringdata_ServerConection_t qt_meta_stringdata
     "genericResponse",
     "data",
     "IncidentsResponseTable",
+    "HostsEnum",
     "receive",
     "now"
 };
@@ -82,23 +85,24 @@ Q_CONSTINIT static const uint qt_meta_data_ServerConection[] = {
       10,       // revision
        0,       // classname
        0,    0, // classinfo
-       7,   14, // methods
+       8,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       6,       // signalCount
+       7,       // signalCount
 
  // signals: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    1,   56,    2, 0x06,    1 /* Public */,
-       4,    1,   59,    2, 0x06,    3 /* Public */,
-       6,    1,   62,    2, 0x06,    5 /* Public */,
-       7,    1,   65,    2, 0x06,    7 /* Public */,
-       8,    1,   68,    2, 0x06,    9 /* Public */,
-      10,    1,   71,    2, 0x06,   11 /* Public */,
+       1,    1,   62,    2, 0x06,    1 /* Public */,
+       4,    1,   65,    2, 0x06,    3 /* Public */,
+       6,    1,   68,    2, 0x06,    5 /* Public */,
+       7,    1,   71,    2, 0x06,    7 /* Public */,
+       8,    1,   74,    2, 0x06,    9 /* Public */,
+      10,    1,   77,    2, 0x06,   11 /* Public */,
+      11,    1,   80,    2, 0x06,   13 /* Public */,
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-      11,    1,   74,    2, 0x08,   13 /* Private */,
+      12,    1,   83,    2, 0x08,   15 /* Private */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::QString,    3,
@@ -107,9 +111,10 @@ Q_CONSTINIT static const uint qt_meta_data_ServerConection[] = {
     QMetaType::Void, QMetaType::QString,    5,
     QMetaType::Void, QMetaType::QString,    9,
     QMetaType::Void, QMetaType::QString,    9,
+    QMetaType::Void, QMetaType::QString,    9,
 
  // slots: parameters
-    QMetaType::Void, QMetaType::QString,   12,
+    QMetaType::Void, QMetaType::QString,   13,
 
        0        // eod
 };
@@ -141,6 +146,9 @@ Q_CONSTINIT const QMetaObject ServerConection::staticMetaObject = { {
         // method 'IncidentsResponseTable'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         QtPrivate::TypeAndForceComplete<QString, std::false_type>,
+        // method 'HostsEnum'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<QString, std::false_type>,
         // method 'receive'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         QtPrivate::TypeAndForceComplete<const QString &, std::false_type>
@@ -160,7 +168,8 @@ void ServerConection::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int 
         case 3: _t->logTable((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
         case 4: _t->genericResponse((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
         case 5: _t->IncidentsResponseTable((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
-        case 6: _t->receive((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
+        case 6: _t->HostsEnum((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
+        case 7: _t->receive((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -207,6 +216,13 @@ void ServerConection::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int 
                 return;
             }
         }
+        {
+            using _t = void (ServerConection::*)(QString );
+            if (_t _q_method = &ServerConection::HostsEnum; *reinterpret_cast<_t *>(_a[1]) == _q_method) {
+                *result = 6;
+                return;
+            }
+        }
     }
 }
 
@@ -229,13 +245,13 @@ int ServerConection::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 7)
+        if (_id < 8)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 7;
+        _id -= 8;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 7)
+        if (_id < 8)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 7;
+        _id -= 8;
     }
     return _id;
 }
@@ -280,6 +296,13 @@ void ServerConection::IncidentsResponseTable(QString _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 5, _a);
+}
+
+// SIGNAL 6
+void ServerConection::HostsEnum(QString _t1)
+{
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
+    QMetaObject::activate(this, &staticMetaObject, 6, _a);
 }
 QT_WARNING_POP
 QT_END_MOC_NAMESPACE

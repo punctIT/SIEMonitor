@@ -17,22 +17,21 @@ QWidget * SiemHomeWindow::get_window(){
     logsTable = new LogsTable(window);
     QWidget *container= new QWidget(window);
     QGridLayout *layout = new QGridLayout(container);
+    QGridLayout *top_layout = new QGridLayout(container);
     updateTimer = new QTimer(window);
     connect(updateTimer, &QTimer::timeout, this, &SiemHomeWindow::update);
-
-    QLineEdit *cmd = new QLineEdit(container);
-    QPushButton *run = new QPushButton("run",container);
+    bind_signals();
     
-    QObject::connect(run, &QPushButton::clicked, [this,cmd](){
-        std::string c= cmd->text().toStdString();
-        if(c =="e"){
-            logsTable->pop();
-        }
-        else {
-            gui.get_server().sent(c);
-        }
-    });
-
+    
+    top_layout->addWidget(infoChart->get_data_chart(), 0, 0); 
+    top_layout->addWidget(infoChart->get_chart(), 0, 1); 
+    layout->addLayout(top_layout,0,0);
+    layout->addWidget(logsTable->get_chart(),1,0);   
+ 
+    
+    return container;
+}
+void SiemHomeWindow::bind_signals(){
     QObject::connect(&gui.get_server(),&ServerConection::logTable,[this](QString resp){
         if(resp=="RESTART"){
             logsTable->clear();
@@ -85,29 +84,20 @@ QWidget * SiemHomeWindow::get_window(){
         }
            
     });
-    
-    layout->addWidget(infoChart->get_data_chart(), 0, 0); 
-    layout->addWidget(infoChart->get_chart(), 0, 1); 
-    layout->addWidget(logsTable->get_chart(),1,0);   
-    layout->addWidget(cmd, 1, 1);        
-    layout->addWidget(run, 1, 2);  
-    
-    return container;
 }
 void SiemHomeWindow::update(){
     auto now = get_current_time();
-    gui.get_server().sent(std::format("GL {} {} 10000", datetime, now));
-    gui.get_server().sent(std::format("GLND {}",now));
-                    
-                                
+    gui.get_server().sent(std::format("GLND {}",now)).
+                     sent(std::format("GL {} {} 10000", datetime, now));
+                
     datetime = now;  
 }
 
 SiemHomeWindow& SiemHomeWindow::start_update_timer(){
     auto now = get_current_time();
-    gui.get_server().sent("LN 15");
-    gui.get_server().sent(std::format("GLND {}",now));
-    updateTimer->start(2000);
+    gui.get_server().sent("LN 15")
+                    .sent(std::format("GLND {}",now));
+    updateTimer->start(3000);
     return *this;
 }
 SiemHomeWindow& SiemHomeWindow::stop_update_timer(){
