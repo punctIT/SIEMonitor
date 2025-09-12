@@ -1,4 +1,6 @@
 #include "incidents_table.hpp"
+#include "incidents_home.h"
+#include "../../gui.h"
 #include <string>
 #include <format>
 
@@ -9,8 +11,9 @@
 
 
 
-IncidentTable::IncidentTable(QMainWindow *win){
-   
+IncidentTable::IncidentTable(IncidentsWindow *inc,QMainWindow *win){
+    incidentWindow=inc;
+    window=win;
 }
 
 QWidget* IncidentTable::get_chart(){
@@ -24,12 +27,11 @@ QWidget* IncidentTable::get_chart(){
         qDebug()<<nr<<" "<<msg;
         
     });
-    QObject::connect(logTree, &QListWidget::itemChanged, [&](QListWidgetItem *item){
+    QObject::connect(logTree, &QListWidget::itemChanged, [this](QListWidgetItem *item){
         if(item->checkState() == Qt::Checked) {
-            qDebug() << "Bifat:" << item->text();
-        } else {
-            qDebug() << "Debifat:" << item->text();
-        }
+            std::string id = item->data(Qt::UserRole).toString().toStdString();
+            incidentWindow->get_gui().get_server().sent(std::format("UpRe {} {}",id,1));
+        } 
     });
 
     QListWidgetItem *item = new QListWidgetItem("primu");                    

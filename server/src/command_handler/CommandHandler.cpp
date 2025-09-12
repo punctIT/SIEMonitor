@@ -3,7 +3,7 @@
 #include <unistd.h> 
 #include <vector>
 
-#include "commands/test.h"
+#include "commands/UpdateData.hpp"
 #include "commands/OnlineUsers.hpp"
 #include "commands/ListHosts.hpp"
 #include "commands/LogsData.hpp"
@@ -17,10 +17,9 @@ HandleCommand& HandleCommand::set_username(std::string name){
 }
 void HandleCommand::run(std::vector<std::string> args){
     int e =0;
-    if(args[0]=="test"){
-       Test test;
-       test.test(fd);
-       return;
+    if(args[0]=="UpRe"){
+        UpdateLogsData up_log;
+        up_log.update_resolved(args[1],args[2]);
     }
     if(args[0]=="users"){
         try{
@@ -34,7 +33,7 @@ void HandleCommand::run(std::vector<std::string> args){
         }
         return;
     }
-    if(args[0]=="hosts"){
+    if(args[0]=="HOSTS"){
         try{
             ListHosts host;
             host.set_fd(fd)

@@ -7,13 +7,16 @@
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QListWidget>
 
+class IncidentsWindow;
+
 class IncidentTable{
     private: 
         QMainWindow *window;
-        QListWidget *logTree ; 
+        QListWidget *logTree;
+        IncidentsWindow* incidentWindow; 
         int log_number;   
     public:
-        IncidentTable(QMainWindow *window);
+        IncidentTable(IncidentsWindow* incWindow,QMainWindow *win);
         QWidget* get_chart();
         IncidentTable& update();
         IncidentTable& clear();

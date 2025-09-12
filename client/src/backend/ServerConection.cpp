@@ -72,6 +72,11 @@ void ServerConection::receive(const QString& msg){
         }
         return;
     }
+    if (msg.startsWith("[HOSTS]")){
+        QString msg2=msg.mid(QString("[HOSTS]").length());
+        emit HostsEnum(msg2);
+        return;
+    }
     emit genericResponse(msg);
               
 }
