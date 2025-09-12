@@ -4,6 +4,7 @@
 #include <sstream>
 #include <vector>
 #include <string>
+#include <format>
 
 SplitLog& SplitLog::set_log(std::string log ){
     this->log=log;
@@ -55,7 +56,14 @@ std::string SplitLog::get_severity(){
 }
 std::string SplitLog::get_message(){
     if(splited_log.size()>=7){
-        return splited_log[7];
+         std::istringstream iss(splited_log[7]);
+        std::string msg="";
+        std::string word="";
+        while (iss >> word) {
+            msg=std::format("{} {}",msg,word);
+        }
+        
+        return msg;
     }
     return "";
 }
@@ -75,6 +83,12 @@ int SplitLog::get_id(){
 std::string SplitLog::get_time(){
     if(splited_log.size()>=6){
         return splited_log[3];
+    }
+    return "";
+}
+std::string SplitLog::get_date(){
+    if(splited_log.size()>=6){
+        return splited_log[2];
     }
     return "";
 }

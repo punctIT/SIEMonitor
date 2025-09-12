@@ -19,53 +19,58 @@
 QWidget * SIEMWindow::get_side_menu(){
 
     QWidget *container= new QWidget(window);
-    QGridLayout *layout = new QGridLayout(container);
+    QGridLayout* layout = new QGridLayout(container);
 
     QLabel* title_siem = new QLabel("Security Information and Event Management");
+    title_siem->setContentsMargins(20,100,20,100);
     QPushButton* home_btn= new QPushButton("Home");
+    home_btn->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     QPushButton* incidents_btn= new QPushButton("Incidents");
+    incidents_btn->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     QPushButton* analytic_btn = new QPushButton("Analytics");
+    analytic_btn->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     QPushButton* threat_btn = new QPushButton("Threat Center");
+    threat_btn->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     QPushButton* search_btn = new QPushButton("Search");
+    search_btn->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
    
     QObject::connect(home_btn, &QPushButton::clicked, [this](){
         stack_window->setCurrentIndex(0); 
         homeWindow->start_update_timer();
         incidentsWindow->stop_timer();
+        toggle_side_menu();
     });
     QObject::connect(incidents_btn, &QPushButton::clicked, [this](){
         stack_window->setCurrentIndex(1); 
         homeWindow->stop_update_timer();
         incidentsWindow->start_timer();
+        toggle_side_menu();
     });
     QObject::connect(analytic_btn, &QPushButton::clicked, [this](){
         qDebug()<<"analitic";
+        toggle_side_menu();
     });
     QObject::connect(threat_btn, &QPushButton::clicked, [this](){
         qDebug()<<"threat";
+        toggle_side_menu();
     });
     QObject::connect(search_btn, &QPushButton::clicked, [this](){
         qDebug()<<"search";
+        toggle_side_menu();
     });
     
-    layout->addWidget(title_siem,0,0);
-    layout->addWidget(home_btn,1,0);
-    layout->addWidget(incidents_btn,2,0);
-    layout->addWidget(analytic_btn,3,0);
-    layout->addWidget(threat_btn,4,0);
-    layout->addWidget(search_btn,5,0);
+    layout->addWidget(title_siem, 0,0); 
+    layout->addWidget(home_btn, 1,0);  
+    layout->addWidget(incidents_btn, 2,0);
+    layout->addWidget(analytic_btn, 3,0);
+    layout->addWidget(threat_btn, 4,0);
+    layout->addWidget(search_btn, 5,0);
     return container;
 }
-
-QWidget * SIEMWindow::get_top_menu(){
-    QWidget *container= new QWidget(window);
-    QGridLayout *layout = new QGridLayout(container);
-    QPushButton* side_menu_btn= new QPushButton("Home");
-    
-    QObject::connect(side_menu_btn, &QPushButton::clicked, [this](){
-        QLayoutItem *item = main_layout->itemAtPosition(1, 0);
-        QWidget *widget = item->widget();
-        if(toggle_menu){
+void SIEMWindow::toggle_side_menu(){
+    QLayoutItem *item = main_layout->itemAtPosition(1, 0);
+    QWidget *widget = item->widget();
+    if(toggle_menu){
             widget->show();    
             main_layout->setColumnStretch(0,1);
             main_layout->setColumnStretch(1,9);
@@ -76,6 +81,14 @@ QWidget * SIEMWindow::get_top_menu(){
              main_layout->setColumnStretch(1,10);
         }
         toggle_menu=!toggle_menu;
+}
+QWidget * SIEMWindow::get_top_menu(){
+    QWidget *container= new QWidget(window);
+    QGridLayout *layout = new QGridLayout(container);
+    QPushButton* side_menu_btn= new QPushButton("Home");
+    
+    QObject::connect(side_menu_btn, &QPushButton::clicked, [this](){
+        toggle_side_menu();
     });
     layout->addWidget(side_menu_btn,0,0);
     return container;

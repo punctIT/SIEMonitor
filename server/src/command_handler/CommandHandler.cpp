@@ -18,6 +18,8 @@ HandleCommand& HandleCommand::set_username(std::string name){
 void HandleCommand::run(std::vector<std::string> args){
     int e =0;
     if(args[0]=="UpRe"){
+        if(args.size()<3)
+            return;
         UpdateLogsData up_log;
         up_log.update_resolved(args[1],args[2]);
     }
@@ -46,6 +48,8 @@ void HandleCommand::run(std::vector<std::string> args){
     }
     if(args[0]=="source"){
         try{
+            if(args.size()<2)
+            return;
             ListHosts host;
             host.set_fd(fd)
                 .get_sources(args[1]);
@@ -72,6 +76,8 @@ void HandleCommand::run(std::vector<std::string> args){
     }
     if(args[0]=="LN"){
         try{
+            if(args.size()<2)
+            return;
             LogsData logs;
            
             logs.set_fd(fd)
@@ -96,6 +102,8 @@ void HandleCommand::run(std::vector<std::string> args){
     }
     if(args[0]=="GLSHS"){
         try{
+            if(args.size()<8)
+             return;
             LogsData logs;
             std::string time= std::format("{} {}",args[4],args[5]);
             std::string time_end= std::format("{} {}",args[6],args[7]);

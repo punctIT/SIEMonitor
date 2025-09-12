@@ -33,6 +33,7 @@ public:
     QWidget* get_window();
     SiemHomeWindow& start_update_timer();  
     SiemHomeWindow& stop_update_timer();
+    void bind_signals();
 
 private slots:
     void update();

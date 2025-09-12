@@ -67,6 +67,7 @@ void IncidentsWindow::bind_signals(){
            .split_log();
         incidentTable->add_log(log.get_host(),
                                log.get_time(),
+                               log.get_date(),
                                log.get_source(),
                                log.get_severity(),
                                log.get_message(),

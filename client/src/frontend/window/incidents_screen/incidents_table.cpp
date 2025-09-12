@@ -9,17 +9,23 @@
 #include <QtWidgets/QTextEdit>
  
 
+std::string get_spaced(std::string name,int len){
+    if(name.size()>len){
+        name.erase(len-3,name.size());
+        name+="...";
+    }
+    else {
+        name.resize(len, ' ');
+    }
+    return name;
+}
 
 
 IncidentTable::IncidentTable(IncidentsWindow *inc,QMainWindow *win){
     incidentWindow=inc;
     window=win;
 }
-
-QWidget* IncidentTable::get_chart(){
-    QWidget *container = new QWidget(window);
-    QGridLayout* layout = new QGridLayout(container);
-    logTree= new QListWidget(container);
+void IncidentTable::bind_signals(){
     QObject::connect(logTree, &QListWidget::itemDoubleClicked,
                      [&](QListWidgetItem *item){
         int nr = item->data(Qt::UserRole).toInt();
@@ -33,7 +39,35 @@ QWidget* IncidentTable::get_chart(){
             delete logTree->takeItem(logTree->row(item));
         } 
     });
-    layout->addWidget(logTree,0,0);
+    
+}
+QWidget* IncidentTable::get_chart(){
+    QWidget *container = new QWidget(window);
+    QGridLayout* layout = new QGridLayout(container);
+    logTree= new QListWidget(container);
+
+    logTree->setStyleSheet(
+        "QListWidget::item { "
+        "padding: 5px 5px 5px; "  
+        "}"
+    );
+    bind_signals();
+    std::string text = std::format("{}{} {} {} {} {} {}",
+                                    get_spaced("Resolved",12),
+                                    get_spaced("Hostname",31),
+                                    get_spaced("Time",36),
+                                    get_spaced("Date",33),
+                                    get_spaced("Source",34),
+                                    get_spaced("Severity",36),
+                                    get_spaced("Message",50)
+                                );
+    QLabel *head=new QLabel(QString::fromStdString(text));
+    head->setStyleSheet(
+        "QLabel { padding: 5px 5px; }"
+    );
+    layout->addWidget(head,0,0);
+    layout->addWidget(logTree,1,0);
+    
     return container;
 }
 IncidentTable& IncidentTable::clear(){
@@ -49,6 +83,7 @@ IncidentTable& IncidentTable::pop(){
 }
 IncidentTable& IncidentTable::add_log(const std::string Hostname,
                               const std::string Time,
+                              const std::string Date,
                               const std::string Source,
                               const std::string Severity,
                               const std::string Message,
@@ -59,12 +94,29 @@ IncidentTable& IncidentTable::add_log(const std::string Hostname,
         pop();
     }
     log_number+=1;
-    std::string text = std::format("{} {} {} {}",Hostname,Time,Source,Severity);
+
+    std::string text = std::format("    {} {} {} {} {} {}",get_spaced(Hostname,20),
+                                                    get_spaced(Time,20),
+                                                    get_spaced(Date,20),
+                                                    get_spaced(Source,20),
+                                                    get_spaced(Severity,20),
+                                                    get_spaced(Message,50)
+                                                );
+
     QListWidgetItem *item = new QListWidgetItem(QString::fromStdString(text));
     item->setFlags(item->flags() | Qt::ItemIsUserCheckable);  
     item->setCheckState(Qt::Unchecked);                      
     item->setData(Qt::UserRole,id);
     item->setData(Qt::UserRole+1,QString::fromStdString(Message));
+
+    QPixmap spacer(20, 10);
+    spacer.fill(Qt::red);
+    item->setIcon(QIcon(spacer));
+
+    QFont monoFont("Courier New");
+    monoFont.setStyleHint(QFont::Monospace);
+    item->setFont(monoFont);
+
     if(top==1)
         logTree->insertItem(0,item);
     else {

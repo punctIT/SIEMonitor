@@ -15,6 +15,7 @@ class IncidentTable{
         QListWidget *logTree;
         IncidentsWindow* incidentWindow; 
         int log_number;   
+        void bind_signals();
     public:
         IncidentTable(IncidentsWindow* incWindow,QMainWindow *win);
         QWidget* get_chart();
@@ -23,11 +24,13 @@ class IncidentTable{
         IncidentTable& pop();
         IncidentTable& add_log(const std::string Hostname,
                            const std::string Time,
+                           const std::string Date,
                            const std::string Source,
                            const std::string Severity,
                            const std::string Message,
                            const int id,
                            const int top
                           );
+                    
     
 };
