@@ -102,13 +102,13 @@ void HandleCommand::run(std::vector<std::string> args){
     }
     if(args[0]=="GLSHS"){
         try{
-            if(args.size()<8)
+            if(args.size()<9)
              return;
             LogsData logs;
             std::string time= std::format("{} {}",args[4],args[5]);
             std::string time_end= std::format("{} {}",args[6],args[7]);
             logs.set_fd(fd)
-                .get_logs_by_severity_host_source(args[1],args[2],args[3],time,time_end);   
+                .get_logs_by_severity_host_source(args[1],args[2],args[3],time,time_end,args[8]);   
         }
         catch(std::exception &err){
             write(fd,unexpected_error.c_str(),unexpected_error.size());

@@ -10,6 +10,8 @@
 #include <QtCore/QThread>
 #include <QtCore/QTimer>
 #include <QtWidgets/QComboBox>
+#include <QtWidgets/QLineEdit>
+
 
 #include "incidents_table.hpp"
 
@@ -26,15 +28,17 @@ private:
 
     QComboBox *type_box;
     QComboBox *hostname_box;
+    QLineEdit *search_entry;
 
     std::string datetime="NONE NONE";
     std::string hostname="NONE";
     std::string type="ALL";
     std::string source="NONE";
-
+    std::string search="NONE";
     int top;
 
     void bind_signals();
+    QWidget* get_filtres_menu();
 public:
     IncidentsWindow(GUI &srv,QMainWindow* win) : gui(srv) , window(win){}
     QWidget* get_window();

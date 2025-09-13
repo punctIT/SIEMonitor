@@ -3,7 +3,6 @@
 #include <QtWidgets/QPushButton>
 #include <QtCore/QObject>
 #include <QtWidgets/QGridLayout>
-#include <QtWidgets/QLineEdit>
 #include <QtCore/QTimer>  
 
 

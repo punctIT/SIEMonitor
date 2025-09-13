@@ -1,13 +1,16 @@
 #include "incidents_table.hpp"
 #include "incidents_home.h"
 #include "../../gui.h"
+
 #include <string>
 #include <format>
 
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QTextEdit>
- 
+
+
+
 
 std::string get_spaced(std::string name,int len){
     if(name.size()>len){
@@ -110,7 +113,16 @@ IncidentTable& IncidentTable::add_log(const std::string Hostname,
     item->setData(Qt::UserRole+1,QString::fromStdString(Message));
 
     QPixmap spacer(20, 10);
-    spacer.fill(Qt::red);
+    if(Severity=="Alert"||Severity=="Emergency"||Severity=="Critical"){
+        spacer.fill(Qt::red);
+    }
+    else if(Severity=="Warning"||Severity=="Error"){
+        spacer.fill(Qt::yellow);
+    }
+    else {
+        spacer.fill(Qt::green);
+    }
+   
     item->setIcon(QIcon(spacer));
 
     QFont monoFont("Courier New");

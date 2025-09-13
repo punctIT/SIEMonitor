@@ -24,8 +24,8 @@ class LogsData: ProtocolHandler{
                                                    const std::string host,
                                                    const std::string source,
                                                    const std::string time_start,
-                                                     const std::string time_end
-
+                                                   const std::string time_end,
+                                                   const std::string search
                                                   );
         
 };

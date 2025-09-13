@@ -86,7 +86,8 @@ LogsData& LogsData::get_logs_by_severity_host_source(const std::string severity,
                                                      const std::string host,
                                                      const std::string source,
                                                      const std::string time_start,
-                                                     const std::string time_end
+                                                     const std::string time_end,
+                                                     const std::string search
                                             ){
 
     std::string sql;
@@ -118,6 +119,9 @@ LogsData& LogsData::get_logs_by_severity_host_source(const std::string severity,
     else {
         sql=std::format(" {} AND timestamp < '{}' AND timestamp >= '{}'",sql,time_end,time_start);
         //std::cout<<timestamp<<" "<<time<<std::endl;
+    }
+    if(search!="NONE"){
+        sql=std::format(" {} AND (hostname LIKE '%{}%' OR source LIKE '%{}%' OR message LIKE '%{}%')",sql,search,search,search);
     }
     if(limit){
         sql+=" AND resolved=0 ORDER BY id DESC LIMIT 150;";
