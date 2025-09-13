@@ -14,7 +14,7 @@
 
 
 #include "incidents_table.hpp"
-
+#include "Incidents_chart.hpp"
 
 class GUI;
 
@@ -25,6 +25,7 @@ private:
     QMainWindow* window;
     QTimer* updateTimer;
     IncidentTable* incidentTable;
+    IncidentsChart* incidentsChart;
 
     QComboBox *type_box;
     QComboBox *hostname_box;

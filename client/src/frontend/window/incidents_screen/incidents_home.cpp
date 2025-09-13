@@ -42,12 +42,19 @@ QWidget* IncidentsWindow::get_window(){
     
     QLabel *text = new QLabel("Incidents");
     incidentTable= new IncidentTable(this,window);
+    incidentsChart= new IncidentsChart(window);
 
     updateTimer=new QTimer(window);
     
+    layout->setRowStretch(0,1);
+    layout->setRowStretch(1,39);
+    layout->setRowStretch(2,5);
+    layout->setRowStretch(3,60);
+
     layout->addWidget(text,0,0);
-    layout->addWidget(get_filtres_menu(),1,0);
-    layout->addWidget(incidentTable->get_chart(),2,0);
+    layout->addWidget(incidentsChart->get_charts(),1,0);
+    layout->addWidget(get_filtres_menu(),2,0);
+    layout->addWidget(incidentTable->get_chart(),3,0);
     bind_signals();
     return container;
 }
@@ -62,7 +69,21 @@ void IncidentsWindow::bind_signals(){
         }
         update_types();
     });
-
+    QObject::connect(&gui.get_server(),&ServerConection::IncidentsChartData,[this](QString resp){
+        SplitLog log;
+        log.set_log(resp.toStdString())
+           .split_all();
+        incidentsChart->update_data_logs(log.get_splited_log());
+        
+     });
+    QObject::connect(&gui.get_server(),&ServerConection::IncidentsResolved,[this](QString resp){
+        SplitLog log;
+        log.set_log(resp.toStdString())
+           .split_all();
+        incidentsChart->update_data_resolved(log.get_splited_log());
+        
+     });
+    
     QObject::connect(&gui.get_server(),&ServerConection::HostsEnum,[this](QString resp){
         hostname_box->clear();
         hostname_box->addItem("All");
@@ -113,7 +134,9 @@ void IncidentsWindow::update_types(){
     datetime="NONE NONE";
     top=0;
     std::string cmd = std::format("GLSHS {} {} {} {} {} {}",type, hostname, source,datetime,datetime,search);
-    gui.get_server().sent(cmd);
+    gui.get_server().sent(cmd)
+                    .sent(std::format("GLNT {}",type))
+                    .sent(std::format("GRN {}",type));
    
 }
 void IncidentsWindow::update(){ 
@@ -129,7 +152,10 @@ IncidentsWindow& IncidentsWindow::start_timer(){
     datetime="NONE NONE";
     top=0;
     std::string cmd = std::format("GLSHS {} {} {} {} {}",type, hostname, source,datetime,datetime);
-    gui.get_server().sent(cmd).sent("HOSTS");
+    gui.get_server().sent(cmd)
+                    .sent("HOSTS")
+                    .sent(std::format("GLNT {}",type))
+                    .sent(std::format("GRN {}",type));
     datetime=get_current_time();
     updateTimer->start(2000);
     return *this;

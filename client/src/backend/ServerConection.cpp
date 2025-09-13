@@ -65,6 +65,11 @@ void ServerConection::receive(const QString& msg){
         }
         return;
     }
+    if (msg.startsWith("[GLNT]")){
+        QString msg2=msg.mid(QString("[GLNT]").length());
+        emit IncidentsChartData(msg2);
+        return;
+    }
     if (msg.startsWith("[INC]")){
         QString msg2=msg.mid(QString("[INC]").length());
         if(msg2.startsWith("[TAB]")){
@@ -75,6 +80,11 @@ void ServerConection::receive(const QString& msg){
     if (msg.startsWith("[HOSTS]")){
         QString msg2=msg.mid(QString("[HOSTS]").length());
         emit HostsEnum(msg2);
+        return;
+    }
+    if (msg.startsWith("[GRN]")){
+        QString msg2=msg.mid(QString("[GRN]").length());
+        emit IncidentsResolved(msg2);
         return;
     }
     emit genericResponse(msg);
