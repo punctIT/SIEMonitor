@@ -24,7 +24,8 @@ QWidget* InfoChart::get_chart(){
     series->append("Alert", alert);
     series->append("Critical", critical);
     series->append("Warning", warning);
-
+    series->setHoleSize(0.35); 
+    
     QChart *chart = new QChart();
     chart->addSeries(series);
     series->setLabelsVisible(true);

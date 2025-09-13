@@ -115,7 +115,33 @@ void HandleCommand::run(std::vector<std::string> args){
         }
         return;
     }
-    
+    if(args[0]=="GLNT"){
+        try{
+            if(args.size()<2)
+                return;
+            LogsData logs;
+            logs.set_fd(fd)
+                .get_logs_number_by_type(args[1]);
+        }
+        catch(std::exception &err){
+            write(fd,unexpected_error.c_str(),unexpected_error.size());
+        }
+        return;
+    }
+    if(args[0]=="GRN"){
+        try{
+            if(args.size()<2){
+                return;
+            }
+            LogsData logs;
+            logs.set_fd(fd)
+                .get_resolve_number(args[1]);
+        }
+        catch(std::exception &err){
+            write(fd,unexpected_error.c_str(),unexpected_error.size());
+        }
+        return;
+    }
     std::string msg="error , invalid command";
     e=write(fd,msg.c_str(),msg.size());
     if( e < 0){

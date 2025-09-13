@@ -140,3 +140,96 @@ LogsData& LogsData::get_logs_by_severity_host_source(const std::string severity,
      }
     return *this;
 }
+
+ LogsData& LogsData::get_logs_number_by_type(const std::string type){
+    std::vector<std::string> data;
+    if(type=="HIGH"){
+        std::string sql=std::format("SELECT COUNT(*) FROM LOGS WHERE severity in ('Critical');");
+        auto logs=logs_db.get_data(sql.c_str());
+        data.push_back(std::format("{}Critical",logs[0]));
+        sql=std::format("SELECT COUNT(*) FROM LOGS WHERE severity in ('Emergency');");
+        logs=logs_db.get_data(sql.c_str());
+        data.push_back(std::format("{}Emergency",logs[0]));
+        sql=std::format("SELECT COUNT(*) FROM LOGS WHERE severity in ('Alert');");
+        logs=logs_db.get_data(sql.c_str());
+        data.push_back(std::format("{}Alert",logs[0]));
+    }   
+    else if(type=="MEDIUM"){
+        std::string sql=std::format("SELECT COUNT(*) FROM LOGS WHERE severity in ('Error');");
+        auto logs=logs_db.get_data(sql.c_str());
+        data.push_back(std::format("{}Error",logs[0]));
+        sql=std::format("SELECT COUNT(*) FROM LOGS WHERE severity in ('Warning');");
+        logs=logs_db.get_data(sql.c_str());
+        data.push_back(std::format("{}Warning",logs[0]));
+       
+    }
+    else if(type=="LOW"){
+        std::string sql=std::format("SELECT COUNT(*) FROM logs WHERE severity in ('Debug');");
+        auto logs=logs_db.get_data(sql.c_str());
+        data.push_back(std::format("{}Debug",logs[0]));
+        sql=std::format("SELECT COUNT(*) FROM logs WHERE severity in ('Informational');");
+        logs=logs_db.get_data(sql.c_str());
+        data.push_back(std::format("{}Informational",logs[0]));
+        sql=std::format("SELECT COUNT(*) FROM logs WHERE severity in ('Notice');");
+        logs=logs_db.get_data(sql.c_str());
+        data.push_back(std::format("{}Notice",logs[0]));
+    }
+    else {
+        std::string sql=std::format("SELECT COUNT(*) FROM LOGS WHERE severity in ('Emergency','Alert','Critical');");
+        auto logs=logs_db.get_data(sql.c_str());
+        data.push_back(std::format("{}High",logs[0]));
+        sql=std::format("SELECT COUNT(*) FROM LOGS WHERE severity in ('Error','Warning');");
+        logs=logs_db.get_data(sql.c_str());
+        data.push_back(std::format("{}Medium",logs[0]));
+        sql=std::format("SELECT COUNT(*) FROM logs WHERE severity in ('Notice','Informational','Debug');");
+        logs=logs_db.get_data(sql.c_str());
+        data.push_back(std::format("{}Low",logs[0]));
+    }
+    if(!data.empty()){
+        std::string text=get_text(data,"[GLNT]");
+        write(fd,text.c_str(),text.length());
+    }
+    return *this;
+ }
+ LogsData& LogsData::get_resolve_number(const std::string type){
+    std::vector<std::string> data;
+     if(type=="HIGH"){
+        std::string sql=std::format("SELECT COUNT(*) FROM LOGS WHERE severity in ('Emergency','Alert','Critical') AND resolved=0;");
+        auto logs=logs_db.get_data(sql.c_str());
+        data.push_back(logs[0]);
+        sql=std::format("SELECT COUNT(*) FROM LOGS WHERE severity in ('Emergency','Alert','Critical') AND resolved=1;");
+         logs=logs_db.get_data(sql.c_str());
+        data.push_back(logs[0]);
+    }   
+    else if(type=="MEDIUM"){
+        std::string sql=std::format("SELECT COUNT(*) FROM LOGS WHERE severity in ('Error','Warning') AND resolved=0;");
+         auto logs=logs_db.get_data(sql.c_str());
+        data.push_back(logs[0]);
+        sql=std::format("SELECT COUNT(*) FROM LOGS WHERE severity in ('Error','Warning') AND resolved=1;");
+         logs=logs_db.get_data(sql.c_str());
+        data.push_back(logs[0]);
+       
+    }
+    else if(type=="LOW"){
+       std::string sql=std::format("SELECT COUNT(*) FROM logs WHERE severity in ('Notice','Informational','Debug') AND resolved=0;");
+        auto logs=logs_db.get_data(sql.c_str());
+        data.push_back(logs[0]);
+       sql=std::format("SELECT COUNT(*) FROM logs WHERE severity in ('Notice','Informational','Debug') AND resolved=1;");
+        logs=logs_db.get_data(sql.c_str());
+        data.push_back(logs[0]);
+    }
+    else {
+        std::string sql=std::format("SELECT COUNT(*) FROM LOGS WHERE resolved=0;");
+        auto logs=logs_db.get_data(sql.c_str());
+        data.push_back(logs[0]);
+        sql=std::format("SELECT COUNT(*) FROM LOGS WHERE resolved=1;");
+        logs=logs_db.get_data(sql.c_str());
+        data.push_back(logs[0]);
+    }
+    
+    if(!data.empty()){
+        std::string text=get_text(data,"[GRN]");
+        write(fd,text.c_str(),text.length());
+    }
+    return *this;
+ }

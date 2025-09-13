@@ -27,5 +27,6 @@ class LogsData: ProtocolHandler{
                                                    const std::string time_end,
                                                    const std::string search
                                                   );
-        
+        LogsData& get_logs_number_by_type(const std::string type);
+        LogsData& get_resolve_number(const std::string type);
 };
