@@ -9,7 +9,7 @@ ListHosts& ListHosts::set_fd(const int &fd){
     return *this;
 }
 ListHosts& ListHosts::get_hosts(){
-    const std::string sql="SELECT DISTINCT hostname from logs;";
+    const std::string sql="SELECT DISTINCT hostname from logs ORDER BY hostname;";
     auto hosts=logs_db.get_data(sql.c_str());
 
     const std::string text = get_text(hosts,"[HOSTS]");
