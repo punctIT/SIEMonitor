@@ -16,7 +16,6 @@ LogDatabaseWriter::LogDatabaseWriter(){
         "hostname TEXT,"
         "source TEXT,"
         "severity TEXT,"
-        "resolved TINYINT,"
         "message TEXT"
         ");";
     db.set_new_database_path("logsData.db")

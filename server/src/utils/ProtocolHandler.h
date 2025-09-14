@@ -25,6 +25,9 @@ class ProtocolHandler{
                 return type+out+end_msg;
             else return type+second_type+out+end_msg;
         }
+        std::string get_error(const std::string s){
+            return s+end_msg;
+        }
         std::string log_text_protocol(std::string data,std::string type){                
             return "[LOG]"+std::format("[{}]",type)+data+end_msg;
            
