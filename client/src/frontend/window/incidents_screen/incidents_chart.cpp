@@ -8,7 +8,8 @@ IncidentsChart::IncidentsChart(QMainWindow *win){
 QWidget* IncidentsChart::get_info_data_table(){
     QFrame* card = new QFrame;
     card->setFrameShape(QFrame::StyledPanel);
-    card->setStyleSheet(QString("background: %1; border-radius: 10px; padding: 10px;"));
+    QString color = "#f0f0f0"; 
+    card->setStyleSheet(QString("background-color: %1; border-radius: 10px; padding: 10px;").arg(color));
 
     QGridLayout* cardLayout = new QGridLayout(card);
     total=new QLabel("Total 0");

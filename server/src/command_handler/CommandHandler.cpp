@@ -3,6 +3,7 @@
 #include <unistd.h> 
 #include <vector>
 
+
 #include "commands/UpdateData.hpp"
 #include "commands/OnlineUsers.hpp"
 #include "commands/ListHosts.hpp"
@@ -30,8 +31,9 @@ void HandleCommand::run(std::vector<std::string> args){
                  .run();
         }
         catch(std::exception &err){
-            std::cout<<"[USER COMMAND]"<<err.what()<<std::endl;
-            write(fd,unexpected_error.c_str(),unexpected_error.size());
+           std::cout<<"[USER COMMAND]"<<err.what()<<std::endl;
+           std::string e=get_error(err.what());
+           write(fd,e.c_str(),e.size());
         }
         return;
     }
@@ -42,7 +44,8 @@ void HandleCommand::run(std::vector<std::string> args){
                 .get_hosts();
         }
          catch(std::exception &err){
-            write(fd,unexpected_error.c_str(),unexpected_error.size());
+           std::string e=get_error(err.what());
+           write(fd,e.c_str(),e.size());
         }
         return;
     }
@@ -55,7 +58,8 @@ void HandleCommand::run(std::vector<std::string> args){
                 .get_sources(args[1]);
         }
          catch(std::exception &err){
-            write(fd,unexpected_error.c_str(),unexpected_error.size());
+           std::string e=get_error(err.what());
+           write(fd,e.c_str(),e.size());
         }
         return;
     }
@@ -70,7 +74,8 @@ void HandleCommand::run(std::vector<std::string> args){
             }
         }
         catch(std::exception &err){
-            write(fd,unexpected_error.c_str(),unexpected_error.size());
+           std::string e=get_error(err.what());
+           write(fd,e.c_str(),e.size());
         }
         return;
     }
@@ -84,7 +89,8 @@ void HandleCommand::run(std::vector<std::string> args){
                 .get_last_n(args[1]);
         }
         catch(std::exception &err){
-            write(fd,unexpected_error.c_str(),unexpected_error.size());
+           std::string e=get_error(err.what());
+           write(fd,e.c_str(),e.size());
         }
         return;
     }
@@ -96,7 +102,8 @@ void HandleCommand::run(std::vector<std::string> args){
                 .get_logs_number_data(time_end);   
         }
         catch(std::exception &err){
-            write(fd,unexpected_error.c_str(),unexpected_error.size());
+            std::string e=get_error(err.what());
+           write(fd,e.c_str(),e.size());
         }
         return;
     }
@@ -111,7 +118,8 @@ void HandleCommand::run(std::vector<std::string> args){
                 .get_logs_by_severity_host_source(args[1],args[2],args[3],time,time_end,args[8]);   
         }
         catch(std::exception &err){
-            write(fd,unexpected_error.c_str(),unexpected_error.size());
+            std::string e=get_error(err.what());
+           write(fd,e.c_str(),e.size());
         }
         return;
     }
@@ -124,7 +132,8 @@ void HandleCommand::run(std::vector<std::string> args){
                 .get_logs_number_by_type(args[1]);
         }
         catch(std::exception &err){
-            write(fd,unexpected_error.c_str(),unexpected_error.size());
+            std::string e=get_error(err.what());
+           write(fd,e.c_str(),e.size());
         }
         return;
     }
@@ -138,7 +147,8 @@ void HandleCommand::run(std::vector<std::string> args){
                 .get_resolve_number(args[1]);
         }
         catch(std::exception &err){
-            write(fd,unexpected_error.c_str(),unexpected_error.size());
+           std::string e=get_error(err.what());
+           write(fd,e.c_str(),e.size());
         }
         return;
     }
