@@ -37,10 +37,31 @@ void IncidentTable::bind_signals(){
     });
     QObject::connect(logTree, &QListWidget::itemChanged, [this](QListWidgetItem *item){
         if(item->checkState() == Qt::Checked) {
-            std::string id = item->data(Qt::UserRole).toString().toStdString();
-            incidentWindow->get_gui().get_server().sent(std::format("UpRe {} {}",id,1));
-            delete logTree->takeItem(logTree->row(item));
+            check_count+=1;
+            if(check_count>0){
+                save_btn->show();
+            }
         } 
+        else {
+            check_count-=1;
+            if(check_count==0){
+                save_btn->hide();
+            }
+        }
+    });
+    QObject::connect(save_btn,&QPushButton::clicked,[this](){
+        check_count=0;
+        for (int i = logTree->count() - 1; i >= 0; --i) {
+            QListWidgetItem* item = logTree->item(i);
+            if(item->checkState() == Qt::Checked) {
+                std::string id = item->data(Qt::UserRole).toString().toStdString();
+                incidentWindow->get_gui().get_server().sent(std::format("UpRe {} {}",id,1));
+                delete logTree->takeItem(i);
+            }
+        }
+        if(check_count==0){
+            save_btn->hide();
+        }
     });
     
 }
@@ -54,7 +75,7 @@ QWidget* IncidentTable::get_chart(){
         "padding: 5px 5px 5px; "  
         "}"
     );
-    bind_signals();
+    
     std::string text = std::format("{}{} {} {} {} {} {}",
                                     get_spaced("Resolved",12),
                                     get_spaced("Hostname",31),
@@ -64,13 +85,17 @@ QWidget* IncidentTable::get_chart(){
                                     get_spaced("Severity",36),
                                     get_spaced("Message",50)
                                 );
-    QLabel *head=new QLabel(QString::fromStdString(text));
+    QLabel *head=new QLabel(QString::fromStdString(text),container);
     head->setStyleSheet(
         "QLabel { padding: 5px 5px; }"
     );
+    save_btn = new QPushButton("Save",container);
+
     layout->addWidget(head,0,0);
     layout->addWidget(logTree,1,0);
-    
+    layout->addWidget(save_btn,2,0);
+    save_btn->hide();
+    bind_signals();
     return container;
 }
 IncidentTable& IncidentTable::clear(){

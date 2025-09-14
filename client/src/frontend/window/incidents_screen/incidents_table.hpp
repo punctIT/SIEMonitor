@@ -6,7 +6,7 @@
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QListWidget>
-
+#include <QtWidgets/QPushButton>
 class IncidentsWindow;
 
 class IncidentTable{
@@ -14,7 +14,10 @@ class IncidentTable{
         QMainWindow *window;
         QListWidget *logTree;
         IncidentsWindow* incidentWindow; 
+
+        QPushButton *save_btn;
         int log_number;   
+        int check_count=0;
         void bind_signals();
     public:
         IncidentTable(IncidentsWindow* incWindow,QMainWindow *win);

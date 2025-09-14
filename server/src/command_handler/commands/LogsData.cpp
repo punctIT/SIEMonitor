@@ -193,20 +193,20 @@ LogsData& LogsData::get_logs_by_severity_host_source(const std::string severity,
  }
  LogsData& LogsData::get_resolve_number(const std::string type){
     std::vector<std::string> data;
-     if(type=="HIGH"){
+    DBComandExecutor resolved_logs_db;
+    resolved_logs_db.set_database_path("resolvedLogsData.db");
+    if(type=="HIGH"){
         std::string sql=std::format("SELECT COUNT(*) FROM LOGS WHERE severity in ('Emergency','Alert','Critical');");
         auto logs=logs_db.get_data(sql.c_str());
         data.push_back(logs[0]);
-        sql=std::format("SELECT COUNT(*) FROM LOGS WHERE severity in ('Emergency','Alert','Critical');");
-         logs=logs_db.get_data(sql.c_str());
+        logs=resolved_logs_db.get_data(sql.c_str());
         data.push_back(logs[0]);
     }   
     else if(type=="MEDIUM"){
         std::string sql=std::format("SELECT COUNT(*) FROM LOGS WHERE severity in ('Error','Warning');");
          auto logs=logs_db.get_data(sql.c_str());
         data.push_back(logs[0]);
-        sql=std::format("SELECT COUNT(*) FROM LOGS WHERE severity in ('Error','Warning');");
-         logs=logs_db.get_data(sql.c_str());
+         logs=resolved_logs_db.get_data(sql.c_str());
         data.push_back(logs[0]);
        
     }
@@ -214,16 +214,14 @@ LogsData& LogsData::get_logs_by_severity_host_source(const std::string severity,
        std::string sql=std::format("SELECT COUNT(*) FROM logs WHERE severity in ('Notice','Informational','Debug');");
         auto logs=logs_db.get_data(sql.c_str());
         data.push_back(logs[0]);
-       sql=std::format("SELECT COUNT(*) FROM logs WHERE severity in ('Notice','Informational','Debug');");
-        logs=logs_db.get_data(sql.c_str());
+        logs=resolved_logs_db.get_data(sql.c_str());
         data.push_back(logs[0]);
     }
     else {
         std::string sql=std::format("SELECT COUNT(*) FROM LOGS;");
         auto logs=logs_db.get_data(sql.c_str());
         data.push_back(logs[0]);
-        sql=std::format("SELECT COUNT(*) FROM LOGS;");
-        logs=logs_db.get_data(sql.c_str());
+        logs=resolved_logs_db.get_data(sql.c_str());
         data.push_back(logs[0]);
     }
     

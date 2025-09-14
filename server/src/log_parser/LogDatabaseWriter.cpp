@@ -8,7 +8,7 @@
 
 LogDatabaseWriter::LogDatabaseWriter(){
     std::cout<<"Start writing log in DataBase"<<std::endl;
-    const std::string sql = 
+    std::string sql = 
         "CREATE TABLE IF NOT EXISTS logs("
         "id INTEGER PRIMARY KEY AUTOINCREMENT,"
         "pri INT,"
@@ -19,6 +19,20 @@ LogDatabaseWriter::LogDatabaseWriter(){
         "message TEXT"
         ");";
     db.set_new_database_path("logsData.db")
+      .run_command(sql.c_str());
+    sql = 
+        "CREATE TABLE IF NOT EXISTS logs("
+        "id INT,"
+        "pri INT,"
+        "timestamp DATETIME,"
+        "hostname TEXT,"
+        "source TEXT,"
+        "severity TEXT,"
+        "resolvedTIME DATETIME,"
+        "resolvedRESPONDER TEXT," 
+        "message TEXT"
+        ");";
+    db.set_new_database_path("resolvedLogsData.db")
       .run_command(sql.c_str());
 }
 LogDatabaseWriter& LogDatabaseWriter::set_thread_safe_quere(ThreadSafeQueue <std::string>* queue){

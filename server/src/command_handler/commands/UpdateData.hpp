@@ -5,6 +5,7 @@
 
 class UpdateLogsData: ProtocolHandler{
     DBComandExecutor logs_db;
+    DBComandExecutor resolved_db;
 public:
     UpdateLogsData();
     UpdateLogsData& update_resolved(const std::string id,const std::string status);
