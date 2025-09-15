@@ -23,7 +23,7 @@ QWidget* InfoChart::get_chart(){
     set = new QBarSet("Incidents");
     *set << (1) << 2 << 3 << 4 << 5 <<6;
     
-  series->append(set);
+    series->append(set);
     series->setLabelsVisible(true);
     series->setLabelsPosition(QAbstractBarSeries::LabelsOutsideEnd); 
     series->setLabelsFormat("@value");     
@@ -44,6 +44,7 @@ QWidget* InfoChart::get_chart(){
     chart->addAxis(axisY, Qt::AlignLeft);
     series->attachAxis(axisX);
     series->attachAxis(axisY);
+    chart->legend()->hide();
 
     QChartView *chartView = new QChartView(chart, window);
     chartView->setRenderHint(QPainter::Antialiasing);

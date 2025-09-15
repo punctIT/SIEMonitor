@@ -55,8 +55,8 @@ std::string SplitLog::get_severity(){
     return "";
 }
 std::string SplitLog::get_message(){
-    if(splited_log.size()>=6){
-        std::istringstream iss(splited_log[6]);
+    if(splited_log.size()>=7){
+        std::istringstream iss(splited_log[7]);
         std::string msg="";
         std::string word="";
         while (iss >> word) {

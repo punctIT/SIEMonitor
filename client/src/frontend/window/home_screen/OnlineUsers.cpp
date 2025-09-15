@@ -11,7 +11,10 @@ QWidget* UsersTable::get_chart(){
     QWidget *container = new QWidget(window);
     QGridLayout *layout = new QGridLayout(container);
     logTree= new QListWidget(window);
-    layout->addWidget(logTree,0,0);
+    layout->setRowStretch(0,1);
+    layout->setRowStretch(0,99);
+    layout->addWidget(new QLabel("Online users:"),0,0);
+    layout->addWidget(logTree,1,0);
     return container;
 }
 
@@ -19,7 +22,7 @@ UsersTable& UsersTable::set_users(const std::vector<std::string> users){
     logTree->clear();
     for(auto i :users){
         QListWidgetItem* item= new QListWidgetItem(QString::fromStdString(i));
-        qDebug()<<QString::fromStdString(i)<<" "<<username;
+        //qDebug()<<QString::fromStdString(i)<<" "<<username;
         if(i==username.toStdString()){
            QFont font = item->font();  
             font.setBold(true);     

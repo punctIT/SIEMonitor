@@ -1,4 +1,4 @@
-#include "LogsTable.hpp"
+#include "ResolvedTable.hpp"
 #include <string>
 #include <format>
 
@@ -7,33 +7,18 @@
 #include <QtWidgets/QTextEdit>
 
 
-QString get_spaced_string(std::string name,int len){
-    if(name.size()>len){
-        name.erase(len-3,name.size());
-        name+="...";
-    }
-    else {
-        name.resize(len, ' ');
-    }
-    return QString::fromStdString(name);
-}
-
-LogsTable::LogsTable(QMainWindow *win){
+ResolvedTable::ResolvedTable(QMainWindow *win){
     window=win;
     log_number=0;
 }
 
-QWidget* LogsTable::get_chart(){
+QWidget* ResolvedTable::get_chart(){
     QWidget *container = new QWidget(window);
     QGridLayout* layout = new QGridLayout(container);
     logTree= new QTreeWidget(container);
     logTree->setColumnCount(1);
     logTree->resizeColumnToContents(1);
-    logTree->setHeaderLabels({get_spaced_string("      Hostname",112)+
-                              get_spaced_string("Time",40)+
-                              get_spaced_string("Severity",10)
-                             });
-    
+   
     logTree->setStyleSheet(
         "QTreeWidget::item { "
         "padding: 5px 5px 5px; " 
@@ -45,13 +30,13 @@ QWidget* LogsTable::get_chart(){
     layout->addWidget(logTree,0,0);
     return container;
 }
-LogsTable& LogsTable::clear(){
+ResolvedTable& ResolvedTable::clear(){
      if (logTree) {
         logTree->clear();
     }
     return *this;
 }
-LogsTable& LogsTable::pop(){
+ResolvedTable& ResolvedTable::pop(){
     if (!logTree || log_number<40) return *this;
     
     int itemCount = logTree->topLevelItemCount();
@@ -62,7 +47,7 @@ LogsTable& LogsTable::pop(){
     return *this;
 }
 
-LogsTable& LogsTable::add_log(const std::string Hostname,
+ResolvedTable& ResolvedTable::add_log(const std::string Hostname,
                               const std::string Time,
                               const std::string Source,
                               const std::string Severity,
@@ -71,9 +56,6 @@ LogsTable& LogsTable::add_log(const std::string Hostname,
                              ){
 
     QTreeWidgetItem *logItem = new QTreeWidgetItem();
-    logItem->setText(0, get_spaced_string(Hostname,61)+
-                        get_spaced_string(Time,23)+
-                        get_spaced_string(Severity,40));
     
     QFont monoFont("Courier New");
     monoFont.setStyleHint(QFont::Monospace);
@@ -81,7 +63,8 @@ LogsTable& LogsTable::add_log(const std::string Hostname,
 
     QTreeWidgetItem *msgItem = new QTreeWidgetItem(logItem);
     QWidget *msgContainer = new QWidget();
-    QLabel *msgText = new QLabel(QString::fromStdString("Source: "+Source+"\nMessage: "+ Message));
+    QLabel *msgText = new QLabel(QString::fromStdString(Message));
+    
     msgText->setWordWrap(true); 
     logTree->setItemWidget(msgItem, 0, msgText);
     if(top != 0){
@@ -93,6 +76,3 @@ LogsTable& LogsTable::add_log(const std::string Hostname,
     return *this;
 }
 
-LogsTable& LogsTable::update(){
-    return *this;
-}

@@ -4,7 +4,7 @@
 #include "InfoChart.hpp"
 #include "LogsTable.hpp"
 #include "OnlineUsers.hpp"
-
+#include "ResolvedTable.hpp"
 #include <string>
 
 #include <QtWidgets/QMainWindow>
@@ -26,7 +26,8 @@ private:
     InfoChart* infoChart;
     LogsTable* logsTable;
     UsersTable* usersTable;
-
+    ResolvedTable* resolvedTable;
+    
     QLabel* welcome_msg;
     SplitLog split;
     std::string datetime;
