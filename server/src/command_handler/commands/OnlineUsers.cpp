@@ -10,7 +10,7 @@ OnlineUsers& OnlineUsers::set_fd(const int &fd){
     return *this;
 }
 OnlineUsers& OnlineUsers::run(){
-    const std::string sql = "SELECT username, strftime('%H:%M:%S', timestamp) as time_only FROM Users;";
+    const std::string sql = "SELECT username FROM Users;";
     auto users=users_db.get_data(sql.c_str());
     auto text=get_text(users,"[USERS]");
     write(fd,text.c_str(),text.size());

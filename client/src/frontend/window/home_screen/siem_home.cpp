@@ -14,6 +14,8 @@
 QWidget * SiemHomeWindow::get_window(){
     infoChart = new InfoChart(window);
     logsTable = new LogsTable(window);
+    usersTable= new UsersTable(window);
+
     QWidget *container= new QWidget(window);
     QGridLayout *layout = new QGridLayout(container);
     QGridLayout *top_layout = new QGridLayout(container);
@@ -21,11 +23,17 @@ QWidget * SiemHomeWindow::get_window(){
     connect(updateTimer, &QTimer::timeout, this, &SiemHomeWindow::update);
     bind_signals();
     
-    
+    welcome_msg=new QLabel("",container);
     top_layout->addWidget(infoChart->get_data_chart(), 0, 0); 
     top_layout->addWidget(infoChart->get_chart(), 0, 1); 
-    layout->addLayout(top_layout,0,0);
-    layout->addWidget(logsTable->get_chart(),1,0);   
+    top_layout->addWidget(usersTable->get_chart(),0,2);
+
+    layout->setRowStretch(0,15);
+    layout->setRowStretch(1,35);
+    layout->setRowStretch(2,50);
+    layout->addWidget(welcome_msg,0,0);
+    layout->addLayout(top_layout,1,0);
+    layout->addWidget(logsTable->get_chart(),2,0);   
  
     
     return container;
@@ -66,6 +74,12 @@ void SiemHomeWindow::bind_signals(){
                   .update();
          
     });
+    QObject::connect(&gui.get_server(),&ServerConection::onlineUsers,[this](QString resp){
+        split.set_log(resp.toStdString())
+             .split_all();
+        usersTable->set_username(username)
+                    .set_users(split.get_splited_log());
+    });
     QObject::connect(&gui.get_server(),&ServerConection::logData,[this](QString resp){
         //qDebug()<<resp;
         split.set_log(resp.toStdString())
@@ -87,7 +101,9 @@ void SiemHomeWindow::bind_signals(){
 void SiemHomeWindow::update(){
     auto now = get_current_time();
     gui.get_server().sent(std::format("GLND {}",now)).
-                     sent(std::format("GL {} {} 10000", datetime, now));
+                     sent(std::format("GL {} {} 10000", datetime, now)).
+                     sent("Users");
+
                 
     datetime = now;  
 }
@@ -97,9 +113,14 @@ SiemHomeWindow& SiemHomeWindow::start_update_timer(){
     gui.get_server().sent("LN 15")
                     .sent(std::format("GLND {}",now));
     updateTimer->start(3000);
+    welcome_msg->setText("Welcome back "+username);
     return *this;
 }
 SiemHomeWindow& SiemHomeWindow::stop_update_timer(){
     updateTimer->stop();
+    return *this;
+}
+SiemHomeWindow& SiemHomeWindow::set_username(QString user){
+    username=user;
     return *this;
 }

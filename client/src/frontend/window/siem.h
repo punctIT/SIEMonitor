@@ -23,8 +23,11 @@ private:
     void toggle_side_menu();
     QWidget* get_side_menu();
     QWidget* get_top_menu();
+
+    QString username;
 public:
     SIEMWindow(GUI &srv,QMainWindow* win) : gui(srv) , window(win){}
     QWidget* get_window();
     void start_home_thread();
+    SIEMWindow& set_username(QString user);
 };

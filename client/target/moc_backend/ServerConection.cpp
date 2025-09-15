@@ -26,7 +26,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 namespace {
 struct qt_meta_stringdata_ServerConection_t {
-    uint offsetsAndSizes[32];
+    uint offsetsAndSizes[36];
     char stringdata0[16];
     char stringdata1[14];
     char stringdata2[1];
@@ -37,12 +37,14 @@ struct qt_meta_stringdata_ServerConection_t {
     char stringdata7[9];
     char stringdata8[16];
     char stringdata9[5];
-    char stringdata10[23];
-    char stringdata11[19];
-    char stringdata12[18];
-    char stringdata13[10];
-    char stringdata14[8];
-    char stringdata15[4];
+    char stringdata10[12];
+    char stringdata11[6];
+    char stringdata12[23];
+    char stringdata13[19];
+    char stringdata14[18];
+    char stringdata15[10];
+    char stringdata16[8];
+    char stringdata17[4];
 };
 #define QT_MOC_LITERAL(ofs, len) \
     uint(sizeof(qt_meta_stringdata_ServerConection_t::offsetsAndSizes) + ofs), len 
@@ -58,12 +60,14 @@ Q_CONSTINIT static const qt_meta_stringdata_ServerConection_t qt_meta_stringdata
         QT_MOC_LITERAL(63, 8),  // "logTable"
         QT_MOC_LITERAL(72, 15),  // "genericResponse"
         QT_MOC_LITERAL(88, 4),  // "data"
-        QT_MOC_LITERAL(93, 22),  // "IncidentsResponseTable"
-        QT_MOC_LITERAL(116, 18),  // "IncidentsChartData"
-        QT_MOC_LITERAL(135, 17),  // "IncidentsResolved"
-        QT_MOC_LITERAL(153, 9),  // "HostsEnum"
-        QT_MOC_LITERAL(163, 7),  // "receive"
-        QT_MOC_LITERAL(171, 3)   // "now"
+        QT_MOC_LITERAL(93, 11),  // "onlineUsers"
+        QT_MOC_LITERAL(105, 5),  // "users"
+        QT_MOC_LITERAL(111, 22),  // "IncidentsResponseTable"
+        QT_MOC_LITERAL(134, 18),  // "IncidentsChartData"
+        QT_MOC_LITERAL(153, 17),  // "IncidentsResolved"
+        QT_MOC_LITERAL(171, 9),  // "HostsEnum"
+        QT_MOC_LITERAL(181, 7),  // "receive"
+        QT_MOC_LITERAL(189, 3)   // "now"
     },
     "ServerConection",
     "loginResponse",
@@ -75,6 +79,8 @@ Q_CONSTINIT static const qt_meta_stringdata_ServerConection_t qt_meta_stringdata
     "logTable",
     "genericResponse",
     "data",
+    "onlineUsers",
+    "users",
     "IncidentsResponseTable",
     "IncidentsChartData",
     "IncidentsResolved",
@@ -91,26 +97,27 @@ Q_CONSTINIT static const uint qt_meta_data_ServerConection[] = {
       10,       // revision
        0,       // classname
        0,    0, // classinfo
-      10,   14, // methods
+      11,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       9,       // signalCount
+      10,       // signalCount
 
  // signals: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    1,   74,    2, 0x06,    1 /* Public */,
-       4,    1,   77,    2, 0x06,    3 /* Public */,
-       6,    1,   80,    2, 0x06,    5 /* Public */,
-       7,    1,   83,    2, 0x06,    7 /* Public */,
-       8,    1,   86,    2, 0x06,    9 /* Public */,
-      10,    1,   89,    2, 0x06,   11 /* Public */,
-      11,    1,   92,    2, 0x06,   13 /* Public */,
-      12,    1,   95,    2, 0x06,   15 /* Public */,
-      13,    1,   98,    2, 0x06,   17 /* Public */,
+       1,    1,   80,    2, 0x06,    1 /* Public */,
+       4,    1,   83,    2, 0x06,    3 /* Public */,
+       6,    1,   86,    2, 0x06,    5 /* Public */,
+       7,    1,   89,    2, 0x06,    7 /* Public */,
+       8,    1,   92,    2, 0x06,    9 /* Public */,
+      10,    1,   95,    2, 0x06,   11 /* Public */,
+      12,    1,   98,    2, 0x06,   13 /* Public */,
+      13,    1,  101,    2, 0x06,   15 /* Public */,
+      14,    1,  104,    2, 0x06,   17 /* Public */,
+      15,    1,  107,    2, 0x06,   19 /* Public */,
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-      14,    1,  101,    2, 0x08,   19 /* Private */,
+      16,    1,  110,    2, 0x08,   21 /* Private */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::QString,    3,
@@ -118,13 +125,14 @@ Q_CONSTINIT static const uint qt_meta_data_ServerConection[] = {
     QMetaType::Void, QMetaType::QString,    5,
     QMetaType::Void, QMetaType::QString,    5,
     QMetaType::Void, QMetaType::QString,    9,
+    QMetaType::Void, QMetaType::QString,   11,
     QMetaType::Void, QMetaType::QString,    9,
     QMetaType::Void, QMetaType::QString,    9,
     QMetaType::Void, QMetaType::QString,    9,
     QMetaType::Void, QMetaType::QString,    9,
 
  // slots: parameters
-    QMetaType::Void, QMetaType::QString,   15,
+    QMetaType::Void, QMetaType::QString,   17,
 
        0        // eod
 };
@@ -151,6 +159,9 @@ Q_CONSTINIT const QMetaObject ServerConection::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         QtPrivate::TypeAndForceComplete<QString, std::false_type>,
         // method 'genericResponse'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<QString, std::false_type>,
+        // method 'onlineUsers'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         QtPrivate::TypeAndForceComplete<QString, std::false_type>,
         // method 'IncidentsResponseTable'
@@ -183,11 +194,12 @@ void ServerConection::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int 
         case 2: _t->logDataNumbers((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
         case 3: _t->logTable((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
         case 4: _t->genericResponse((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
-        case 5: _t->IncidentsResponseTable((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
-        case 6: _t->IncidentsChartData((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
-        case 7: _t->IncidentsResolved((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
-        case 8: _t->HostsEnum((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
-        case 9: _t->receive((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
+        case 5: _t->onlineUsers((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
+        case 6: _t->IncidentsResponseTable((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
+        case 7: _t->IncidentsChartData((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
+        case 8: _t->IncidentsResolved((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
+        case 9: _t->HostsEnum((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
+        case 10: _t->receive((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -229,29 +241,36 @@ void ServerConection::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int 
         }
         {
             using _t = void (ServerConection::*)(QString );
-            if (_t _q_method = &ServerConection::IncidentsResponseTable; *reinterpret_cast<_t *>(_a[1]) == _q_method) {
+            if (_t _q_method = &ServerConection::onlineUsers; *reinterpret_cast<_t *>(_a[1]) == _q_method) {
                 *result = 5;
                 return;
             }
         }
         {
             using _t = void (ServerConection::*)(QString );
-            if (_t _q_method = &ServerConection::IncidentsChartData; *reinterpret_cast<_t *>(_a[1]) == _q_method) {
+            if (_t _q_method = &ServerConection::IncidentsResponseTable; *reinterpret_cast<_t *>(_a[1]) == _q_method) {
                 *result = 6;
                 return;
             }
         }
         {
             using _t = void (ServerConection::*)(QString );
-            if (_t _q_method = &ServerConection::IncidentsResolved; *reinterpret_cast<_t *>(_a[1]) == _q_method) {
+            if (_t _q_method = &ServerConection::IncidentsChartData; *reinterpret_cast<_t *>(_a[1]) == _q_method) {
                 *result = 7;
                 return;
             }
         }
         {
             using _t = void (ServerConection::*)(QString );
-            if (_t _q_method = &ServerConection::HostsEnum; *reinterpret_cast<_t *>(_a[1]) == _q_method) {
+            if (_t _q_method = &ServerConection::IncidentsResolved; *reinterpret_cast<_t *>(_a[1]) == _q_method) {
                 *result = 8;
+                return;
+            }
+        }
+        {
+            using _t = void (ServerConection::*)(QString );
+            if (_t _q_method = &ServerConection::HostsEnum; *reinterpret_cast<_t *>(_a[1]) == _q_method) {
+                *result = 9;
                 return;
             }
         }
@@ -277,13 +296,13 @@ int ServerConection::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 10)
+        if (_id < 11)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 10;
+        _id -= 11;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 10)
+        if (_id < 11)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 10;
+        _id -= 11;
     }
     return _id;
 }
@@ -324,31 +343,38 @@ void ServerConection::genericResponse(QString _t1)
 }
 
 // SIGNAL 5
-void ServerConection::IncidentsResponseTable(QString _t1)
+void ServerConection::onlineUsers(QString _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 5, _a);
 }
 
 // SIGNAL 6
-void ServerConection::IncidentsChartData(QString _t1)
+void ServerConection::IncidentsResponseTable(QString _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 6, _a);
 }
 
 // SIGNAL 7
-void ServerConection::IncidentsResolved(QString _t1)
+void ServerConection::IncidentsChartData(QString _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 7, _a);
 }
 
 // SIGNAL 8
-void ServerConection::HostsEnum(QString _t1)
+void ServerConection::IncidentsResolved(QString _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 8, _a);
+}
+
+// SIGNAL 9
+void ServerConection::HostsEnum(QString _t1)
+{
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
+    QMetaObject::activate(this, &staticMetaObject, 9, _a);
 }
 QT_WARNING_POP
 QT_END_MOC_NAMESPACE

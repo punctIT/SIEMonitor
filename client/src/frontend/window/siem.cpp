@@ -125,3 +125,9 @@ void SIEMWindow::start_home_thread(){
     stack_window->setCurrentIndex(0); 
     homeWindow->start_update_timer();
 }
+
+SIEMWindow& SIEMWindow::set_username(QString user){
+    username=user;
+    homeWindow->set_username(user);
+    return *this;
+}

@@ -3,6 +3,7 @@
 #include "../../../backend/SplitLogs.hpp"
 #include "InfoChart.hpp"
 #include "LogsTable.hpp"
+#include "OnlineUsers.hpp"
 
 #include <string>
 
@@ -24,15 +25,19 @@ private:
 
     InfoChart* infoChart;
     LogsTable* logsTable;
-    
+    UsersTable* usersTable;
+
+    QLabel* welcome_msg;
     SplitLog split;
     std::string datetime;
+    QString username;
     int res=0;
 public:
     SiemHomeWindow(GUI &srv,QMainWindow* win) : gui(srv) , window(win){}
     QWidget* get_window();
     SiemHomeWindow& start_update_timer();  
     SiemHomeWindow& stop_update_timer();
+    SiemHomeWindow& set_username(QString user);
     void bind_signals();
 
 private slots:
