@@ -23,8 +23,9 @@ void HandleCommand::run(std::vector<std::string> args){
             return;
         UpdateLogsData up_log;
         up_log.update_resolved(args[1],args[2]);
+        return;
     }
-    if(args[0]=="users"){
+    if(args[0]=="Users"){
         try{
             OnlineUsers users;
             users.set_fd(fd)

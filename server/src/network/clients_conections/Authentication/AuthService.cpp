@@ -12,7 +12,6 @@ AuthService::AuthService(){
    
     const char *sql = 
         "CREATE TABLE IF NOT EXISTS Users("
-        "id INTEGER PRIMARY KEY AUTOINCREMENT,"
         "username Text,"
         "timestamp DATETIME"
         ");";

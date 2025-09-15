@@ -46,6 +46,10 @@ void ServerConection::receive(const QString& msg){
         emit loginResponse(msg.mid(QString("[login]").length()));
         return;
     }
+    if(msg.startsWith("[USERS]")){
+        emit onlineUsers(msg.mid(QString("[USERS]").length()));
+        return;
+    }
     if (msg.startsWith("[LOG]")){
         QString msg2=msg.mid(QString("[LOG]").length());
         if(msg2.startsWith("[LN]")){

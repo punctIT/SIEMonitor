@@ -77,7 +77,8 @@ QWidget * LoginWindow::get_window(){
                     [this,username_entry,password_entry,err,layout](QString resp){
         qDebug()<<resp<<"\n";
         if (resp == "Login Succesul") {
-            gui.set_siem_window();
+            //qDebug()<<username_entry->text();
+            gui.set_siem_window(username_entry->text());
         }
         else {
             username_entry->setText("");

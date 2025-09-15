@@ -36,6 +36,9 @@ UpdateLogsData::UpdateLogsData(){
 UpdateLogsData& UpdateLogsData::update_resolved(const std::string id,const std::string name){
     std::string sql = std::format("SELECT * FROM logs WHERE id='{}';",id);
     auto log=logs_db.get_data(sql.c_str());
+    if(log.empty()){
+        return *this;
+    }
     std::istringstream iss(log[0]);
     std::vector<std::string> data;
     std::string word="";

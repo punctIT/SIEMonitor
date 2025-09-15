@@ -4,19 +4,28 @@
 #include <QtWidgets/QMainWindow>
 #include <QtCharts/QChartView>
 #include <QtCharts/QChart>
-#include <QtCharts/QPieSeries>
+#include <QtCharts/QBarSeries>
+#include <QtCharts/QBarSet>
+#include <QtCharts/QValueAxis>
+
+
 #include <mutex>
 #include <vector>
 class InfoChart{
     private:
         QMainWindow *window;
         std::mutex infoChartMutex;
+
+        QBarSet *set;
+        QValueAxis *axisY;
+
         int total_logs;
         int error;
         int emergency;
         int alert;
         int critical;
         int warning;
+
 
         QLabel *Total;
         QLabel *Error;
@@ -25,7 +34,7 @@ class InfoChart{
         QLabel *Critical;
         QLabel *Warning;
 
-        QPieSeries *series;
+        QBarSeries *series;
         
     public:
         InfoChart(QMainWindow *win);

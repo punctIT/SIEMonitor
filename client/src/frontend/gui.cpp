@@ -50,8 +50,8 @@ GUI& GUI::set_login_window() {
     return *this;
 }
 
-GUI& GUI::set_siem_window() {
-    siem->start_home_thread();
+GUI& GUI::set_siem_window(QString user) {
+    siem->set_username(user).start_home_thread();
     stack->setCurrentIndex(1); 
     window->showMaximized();
     return *this;

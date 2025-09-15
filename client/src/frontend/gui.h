@@ -24,7 +24,7 @@ class GUI: public QObject {
         ~GUI();
         GUI& init_window();
         ServerConection& get_server();
-        GUI& set_siem_window();
+        GUI& set_siem_window(QString user);
         GUI& set_login_window();
 };
 

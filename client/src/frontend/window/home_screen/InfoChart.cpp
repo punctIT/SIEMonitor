@@ -4,32 +4,47 @@
 #include <iostream>
 
 
+#include <QtCharts/QBarCategoryAxis>
+
 
 
 InfoChart::InfoChart( QMainWindow * win){
     window=win;
-    total_logs=-1;
-    error=-1;
-    emergency=-1;
-    alert=-1;
-    critical=-1;
-    warning=-1;
+    total_logs=0;
+    error=0;
+    emergency=0;
+    alert=0;
+    critical=0;
+    warning=0;
 }
 
 QWidget* InfoChart::get_chart(){
-    series = new QPieSeries();
-    series->append("Other", total_logs-error-emergency-alert-critical-warning);
-    series->append("Error", error);
-    series->append("Emergency", emergency);
-    series->append("Alert", alert);
-    series->append("Critical", critical);
-    series->append("Warning", warning);
-    series->setHoleSize(0.35); 
+    series = new QBarSeries();
+    set = new QBarSet("Incidents");
+    *set << (1) << 2 << 3 << 4 << 5 <<6;
     
+    series->append(set);
+    series->setLabelsVisible(true);
+    series->setLabelsPosition(QAbstractBarSeries::LabelsOutsideEnd); 
+    series->setLabelsFormat("@value");     
+    
+    QStringList categories;
+    categories << "Other" << "Error" << "Emergency" << "Alert" << "Critical" << "Warning";
+    QBarCategoryAxis *axisX = new QBarCategoryAxis();
+    axisX->append(categories);
+
+    
+    axisY = new QValueAxis();
+    axisY->setRange(0, 100);  
+    axisY->setTickCount(11); 
+
     QChart *chart = new QChart();
     chart->addSeries(series);
-    series->setLabelsVisible(true);
-    
+    chart->addAxis(axisX, Qt::AlignBottom);
+    chart->addAxis(axisY, Qt::AlignLeft);
+    series->attachAxis(axisX);
+    series->attachAxis(axisY);
+    chart->legend()->hide();
 
     QChartView *chartView = new QChartView(chart, window);
     chartView->setRenderHint(QPainter::Antialiasing);
@@ -89,13 +104,14 @@ InfoChart& InfoChart::update(){
     QString warning_string = QString::fromStdString(std::format("Warning {}", warning));
     Warning->setText(warning_string);
 
-    series->slices().at(0)->setValue(total_logs-error-emergency-alert-critical-warning);
-    series->slices().at(1)->setValue(error);
-    series->slices().at(2)->setValue(emergency);
-    series->slices().at(3)->setValue(alert);
-    series->slices().at(4)->setValue(critical);
-    series->slices().at(5)->setValue(warning);
-
+    set->replace(0, total_logs-error-emergency-alert-critical-warning);
+    set->replace(1, error);
+    set->replace(2, emergency);
+    set->replace(3, alert);
+    set->replace(4, critical);
+    set->replace(5, warning);
+    axisY->setRange(0, total_logs);  
+    axisY->setTickCount(total_logs/10); 
     return *this;
 }
 InfoChart& InfoChart::clear_data(){
