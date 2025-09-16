@@ -167,3 +167,11 @@ IncidentsWindow& IncidentsWindow::stop_timer(){
 GUI& IncidentsWindow::get_gui(){
     return gui;
 }
+
+QString IncidentsWindow::get_username(){
+    return username;
+}
+void IncidentsWindow::set_username(QString user){
+    username=user;
+
+}

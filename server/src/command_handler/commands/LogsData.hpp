@@ -18,6 +18,9 @@ class LogsData: ProtocolHandler{
                            const std::string time_end ,
                            const std::string nr
         );
+        LogsData& get_logs_resolved(const std::string time_start,
+                           const std::string time_end 
+        );
         LogsData& get_last_n(const std::string n);
         LogsData& get_last_n_resolved(const std::string n);
         LogsData& get_logs_number_data(const std::string time);

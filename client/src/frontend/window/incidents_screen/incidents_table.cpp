@@ -55,7 +55,7 @@ void IncidentTable::bind_signals(){
             QListWidgetItem* item = logTree->item(i);
             if(item->checkState() == Qt::Checked) {
                 std::string id = item->data(Qt::UserRole).toString().toStdString();
-                incidentWindow->get_gui().get_server().sent(std::format("UpRe {} {}",id,1));
+                incidentWindow->get_gui().get_server().sent(std::format("UpRe {} {}",id,incidentWindow->get_username().toStdString()));
                 delete logTree->takeItem(i);
             }
         }

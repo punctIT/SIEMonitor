@@ -40,6 +40,8 @@ private:
 
     void bind_signals();
     QWidget* get_filtres_menu();
+
+    QString username;
 public:
     IncidentsWindow(GUI &srv,QMainWindow* win) : gui(srv) , window(win){}
     QWidget* get_window();
@@ -48,4 +50,6 @@ public:
     GUI& get_gui();
     void update_types();
     void update();
+    void set_username(QString user);
+    QString get_username();
 };

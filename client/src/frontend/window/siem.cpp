@@ -129,5 +129,6 @@ void SIEMWindow::start_home_thread(){
 SIEMWindow& SIEMWindow::set_username(QString user){
     username=user;
     homeWindow->set_username(user);
+    incidentsWindow->set_username(user);
     return *this;
 }

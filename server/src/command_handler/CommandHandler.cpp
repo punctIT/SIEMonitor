@@ -80,6 +80,22 @@ void HandleCommand::run(std::vector<std::string> args){
         }
         return;
     }
+     if(args[0]=="GLR"){
+        try{
+            LogsData logs;
+            if(args.size()==6){
+                const std::string time_start=args[1]+' '+args[2];
+                const std::string time_end=args[3]+' '+args[4];
+                logs.set_fd(fd)
+                    .get_logs_resolved(time_start,time_end);
+            }
+        }
+        catch(std::exception &err){
+           std::string e=get_error(err.what());
+           write(fd,e.c_str(),e.size());
+        }
+        return;
+    }
     if(args[0]=="LN"){
         try{
             if(args.size()<2)
