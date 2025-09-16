@@ -108,6 +108,13 @@ void SiemHomeWindow::bind_signals(){
         }
            
     });
+    QObject::connect(&gui.get_server(),&ServerConection::resolvedTable,[this](QString resp){
+        //qDebug()<<resp;
+        split.set_log(resp.toStdString())
+             .split_all();
+        resolvedTable->add_log(split.get_splited_log());
+           
+    });
 }
 void SiemHomeWindow::update(){
     auto now = get_current_time();
@@ -122,7 +129,10 @@ void SiemHomeWindow::update(){
 SiemHomeWindow& SiemHomeWindow::start_update_timer(){
     auto now = get_current_time();
     gui.get_server().sent("LN 40")
-                    .sent(std::format("GLND {}",now));
+                    .sent(std::format("GLND {}",now))
+                    .sent("Users")
+                    .sent("LNR 40");
+
     updateTimer->start(3000);
     welcome_msg->setText("Welcome back "+username);
     return *this;

@@ -47,23 +47,22 @@ ResolvedTable& ResolvedTable::pop(){
     return *this;
 }
 
-ResolvedTable& ResolvedTable::add_log(const std::string Hostname,
-                              const std::string Time,
-                              const std::string Source,
-                              const std::string Severity,
-                              const std::string Message,
-                              const int top
-                             ){
-
+ResolvedTable& ResolvedTable::add_log(std::vector<std::string> data,const int top){
+        
+    if(data[0]=="RESTART"){
+        clear();
+        return *this;
+    }
     QTreeWidgetItem *logItem = new QTreeWidgetItem();
-    
+
+    logItem->setText(0,QString::fromStdString(data[0]+" "+data[1]));
     QFont monoFont("Courier New");
     monoFont.setStyleHint(QFont::Monospace);
     logItem->setFont(0, monoFont);
 
     QTreeWidgetItem *msgItem = new QTreeWidgetItem(logItem);
     QWidget *msgContainer = new QWidget();
-    QLabel *msgText = new QLabel(QString::fromStdString(Message));
+    QLabel *msgText = new QLabel(QString::fromStdString(""));
     
     msgText->setWordWrap(true); 
     logTree->setItemWidget(msgItem, 0, msgText);

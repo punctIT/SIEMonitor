@@ -56,6 +56,10 @@ void ServerConection::receive(const QString& msg){
             QString msg3=msg2.mid(QString("[LN]").length());
             emit logTable(msg3);
         }
+        if(msg2.startsWith("[LNR]")){
+            QString msg3=msg2.mid(QString("[LNR]").length());
+            emit resolvedTable(msg3);
+        }
         else {
             emit logData(msg2);
         }

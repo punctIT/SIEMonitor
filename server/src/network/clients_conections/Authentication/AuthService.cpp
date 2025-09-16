@@ -17,7 +17,7 @@ AuthService::AuthService(){
         ");";
 
     try{
-         this->active_users_db.set_new_database_path("UserDatabase.db")
+         this->active_users_db.set_new_database_path("Data/UserDatabase.db")
                               .run_command(sql);
     }
     catch (std:: exception&e){

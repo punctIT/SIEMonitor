@@ -18,7 +18,7 @@ LogDatabaseWriter::LogDatabaseWriter(){
         "severity TEXT,"
         "message TEXT"
         ");";
-    db.set_new_database_path("logsData.db")
+    db.set_new_database_path("Data/logsData.db")
       .run_command(sql.c_str());
     sql = 
         "CREATE TABLE IF NOT EXISTS logs("
@@ -32,7 +32,7 @@ LogDatabaseWriter::LogDatabaseWriter(){
         "resolvedRESPONDER TEXT," 
         "message TEXT"
         ");";
-    db.set_new_database_path("resolvedLogsData.db")
+    db.set_new_database_path("Data/resolvedLogsData.db")
       .run_command(sql.c_str());
 }
 LogDatabaseWriter& LogDatabaseWriter::set_thread_safe_quere(ThreadSafeQueue <std::string>* queue){

@@ -30,8 +30,8 @@ std::string get_time(){
 }
 
 UpdateLogsData::UpdateLogsData(){
-    this->logs_db.set_database_path("logsData.db");
-    this->resolved_db.set_database_path("resolvedLogsData.db");
+    this->logs_db.set_database_path("Data/logsData.db");
+    this->resolved_db.set_database_path("Data/resolvedLogsData.db");
 }
 UpdateLogsData& UpdateLogsData::update_resolved(const std::string id,const std::string name){
     std::string sql = std::format("SELECT * FROM logs WHERE id='{}';",id);
