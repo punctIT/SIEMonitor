@@ -80,6 +80,22 @@ LogsData& LogsData::get_last_n_resolved(std::string nr){
     }
     return *this;
 }
+LogsData& LogsData:: get_logs_resolved(const std::string time_start,const std::string time_end ){ 
+    DBComandExecutor resolved_logs_db;
+    resolved_logs_db.set_database_path("Data/resolvedLogsData.db");  
+    std::string sql=std::format("SELECT * FROM logs WHERE resolvedTIME >= '{}' AND resolvedTIME < '{}' ORDER BY id DESC;",
+                            time_start,
+                            time_end
+                        );
+    //std::cout << "SQL: " << sql << std::endl;
+    auto logs=resolved_logs_db.get_data(sql.c_str());
+    for(auto log :logs){
+        std::string text=log_text_protocol(log,"GLR");
+        write(fd,text.c_str(),text.length());
+    }
+    //std::cout<<time_start<<" "<<time_end<<std::endl;
+    return *this;
+}
 
 
 LogsData& LogsData::get_logs_number_data(const std::string time){

@@ -53,16 +53,23 @@ ResolvedTable& ResolvedTable::add_log(std::vector<std::string> data,const int to
         clear();
         return *this;
     }
+    if(data.size()<12){
+        return *this;
+    }
     QTreeWidgetItem *logItem = new QTreeWidgetItem();
-
-    logItem->setText(0,QString::fromStdString(data[0]+" "+data[1]));
+    //5 host
+    //7 severity
+    //8 9 time date resolved
+    //10 -who resolved
+    //11 message
+    logItem->setText(0,QString::fromStdString(data[5]+" "+data[7]+" "+data[10]+" "+data[8]+" "+data[9]));
     QFont monoFont("Courier New");
     monoFont.setStyleHint(QFont::Monospace);
     logItem->setFont(0, monoFont);
 
     QTreeWidgetItem *msgItem = new QTreeWidgetItem(logItem);
     QWidget *msgContainer = new QWidget();
-    QLabel *msgText = new QLabel(QString::fromStdString(""));
+    QLabel *msgText = new QLabel(QString::fromStdString(data[11]));
     
     msgText->setWordWrap(true); 
     logTree->setItemWidget(msgItem, 0, msgText);
