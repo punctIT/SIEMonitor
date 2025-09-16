@@ -72,7 +72,7 @@ QWidget * LoginWindow::get_window(){
 
     
     QPushButton *login_btn = new QPushButton("Login",container);
-
+    QPushButton *btn = new QPushButton("auto",container);
     QObject::connect(&gui.get_server(), &ServerConection::loginResponse,
                     [this,username_entry,password_entry,err,layout](QString resp){
         qDebug()<<resp<<"\n";
@@ -94,6 +94,12 @@ QWidget * LoginWindow::get_window(){
                         password_entry->text().toStdString();
         gui.get_server().sent(cmd);
     });
+    QObject::connect(btn, &QPushButton::clicked, [this,username_entry,password_entry](){
+        username_entry->setText("admin");
+        password_entry->setText("password");
+        std::string cmd = "login " + username_entry->text().toStdString() + " " + password_entry->text().toStdString();
+        gui.get_server().sent(cmd);
+    });
 
     container->setStyleSheet(Style);
     layout->addWidget(title,0,0);
@@ -102,6 +108,7 @@ QWidget * LoginWindow::get_window(){
     layout->addWidget(password,3,0);          
     layout->addWidget(password_entry,4,0);  
     layout->addWidget(login_btn,6,0);   
+    layout->addWidget(btn,6,1);   
     return container;
 }
 

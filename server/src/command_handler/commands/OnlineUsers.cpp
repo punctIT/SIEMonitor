@@ -3,7 +3,7 @@
 #define in :
 
 OnlineUsers::OnlineUsers(){
-    users_db.set_database_path("UserDatabase.db");
+    users_db.set_database_path("Data/UserDatabase.db");
 }
 OnlineUsers& OnlineUsers::set_fd(const int &fd){
     this->fd=fd;

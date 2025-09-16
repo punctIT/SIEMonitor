@@ -31,7 +31,7 @@ std::string get_current_time(){
 }
 
 LogsData::LogsData(){
-    this->logs_db.set_database_path("logsData.db");
+    this->logs_db.set_database_path("Data/logsData.db");
 }
 LogsData& LogsData::set_fd(const int fd){
     this->fd=fd;
@@ -66,6 +66,21 @@ LogsData& LogsData::get_last_n(std::string nr){
     }
     return *this;
 }
+LogsData& LogsData::get_last_n_resolved(std::string nr){
+    DBComandExecutor resolved_logs_db;
+    resolved_logs_db.set_database_path("Data/resolvedLogsData.db");
+    auto time = get_current_time();
+     std::string text=log_text_protocol("RESTART","LNR");
+    write(fd,text.c_str(),text.length());
+    std::string sql = std::format("SELECT * FROM logs WHERE timestamp < '{}' ORDER BY id DESC LIMIT {};",time,nr);
+    auto logs=resolved_logs_db.get_data(sql.c_str());
+    for(auto log :logs){
+        std::string text=log_text_protocol(log,"LNR");
+        write(fd,text.c_str(),text.length());
+    }
+    return *this;
+}
+
 
 LogsData& LogsData::get_logs_number_data(const std::string time){
     std::vector<std::string> numbers;
@@ -194,7 +209,7 @@ LogsData& LogsData::get_logs_by_severity_host_source(const std::string severity,
  LogsData& LogsData::get_resolve_number(const std::string type){
     std::vector<std::string> data;
     DBComandExecutor resolved_logs_db;
-    resolved_logs_db.set_database_path("resolvedLogsData.db");
+    resolved_logs_db.set_database_path("Data/resolvedLogsData.db");
     if(type=="HIGH"){
         std::string sql=std::format("SELECT COUNT(*) FROM LOGS WHERE severity in ('Emergency','Alert','Critical');");
         auto logs=logs_db.get_data(sql.c_str());

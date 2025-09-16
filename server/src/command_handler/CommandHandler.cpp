@@ -95,6 +95,21 @@ void HandleCommand::run(std::vector<std::string> args){
         }
         return;
     }
+     if(args[0]=="LNR"){
+        try{
+            if(args.size()<2)
+            return;
+            LogsData logs;
+           
+            logs.set_fd(fd)
+                .get_last_n_resolved(args[1]);
+        }
+        catch(std::exception &err){
+           std::string e=get_error(err.what());
+           write(fd,e.c_str(),e.size());
+        }
+        return;
+    }
     if(args[0]=="GLND"){
         try{
             LogsData logs;

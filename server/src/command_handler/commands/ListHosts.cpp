@@ -2,7 +2,7 @@
 
 #include <format>
 ListHosts::ListHosts(){
-    logs_db.set_database_path("logsData.db");
+    logs_db.set_database_path("Data/logsData.db");
 }
 ListHosts& ListHosts::set_fd(const int &fd){
     this->fd=fd;

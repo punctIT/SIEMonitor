@@ -12,10 +12,10 @@
 
 GUI::GUI(){
 
-    server.set_server_adress("127.0.0.1")
-          .set_server_port(12345)
-          .configure_connection();
-    server.receive_start();
+    // server.set_server_adress("127.0.0.1")
+    //       .set_server_port(12345)
+    //       .configure_connection();
+    // server.receive_start();
 }
 GUI::~GUI(){
 
@@ -26,13 +26,14 @@ GUI& GUI::init_window(){
     window=new QMainWindow();  
 
     siem = new SIEMWindow(*this,window);
-
+    server_connect= new ConnectWindow(*this);
 
     login = new LoginWindow(*this);
 
     stack = new QStackedWidget();
     window->setWindowTitle("SIEM Dashboard");
     
+    stack->addWidget(server_connect->get_window());
     stack->addWidget(login->get_window());
     stack->addWidget(siem->get_window());
 
@@ -46,13 +47,17 @@ GUI& GUI::init_window(){
 }
 
 GUI& GUI::set_login_window() {
+    stack->setCurrentIndex(1); 
+    return *this;
+}
+GUI& GUI::set_connect_window() {
     stack->setCurrentIndex(0); 
     return *this;
 }
 
 GUI& GUI::set_siem_window(QString user) {
     siem->set_username(user).start_home_thread();
-    stack->setCurrentIndex(1); 
+    stack->setCurrentIndex(2); 
     window->showMaximized();
     return *this;
 }

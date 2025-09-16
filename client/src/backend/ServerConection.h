@@ -28,6 +28,7 @@ class ServerConection : public QObject {
         void logData(QString log);
         void logDataNumbers(QString log);
         void logTable(QString log);     
+        void resolvedTable(QString log);     
         void genericResponse(QString data);
         void onlineUsers(QString users); 
 
