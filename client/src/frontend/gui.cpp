@@ -34,7 +34,7 @@ GUI& GUI::init_window(){
     login = new LoginWindow(*this);
 
     stack = new QStackedWidget();
-    window->setWindowTitle("SIEM Dashboard");
+    window->setWindowTitle("Security Information and Event Management");
     
     stack->addWidget(server_connect->get_window());
     stack->addWidget(login->get_window());

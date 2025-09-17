@@ -1,6 +1,7 @@
 #include "incidents_home.h"
 #include "../../../backend/Utils.hpp"
 #include "../../gui.h"
+#include "../../style/style.h"
 
 #include <format>
 
@@ -40,7 +41,6 @@ QWidget* IncidentsWindow::get_window(){
     QWidget *container= new QWidget(window);
     QGridLayout *layout = new QGridLayout(container);
     
-    QLabel *text = new QLabel("Incidents");
     incidentTable= new IncidentTable(this,window);
     incidentsChart= new IncidentsChart(window);
 
@@ -51,11 +51,11 @@ QWidget* IncidentsWindow::get_window(){
     layout->setRowStretch(2,5);
     layout->setRowStretch(3,60);
 
-    layout->addWidget(text,0,0);
     layout->addWidget(incidentsChart->get_charts(),1,0);
     layout->addWidget(get_filtres_menu(),2,0);
     layout->addWidget(incidentTable->get_chart(),3,0);
     bind_signals();
+    container->setStyleSheet(incidnets_style());
     return container;
 }
 void IncidentsWindow::bind_signals(){

@@ -19,6 +19,7 @@ CXXFLAGS = -I/usr/include/x86_64-linux-gnu/qt6 \
            -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets \
            -I/usr/include/x86_64-linux-gnu/qt6/QtCore \
 		   -I/usr/include/x86_64-linux-gnu/qt6/QtCharts \
+		   -I/usr/include/x86_64-linux-gnu/qt6/QtGui \
            -std=c++20
 
 
