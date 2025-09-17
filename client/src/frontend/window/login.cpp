@@ -1,5 +1,6 @@
 #include "login.hpp"
 #include "../gui.h" 
+#include "../style/style.h"
 
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QPushButton>
@@ -9,44 +10,6 @@
 
 
 #include <string>
-
-QString Style = R"(
-    QWidget {
-         background-color: #1c1c1c;
-    }
-
-    QLabel {
-        color: #ecf0f1;
-        font-size: 18px;
-        font-weight: bold;
-    }
-
-    QLineEdit {
-        background-color: #1c1c1c;
-        border: 1px solid #16a085;
-        border-radius: 5px;
-        padding: 5px;
-        color: #ecf0f1;
-    }
-
-    QPushButton {
-        background-color: #16a085;
-        border: none;
-        border-radius: 5px;
-        padding: 8px;
-        color: white;
-        font-weight: bold;
-    }
-
-    QPushButton:hover {
-        background-color: #16a085;
-    }
-
-    QPushButton:pressed {
-        background-color: #149174;
-    }
-)";
-
 
 
 QWidget * LoginWindow::get_window(){
@@ -101,7 +64,7 @@ QWidget * LoginWindow::get_window(){
         gui.get_server().sent(cmd);
     });
 
-    container->setStyleSheet(Style);
+    container->setStyleSheet(login_style());
     layout->addWidget(title,0,0);
     layout->addWidget(username,1,0);  
     layout->addWidget(username_entry,2,0);  

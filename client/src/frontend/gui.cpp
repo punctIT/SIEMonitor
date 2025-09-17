@@ -1,4 +1,5 @@
 #include "gui.h"
+#include "style/style.h"
 
 #include <QtWidgets/QApplication>
 #include <QtCore/QObject>
@@ -24,6 +25,8 @@ GUI& GUI::init_window(){
     int argc = 0;
     char *argv[] = {};
     window=new QMainWindow();  
+
+    window->setStyleSheet(main_style());
 
     siem = new SIEMWindow(*this,window);
     server_connect= new ConnectWindow(*this);
