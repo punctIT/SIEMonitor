@@ -1,4 +1,7 @@
 #include "Utils.hpp"
+#include <fstream>
+#include <iostream>
+#include <filesystem>
 
 std::string get_current_time(){
    auto now = std::chrono::system_clock::now()- std::chrono::seconds(30); 
@@ -22,4 +25,16 @@ std::string get_current_time(){
 
     std::string result = std::format("{}-{}-{} {}",year,month,day,time_result);
     return result;
+}
+
+const char * get_style(const std::string file){
+    std::ifstream fin(file);
+    std::string line;
+    std::string style="";
+    while(getline(fin,line)){
+        style=std::format("{}\n{}",style,line);
+    }
+   
+    fin.close();
+    return style.c_str();
 }
