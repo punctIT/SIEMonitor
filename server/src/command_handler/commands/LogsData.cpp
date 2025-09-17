@@ -44,6 +44,7 @@ LogsData& LogsData:: get_logs(const std::string time_start,const std::string tim
                             nr
                         );
     //std::cout << "SQL: " << sql << std::endl;
+   
     auto logs=logs_db.get_data(sql.c_str());
     for(auto log :logs){
         std::string text=log_text_protocol(log,"GL");
@@ -70,20 +71,21 @@ LogsData& LogsData::get_last_n_resolved(std::string nr){
     DBComandExecutor resolved_logs_db;
     resolved_logs_db.set_database_path("Data/resolvedLogsData.db");
     auto time = get_current_time();
-     std::string text=log_text_protocol("RESTART","LNR");
+    std::string text=log_text_protocol("RESTART","LNR");
     write(fd,text.c_str(),text.length());
-    std::string sql = std::format("SELECT * FROM logs WHERE timestamp < '{}' ORDER BY id DESC LIMIT {};",time,nr);
+    std::string sql = std::format("SELECT * FROM logs WHERE timestamp < '{}' ORDER BY resolvedTIME DESC LIMIT {};",time,nr);
     auto logs=resolved_logs_db.get_data(sql.c_str());
     for(auto log :logs){
         std::string text=log_text_protocol(log,"LNR");
         write(fd,text.c_str(),text.length());
     }
+    
     return *this;
 }
 LogsData& LogsData:: get_logs_resolved(const std::string time_start,const std::string time_end ){ 
     DBComandExecutor resolved_logs_db;
     resolved_logs_db.set_database_path("Data/resolvedLogsData.db");  
-    std::string sql=std::format("SELECT * FROM logs WHERE resolvedTIME >= '{}' AND resolvedTIME < '{}' ORDER BY id DESC;",
+    std::string sql=std::format("SELECT * FROM logs WHERE resolvedTIME >= '{}' AND resolvedTIME < '{}' ORDER BY  resolvedTIME DESC;",
                             time_start,
                             time_end
                         );
@@ -92,6 +94,10 @@ LogsData& LogsData:: get_logs_resolved(const std::string time_start,const std::s
     for(auto log :logs){
         std::string text=log_text_protocol(log,"GLR");
         write(fd,text.c_str(),text.length());
+    }
+    std::cout<<logs.size()<<" ";
+    for(auto i : logs){
+        std::cout<<i<<"\n";
     }
     //std::cout<<time_start<<" "<<time_end<<std::endl;
     return *this;

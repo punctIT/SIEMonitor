@@ -68,7 +68,7 @@ UpdateLogsData& UpdateLogsData::update_resolved(const std::string id,const std::
         name,
         data[7]
     );
-    //std::cout<<sql_insert<<std::endl;
+    //std::cout<<get_time()<<std::endl;
     resolved_db.run_command(sql_insert.c_str());
     sql=std::format("DELETE FROM logs where id = '{}';",id);
     logs_db.run_command(sql.c_str());
