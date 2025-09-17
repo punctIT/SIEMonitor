@@ -89,8 +89,7 @@ void SIEMWindow::toggle_side_menu(){
 QWidget * SIEMWindow::get_top_menu(){
     QWidget *container= new QWidget(window);
     QGridLayout *layout = new QGridLayout(container);
-    QPushButton* side_menu_btn= new QPushButton("Home");
-    
+    QPushButton* side_menu_btn= new QPushButton("Menu");
     QObject::connect(side_menu_btn, &QPushButton::clicked, [this](){
         toggle_side_menu();
     });
