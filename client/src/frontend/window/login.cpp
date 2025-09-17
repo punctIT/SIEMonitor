@@ -72,6 +72,7 @@ QWidget * LoginWindow::get_window(){
     layout->addWidget(password_entry,4,0);  
     layout->addWidget(login_btn,6,0);   
     layout->addWidget(btn,6,1);   
+    
     return container;
 }
 

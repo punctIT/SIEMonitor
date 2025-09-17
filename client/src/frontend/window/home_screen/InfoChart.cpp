@@ -37,6 +37,10 @@ QWidget* InfoChart::get_chart(){
     axisY = new QValueAxis();
     axisY->setRange(0, 100);  
     axisY->setTickCount(11); 
+    axisX->setLinePen(Qt::NoPen);
+    axisY->setLinePen(Qt::NoPen);
+    axisX->setGridLineVisible(false);
+    axisY->setGridLineVisible(false);
 
     QChart *chart = new QChart();
     chart->addSeries(series);
@@ -44,11 +48,15 @@ QWidget* InfoChart::get_chart(){
     chart->addAxis(axisY, Qt::AlignLeft);
     series->attachAxis(axisX);
     series->attachAxis(axisY);
+    chart->setBackgroundBrush(Qt::NoBrush);   
+    chart->setBackgroundPen(Qt::NoPen);     
+    
+
     chart->legend()->hide();
 
     QChartView *chartView = new QChartView(chart, window);
     chartView->setRenderHint(QPainter::Antialiasing);
-
+    chartView->setAttribute(Qt::WA_TranslucentBackground);
     return chartView;
 }
 QWidget* InfoChart::get_data_chart() {

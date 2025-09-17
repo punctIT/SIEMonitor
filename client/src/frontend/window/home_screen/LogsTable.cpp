@@ -33,15 +33,8 @@ QWidget* LogsTable::get_chart(){
                               get_spaced_string("Time",40)+
                               get_spaced_string("Severity",10)
                              });
-    
-    logTree->setStyleSheet(
-        "QTreeWidget::item { "
-        "padding: 5px 5px 5px; " 
-        "font-weight: bold;"
-        "font-size: 15px;"
-        "}"
-    );
-    
+
+    logTree->setObjectName("log_table");
     layout->addWidget(logTree,0,0);
     return container;
 }

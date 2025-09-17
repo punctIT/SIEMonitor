@@ -19,7 +19,7 @@ class SyslogServer{
         }
         void start_server(){
             try{
-                a.set_port(514)
+                a.set_port(1514)
                 .set_maximum_clients(100)
                 .set_thread_safe_quere(&queue)
                 .configure_server();

@@ -29,13 +29,6 @@ QWidget* ResolvedTable::get_chart(){
     logTree->setColumnCount(1);
     logTree->resizeColumnToContents(1);
    
-    logTree->setStyleSheet(
-        "QTreeWidget::item { "
-        "padding: 5px 5px 5px; " 
-        "font-weight: bold;"
-        "font-size: 15px;"
-        "}"
-    );
     
     layout->addWidget(logTree,0,0);
     return container;

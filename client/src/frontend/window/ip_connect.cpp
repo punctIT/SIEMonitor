@@ -82,7 +82,8 @@ QWidget * ConnectWindow::get_window(){
     layout->addWidget(port,3,0);          
     layout->addWidget(port_entry,4,0);  
     layout->addWidget(login_btn,6,0);   
-    layout->addWidget(btn,6,1);   
+    layout->addWidget(btn,6,1);  
+     
     return container;
 }
 

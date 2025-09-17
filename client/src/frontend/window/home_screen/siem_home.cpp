@@ -9,7 +9,7 @@
 #include "siem_home.h"
 #include "../../gui.h"
 #include "../../../backend/Utils.hpp"
-
+#include "../../style/style.h"
 
 QWidget * SiemHomeWindow::get_window(){
     infoChart = new InfoChart(window);
@@ -28,7 +28,8 @@ QWidget * SiemHomeWindow::get_window(){
     bind_signals();
     
     welcome_msg=new QLabel("",container);
-    welcome_msg->setStyleSheet("font-weight: bold; font-size: 36px; color: white;");
+    welcome_msg->setObjectName("welcome_msg");
+    
     top_layout->setColumnStretch(0,20);
     top_layout->setColumnStretch(1,60);
     top_layout->setColumnStretch(2,20);
@@ -46,7 +47,7 @@ QWidget * SiemHomeWindow::get_window(){
     layout->addLayout(top_layout,1,0);
     layout->addLayout(down_layout,2,0);   
  
-    
+    container->setStyleSheet(siem_home_style());
     return container;
 }
 void SiemHomeWindow::bind_signals(){
