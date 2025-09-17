@@ -116,7 +116,7 @@ void SiemHomeWindow::bind_signals(){
            
     });
      QObject::connect(&gui.get_server(),&ServerConection::resolvedTableUpdate,[this](QString resp){
-        //qDebug()<<resp;
+        qDebug()<<resp;
         split.set_log(resp.toStdString())
              .split_all();
         resolvedTable->add_log(split.get_splited_log(),1);
@@ -127,7 +127,7 @@ void SiemHomeWindow::update(){
     auto now = get_current_time();
     gui.get_server().sent(std::format("GLND {}",now)).
                      sent(std::format("GL {} {} 10000", datetime, now)).
-                     sent("LNR 40").
+                     sent(std::format("GLR {} {}", datetime, now)).
                      sent("Users");
 
                 

@@ -6,6 +6,16 @@
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QTextEdit>
 
+QString indent_text(std::string text,int len){
+     if(text.size()>len){
+        text.erase(len-3,text.size());
+        text+="...";
+    }
+    else {
+        text.resize(len, ' ');
+    }
+    return QString::fromStdString(text);
+}
 
 ResolvedTable::ResolvedTable(QMainWindow *win){
     window=win;
@@ -30,12 +40,16 @@ QWidget* ResolvedTable::get_chart(){
     layout->addWidget(logTree,0,0);
     return container;
 }
-ResolvedTable& ResolvedTable::clear(){
-     if (logTree) {
-        logTree->clear();
+ResolvedTable& ResolvedTable::clear() {
+    if (logTree) {
+        while (logTree->topLevelItemCount() > 0) {
+            QTreeWidgetItem* item = logTree->takeTopLevelItem(0); 
+            delete item; 
+        }
     }
     return *this;
 }
+
 ResolvedTable& ResolvedTable::pop(){
     if (!logTree || log_number<40) return *this;
     
@@ -62,14 +76,18 @@ ResolvedTable& ResolvedTable::add_log(std::vector<std::string> data,const int to
     //8 9 time date resolved
     //10 -who resolved
     //11 message
-    logItem->setText(0,QString::fromStdString(data[5]+" "+data[7]+" "+data[10]+" "+data[8]+" "+data[9]));
+    logItem->setText(0,indent_text(data[5],30)+indent_text(data[7],15)+indent_text(data[10],20)+indent_text(data[8],10)+indent_text(data[9],10));
     QFont monoFont("Courier New");
     monoFont.setStyleHint(QFont::Monospace);
     logItem->setFont(0, monoFont);
 
     QTreeWidgetItem *msgItem = new QTreeWidgetItem(logItem);
     QWidget *msgContainer = new QWidget();
-    QLabel *msgText = new QLabel(QString::fromStdString(data[11]));
+    std::string msg;
+    for(int i=11;i<data.size();++i){
+        msg=msg+" "+data[i];
+    }
+    QLabel *msgText = new QLabel(QString::fromStdString(msg));
     
     msgText->setWordWrap(true); 
     logTree->setItemWidget(msgItem, 0, msgText);
