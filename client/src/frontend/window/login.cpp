@@ -58,7 +58,7 @@ QWidget * LoginWindow::get_window(){
         gui.get_server().sent(cmd);
     });
     QObject::connect(btn, &QPushButton::clicked, [this,username_entry,password_entry](){
-        username_entry->setText("admin");
+        username_entry->setText("DexterMorgan");
         password_entry->setText("password");
         std::string cmd = "login " + username_entry->text().toStdString() + " " + password_entry->text().toStdString();
         gui.get_server().sent(cmd);

@@ -159,6 +159,8 @@ QString top_menu_style(){
         QPushButton {
             background-color:rgb(29, 29, 29);
             border: none;
+            text-align: left; 
+            padding-left: 10px;
             border-radius: 5px;
             padding: 8px;
             color: white;
