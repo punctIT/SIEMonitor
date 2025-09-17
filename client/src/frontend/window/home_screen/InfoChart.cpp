@@ -5,8 +5,7 @@
 
 
 #include <QtCharts/QBarCategoryAxis>
-
-
+#include <QtGui/QColor>
 
 InfoChart::InfoChart( QMainWindow * win){
     window=win;
@@ -19,15 +18,27 @@ InfoChart::InfoChart( QMainWindow * win){
 }
 
 QWidget* InfoChart::get_chart(){
+    QWidget *container = new QWidget(window);
+    QGridLayout* layout = new QGridLayout(container);
     series = new QBarSeries();
     set = new QBarSet("Incidents");
     *set << (1) << 2 << 3 << 4 << 5 <<6;
-    
+    QColor orange(255, 165, 0);
+    set->setBrush(orange);
     series->append(set);
     series->setLabelsVisible(true);
     series->setLabelsPosition(QAbstractBarSeries::LabelsOutsideEnd); 
     series->setLabelsFormat("@value");     
     
+
+
+    Warning->setObjectName("data_msg");
+    Critical->setObjectName("data_msg");
+    Total->setObjectName("data_msg");
+    Alert->setObjectName("data_msg");
+    Emergenty->setObjectName("data_msg");
+    Error->setObjectName("data_msg");
+
     QStringList categories;
     categories << "Other" << "Error" << "Emergency" << "Alert" << "Critical" << "Warning";
     QBarCategoryAxis *axisX = new QBarCategoryAxis();
@@ -57,7 +68,9 @@ QWidget* InfoChart::get_chart(){
     QChartView *chartView = new QChartView(chart, window);
     chartView->setRenderHint(QPainter::Antialiasing);
     chartView->setAttribute(Qt::WA_TranslucentBackground);
-    return chartView;
+    layout->addWidget(chartView,0,0);
+    container->setObjectName("data");
+    return container;
 }
 QWidget* InfoChart::get_data_chart() {
     QWidget *container = new QWidget(window);
@@ -88,8 +101,8 @@ QWidget* InfoChart::get_data_chart() {
     layout->addWidget(Critical,2,0);
     layout->addWidget(Error,2,1);
     layout->addWidget(Warning,3,0);
-
-
+    
+    container->setObjectName("data");
     return container;
 }
 InfoChart& InfoChart::update(){

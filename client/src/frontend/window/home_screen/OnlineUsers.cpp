@@ -11,10 +11,13 @@ QWidget* UsersTable::get_chart(){
     QWidget *container = new QWidget(window);
     QGridLayout *layout = new QGridLayout(container);
     logTree= new QListWidget(window);
+    QLabel *title_lg=new QLabel("Online users:");
     layout->setRowStretch(0,1);
     layout->setRowStretch(0,99);
-    layout->addWidget(new QLabel("Online users:"),0,0);
+    layout->addWidget(title_lg,0,0);
     layout->addWidget(logTree,1,0);
+    title_lg->setObjectName("data_msg");
+    container->setObjectName("data");
     return container;
 }
 

@@ -15,13 +15,14 @@
 #include "siem.h"
 #include "home_screen/siem_home.h"
 #include "incidents_screen/incidents_home.h"
+#include "../style/style.h"
 
 QWidget * SIEMWindow::get_side_menu(){
 
     QWidget *container= new QWidget(window);
     QGridLayout* layout = new QGridLayout(container);
 
-    QLabel* title_siem = new QLabel("Security Information and Event Management");
+    QLabel* title_siem = new QLabel("SIEM");
     title_siem->setContentsMargins(20,100,20,100);
     QPushButton* home_btn= new QPushButton("Home");
     home_btn->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -59,12 +60,15 @@ QWidget * SIEMWindow::get_side_menu(){
         toggle_side_menu();
     });
     
+    title_siem->setObjectName("title");
+
     layout->addWidget(title_siem, 0,0); 
     layout->addWidget(home_btn, 1,0);  
     layout->addWidget(incidents_btn, 2,0);
     layout->addWidget(analytic_btn, 3,0);
     layout->addWidget(threat_btn, 4,0);
     layout->addWidget(search_btn, 5,0);
+    container->setStyleSheet(side_menu_style());
     return container;
 }
 void SIEMWindow::toggle_side_menu(){
@@ -91,6 +95,7 @@ QWidget * SIEMWindow::get_top_menu(){
         toggle_side_menu();
     });
     layout->addWidget(side_menu_btn,0,0);
+    container->setStyleSheet(top_menu_style());
     return container;
 }
 QWidget * SIEMWindow::get_window(){
