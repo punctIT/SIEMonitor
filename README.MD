@@ -67,6 +67,11 @@ SIEMonitor/
 ├── LICENSE                             # GPL-3.0 License
 ├── .gitignore                         # Git ignore rules
 ```
+## Preview
+
+![img1](imgs/home_screen.png)
+![img2](imgs/incidents_screen1.png)
+![img3](imgs/incidents_screen2.png)
 
 ## ✨ Key Features
 
