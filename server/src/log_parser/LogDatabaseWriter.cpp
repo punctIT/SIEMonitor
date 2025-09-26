@@ -1,11 +1,17 @@
 #include "LogDatabaseWriter.h"
+#include "GetIpLocation.hpp"
+
 #include <iostream>
 #include <sstream>
 #include <string>
 #include <chrono>
 #include <ctime>
 #include <format>
-
+#include <regex>
+LogDatabaseWriter::~LogDatabaseWriter(){
+    delete ip_data;
+    delete queue;
+}   
 LogDatabaseWriter::LogDatabaseWriter(){
     std::cout<<"Start writing log in DataBase"<<std::endl;
     std::string sql = 
@@ -34,6 +40,17 @@ LogDatabaseWriter::LogDatabaseWriter(){
         ");";
     db.set_new_database_path("Data/resolvedLogsData.db")
       .run_command(sql.c_str());
+    sql = 
+        "CREATE TABLE IF NOT EXISTS logs("
+        "city TEXT,"
+        "country TEXT,"
+        "longitude TEXT,"
+        "latitude TEXT"
+        ");";
+    db_location.set_new_database_path("Data/LocationLogsData.db")
+      .run_command(sql.c_str());
+    db.set_database_path("Data/logsData.db");
+    ip_data=new GetIpData();
 }
 LogDatabaseWriter& LogDatabaseWriter::set_thread_safe_quere(ThreadSafeQueue <std::string>* queue){
     this->queue=queue;
@@ -131,12 +148,7 @@ std::string get_sql_command(std::vector <std::string> logs){
     }
     
     int priority = stoi(logs[0]);
-    //for optimization ,  for DB,
     std::string severity=get_severity(priority);
-    if (logs[6].find("heartbeat") != std::string::npos ){
-        return "";
-    }
-
     //for a valid message , in case of ' character
     std::string escaped;
     for(char c : logs[7]){
@@ -145,23 +157,31 @@ std::string get_sql_command(std::vector <std::string> logs){
     }
     
     const std::string sql = std::format(
-        "INSERT INTO logs(pri, timestamp, hostname, source, severity, resolved,message) "
-        "VALUES ({}, '{}', '{}', '{}', '{}','{}', '{}');",
+        "INSERT INTO logs(pri, timestamp, hostname, source, severity,message) "
+        "VALUES ({}, '{}', '{}', '{}', '{}', '{}');",
         logs[0],
         get_date(logs[1], logs[2], logs[3]),
         logs[4],
         logs[5],
         severity,
-        0,
         escaped
     );
 
     return sql;
 }
-
+bool is_private_ip(const std::string& ip) {
+    if (ip.rfind("10.", 0) == 0) return true;
+    if (ip.rfind("192.168.", 0) == 0) return true;
+    if (ip.rfind("172.", 0) == 0) {
+        int second_octet = std::stoi(ip.substr(4, ip.find('.', 4) - 4));
+        return (second_octet >= 16 && second_octet <= 31);
+    }
+    return false;
+}
 //this function get the SQL command for log (if is posible) and write it in the database
 void LogDatabaseWriter::write_logs(int number){
-    //open the database (for each thread is a diferent connection)
+    std::regex ip_regex(R"((\b\d{1,3}(?:\.\d{1,3}){3}\b))");
+    std::smatch match;
     while(true){
         //wait until is something in the queue
         auto log_data=this->queue->pop();
@@ -175,10 +195,26 @@ void LogDatabaseWriter::write_logs(int number){
             //try to insert log in database
             try{
                 this->db.run_command(insert_sql.c_str());
+                if (std::regex_search(logs[7], match, ip_regex)) {
+                    const std::string ip = match.str(0);
+                    if(!is_private_ip(ip)){
+                        ip_data->set_ip(match.str(0));
+                        //std::cout<<match.str(0)<<" "<<ip_data->get_latitude()<<" " <<ip_data->get_longitude()<<" "<<ip_data->get_city()<<" "<<ip_data->get_county()<<std::endl;
+                        std::string sql=std::format("INSERT INTO logs(city,country,longitude,latitude) VALUES('{}','{}','{}','{}')",
+                            ip_data->get_city(),
+                            ip_data->get_county(),
+                            ip_data->get_longitude(),
+                            ip_data->get_latitude()
+                        );
+                        db_location.run_command(sql.c_str());
+                    }
+                   
+                }
             }
-             catch (const std::exception& e) {
+            catch (const std::exception& e) {
                 std::cout<<e.what()<<std::endl;
-             }
+            }
+           
         }
     }
 }
