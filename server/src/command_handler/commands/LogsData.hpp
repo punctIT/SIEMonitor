@@ -33,4 +33,5 @@ class LogsData: ProtocolHandler{
                                                   );
         LogsData& get_logs_number_by_type(const std::string type);
         LogsData& get_resolve_number(const std::string type);
+        LogsData& get_last_n_locations(const std::string nr);
 };

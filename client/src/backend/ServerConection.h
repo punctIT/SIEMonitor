@@ -38,6 +38,9 @@ class ServerConection : public QObject {
         void IncidentsChartData(QString data);
         void IncidentsResolved(QString data);
         void HostsEnum(QString data);
+
+
+        void LocationData(QString data);
     private slots:
         void receive(const QString& now);
         

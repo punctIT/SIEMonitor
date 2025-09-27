@@ -15,6 +15,7 @@
 #include "siem.h"
 #include "home_screen/siem_home.h"
 #include "incidents_screen/incidents_home.h"
+#include "analytics_screen/analytics_home.h"
 #include "../style/style.h"
 
 QWidget * SIEMWindow::get_side_menu(){
@@ -39,16 +40,21 @@ QWidget * SIEMWindow::get_side_menu(){
         stack_window->setCurrentIndex(0); 
         homeWindow->start_update_timer();
         incidentsWindow->stop_timer();
+        analyticsWindow->stop_timer();
         toggle_side_menu();
     });
     QObject::connect(incidents_btn, &QPushButton::clicked, [this](){
         stack_window->setCurrentIndex(1); 
         homeWindow->stop_update_timer();
         incidentsWindow->start_timer();
+        analyticsWindow->stop_timer();
         toggle_side_menu();
     });
     QObject::connect(analytic_btn, &QPushButton::clicked, [this](){
-        qDebug()<<"analitic";
+        stack_window->setCurrentIndex(2); 
+        homeWindow->stop_update_timer();
+        incidentsWindow->stop_timer();
+        analyticsWindow->start_timer();
         toggle_side_menu();
     });
     QObject::connect(threat_btn, &QPushButton::clicked, [this](){
@@ -105,6 +111,8 @@ QWidget * SIEMWindow::get_window(){
     main_layout = new QGridLayout(second_container);
     homeWindow = new SiemHomeWindow(gui,window);
     incidentsWindow= new IncidentsWindow(gui,window);
+    analyticsWindow= new AnalyticsWindow(gui,window);
+
     toggle_menu=true;
     QWidget *side_menu = get_side_menu();
     QWidget *top_menu= get_top_menu();
@@ -113,6 +121,7 @@ QWidget * SIEMWindow::get_window(){
     stack_window = new QStackedWidget();
     stack_window->addWidget(homeWindow->get_window());
     stack_window->addWidget(incidentsWindow->get_window());
+    stack_window->addWidget(analyticsWindow->get_window());
 
     main_layout->setColumnStretch(0,0);
     main_layout->setColumnStretch(1,10);
