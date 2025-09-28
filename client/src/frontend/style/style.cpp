@@ -8,9 +8,66 @@ QString main_style(){
     )";
     return style;
 }
+QString analytics_style(){
 
+ return R"(
+        QWidget#map {
+            background-color:rgba(135, 135, 135, 0.09);
+            border-radius: 10px;
+            border: 1px solid rgb(160, 100, 22);
+            font-weight: bold;
+        }
+    
+      
+        QBarCategoryAxis{
+            color: white;
+        }
+
+        QHeaderView::section {
+            background-color:rgb(20, 20, 20);
+            color: #ffffffff;
+        }
+        QScrollBar:vertical {
+            border: none;
+            background: rgb(53, 53, 53);
+            width: 12px;
+            margin: 0px 0px 0px 0px;
+        }
+
+        QScrollBar::handle:vertical {
+            background: rgb(53, 53, 53);
+            min-height: 20px;
+            border-radius: 5px;
+        }
+
+        QScrollBar::handle:vertical:hover {
+            background: #888;
+        }
+        QListWidget{
+            Background-color:rgb(17, 17, 17);
+            border: 1px solid rgb(160, 100, 22);
+            
+        }
+        QListWidget::item { 
+            padding: 5px 5px 5px;
+            font-weight: bold;
+            color: #ffffffff;
+            font-size: 15px;
+        }
+        QListWidget::item:selected{
+            background-color:rgb(66, 66, 66);
+            color: rgb(255, 217, 0);
+        }
+    )";
+}
 QString siem_home_style(){
     return R"(
+        QWidget#bg {
+            background-color:rgba(45, 45, 45, 0.09);
+            border-radius: 10px;
+            border: 1px solid rgb(160, 100, 22);
+            font-weight: bold;
+        }
         QWidget#data {
             background-color:rgba(0, 0, 0, 0.09);
             border-radius: 10px;
@@ -180,6 +237,12 @@ QString top_menu_style(){
 }
 QString incidnets_style(){
     return R"(
+        QWidget#bg {
+            background-color:rgba(49, 49, 49, 0.09);
+            border-radius: 10px;
+            border: 1px solid rgb(160, 100, 22);
+            font-weight: bold;
+        }
         QLabel#data_msg{
             font-weight: bold;
             font-size: 20x;

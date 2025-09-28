@@ -10,28 +10,20 @@
 #include <QtCore/QThread>
 #include <QtCore/QTimer>
 
-class MapWidget;
-class LocationTable;
+
 class GUI;
 
-class AnalyticsWindow : public QObject {
+class ThreatWindow : public QObject {
     Q_OBJECT
 private:
     GUI& gui;
-
-    MapWidget* mapWidget;
-    LocationTable* locationTable;
-
     QMainWindow* window;
     QTimer* updateTimer;
-
-    void bind_signals();
-    QWidget* get_filter_menu();
 public:
-    AnalyticsWindow (GUI &srv,QMainWindow* win) : gui(srv) , window(win){}
+    ThreatWindow(GUI &srv,QMainWindow* win) : gui(srv) , window(win){}
     QWidget* get_window();
-    AnalyticsWindow & start_timer();
-    AnalyticsWindow & stop_timer();
+    ThreatWindow& start_timer();
+    ThreatWindow& stop_timer();
     void update();
 signals:
     void timer_signal();

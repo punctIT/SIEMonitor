@@ -104,8 +104,7 @@ void ClientListener::send_receive(const int client_fd){
                 }
             }
         } else if (bytes_read == 0) {
-            // clientul closes normali
-
+            //normal client close
             printf("Client deconectat.\n");
             if(username.has_value()){
                 auth.delete_online_user(username.value());
