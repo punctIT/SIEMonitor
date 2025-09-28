@@ -26,7 +26,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 namespace {
 struct qt_meta_stringdata_ServerConection_t {
-    uint offsetsAndSizes[40];
+    uint offsetsAndSizes[42];
     char stringdata0[16];
     char stringdata1[14];
     char stringdata2[1];
@@ -45,8 +45,9 @@ struct qt_meta_stringdata_ServerConection_t {
     char stringdata15[19];
     char stringdata16[18];
     char stringdata17[10];
-    char stringdata18[8];
-    char stringdata19[4];
+    char stringdata18[13];
+    char stringdata19[8];
+    char stringdata20[4];
 };
 #define QT_MOC_LITERAL(ofs, len) \
     uint(sizeof(qt_meta_stringdata_ServerConection_t::offsetsAndSizes) + ofs), len 
@@ -70,8 +71,9 @@ Q_CONSTINIT static const qt_meta_stringdata_ServerConection_t qt_meta_stringdata
         QT_MOC_LITERAL(168, 18),  // "IncidentsChartData"
         QT_MOC_LITERAL(187, 17),  // "IncidentsResolved"
         QT_MOC_LITERAL(205, 9),  // "HostsEnum"
-        QT_MOC_LITERAL(215, 7),  // "receive"
-        QT_MOC_LITERAL(223, 3)   // "now"
+        QT_MOC_LITERAL(215, 12),  // "LocationData"
+        QT_MOC_LITERAL(228, 7),  // "receive"
+        QT_MOC_LITERAL(236, 3)   // "now"
     },
     "ServerConection",
     "loginResponse",
@@ -91,6 +93,7 @@ Q_CONSTINIT static const qt_meta_stringdata_ServerConection_t qt_meta_stringdata
     "IncidentsChartData",
     "IncidentsResolved",
     "HostsEnum",
+    "LocationData",
     "receive",
     "now"
 };
@@ -103,29 +106,30 @@ Q_CONSTINIT static const uint qt_meta_data_ServerConection[] = {
       10,       // revision
        0,       // classname
        0,    0, // classinfo
-      13,   14, // methods
+      14,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-      12,       // signalCount
+      13,       // signalCount
 
  // signals: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    1,   92,    2, 0x06,    1 /* Public */,
-       4,    1,   95,    2, 0x06,    3 /* Public */,
-       6,    1,   98,    2, 0x06,    5 /* Public */,
-       7,    1,  101,    2, 0x06,    7 /* Public */,
-       8,    1,  104,    2, 0x06,    9 /* Public */,
-       9,    1,  107,    2, 0x06,   11 /* Public */,
-      10,    1,  110,    2, 0x06,   13 /* Public */,
-      12,    1,  113,    2, 0x06,   15 /* Public */,
-      14,    1,  116,    2, 0x06,   17 /* Public */,
-      15,    1,  119,    2, 0x06,   19 /* Public */,
-      16,    1,  122,    2, 0x06,   21 /* Public */,
-      17,    1,  125,    2, 0x06,   23 /* Public */,
+       1,    1,   98,    2, 0x06,    1 /* Public */,
+       4,    1,  101,    2, 0x06,    3 /* Public */,
+       6,    1,  104,    2, 0x06,    5 /* Public */,
+       7,    1,  107,    2, 0x06,    7 /* Public */,
+       8,    1,  110,    2, 0x06,    9 /* Public */,
+       9,    1,  113,    2, 0x06,   11 /* Public */,
+      10,    1,  116,    2, 0x06,   13 /* Public */,
+      12,    1,  119,    2, 0x06,   15 /* Public */,
+      14,    1,  122,    2, 0x06,   17 /* Public */,
+      15,    1,  125,    2, 0x06,   19 /* Public */,
+      16,    1,  128,    2, 0x06,   21 /* Public */,
+      17,    1,  131,    2, 0x06,   23 /* Public */,
+      18,    1,  134,    2, 0x06,   25 /* Public */,
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-      18,    1,  128,    2, 0x08,   25 /* Private */,
+      19,    1,  137,    2, 0x08,   27 /* Private */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::QString,    3,
@@ -140,9 +144,10 @@ Q_CONSTINIT static const uint qt_meta_data_ServerConection[] = {
     QMetaType::Void, QMetaType::QString,   11,
     QMetaType::Void, QMetaType::QString,   11,
     QMetaType::Void, QMetaType::QString,   11,
+    QMetaType::Void, QMetaType::QString,   11,
 
  // slots: parameters
-    QMetaType::Void, QMetaType::QString,   19,
+    QMetaType::Void, QMetaType::QString,   20,
 
        0        // eod
 };
@@ -192,6 +197,9 @@ Q_CONSTINIT const QMetaObject ServerConection::staticMetaObject = { {
         // method 'HostsEnum'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         QtPrivate::TypeAndForceComplete<QString, std::false_type>,
+        // method 'LocationData'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<QString, std::false_type>,
         // method 'receive'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         QtPrivate::TypeAndForceComplete<const QString &, std::false_type>
@@ -217,7 +225,8 @@ void ServerConection::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int 
         case 9: _t->IncidentsChartData((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
         case 10: _t->IncidentsResolved((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
         case 11: _t->HostsEnum((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
-        case 12: _t->receive((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
+        case 12: _t->LocationData((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
+        case 13: _t->receive((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -306,6 +315,13 @@ void ServerConection::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int 
                 return;
             }
         }
+        {
+            using _t = void (ServerConection::*)(QString );
+            if (_t _q_method = &ServerConection::LocationData; *reinterpret_cast<_t *>(_a[1]) == _q_method) {
+                *result = 12;
+                return;
+            }
+        }
     }
 }
 
@@ -328,13 +344,13 @@ int ServerConection::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 13)
+        if (_id < 14)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 13;
+        _id -= 14;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 13)
+        if (_id < 14)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 13;
+        _id -= 14;
     }
     return _id;
 }
@@ -421,6 +437,13 @@ void ServerConection::HostsEnum(QString _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 11, _a);
+}
+
+// SIGNAL 12
+void ServerConection::LocationData(QString _t1)
+{
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
+    QMetaObject::activate(this, &staticMetaObject, 12, _a);
 }
 QT_WARNING_POP
 QT_END_MOC_NAMESPACE

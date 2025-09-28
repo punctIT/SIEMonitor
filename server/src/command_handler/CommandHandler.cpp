@@ -184,6 +184,21 @@ void HandleCommand::run(std::vector<std::string> args){
         }
         return;
     }
+    if(args[0]=="GLNL"){
+        try{
+            if(args.size()<2){
+                return;
+            }
+            LogsData logs;
+            logs.set_fd(fd)
+                .get_last_n_locations(args[1]);
+        }
+        catch(std::exception &err){
+           std::string e=get_error(err.what());
+           write(fd,e.c_str(),e.size());
+        }
+        return;
+    }
     std::string msg="error , invalid command";
     e=write(fd,msg.c_str(),msg.size());
     if( e < 0){

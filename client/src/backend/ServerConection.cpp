@@ -42,6 +42,7 @@ ServerConection& ServerConection::configure_connection(){
     return *this;
 }
 void ServerConection::receive(const QString& msg){
+    //std::cout<<msg.toStdString();
     if (msg.startsWith("[login]")){
         emit loginResponse(msg.mid(QString("[login]").length()));
         return;
@@ -63,6 +64,11 @@ void ServerConection::receive(const QString& msg){
         else if(msg2.startsWith("[GLR]")){
             QString msg3=msg2.mid(QString("[GLR]").length());
             emit resolvedTableUpdate(msg3);
+        }
+        else if (msg2.startsWith("[GLNL]")){
+            QString msg3=msg2.mid(QString("[GLNL]").length());
+            emit LocationData(msg3);
+            return;
         }
         else {
             emit logData(msg2);

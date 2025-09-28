@@ -9,6 +9,7 @@
 
 class SiemHomeWindow;
 class IncidentsWindow;
+class AnalyticsWindow;
 class GUI;
 
 class SIEMWindow{
@@ -18,6 +19,8 @@ private:
     QStackedWidget* stack_window;
     SiemHomeWindow* homeWindow;
     IncidentsWindow *incidentsWindow;
+    AnalyticsWindow *analyticsWindow;
+    
     QGridLayout *main_layout;
     bool toggle_menu;
     void toggle_side_menu();

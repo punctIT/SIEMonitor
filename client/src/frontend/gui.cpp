@@ -27,7 +27,8 @@ GUI& GUI::init_window(){
     window=new QMainWindow();  
 
     window->setStyleSheet(main_style());
-
+    window->setFixedSize(400, 200);
+    
     siem = new SIEMWindow(*this,window);
     server_connect= new ConnectWindow(*this);
 
@@ -35,7 +36,8 @@ GUI& GUI::init_window(){
 
     stack = new QStackedWidget();
     window->setWindowTitle("Security Information and Event Management");
-    
+    stack->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
     stack->addWidget(server_connect->get_window());
     stack->addWidget(login->get_window());
     stack->addWidget(siem->get_window());
@@ -43,9 +45,8 @@ GUI& GUI::init_window(){
 
     
     window->setCentralWidget(stack);
-    window->resize(400, 200);
     window->show();
-    
+    window->resize(400, 200);
     return *this;
 }
 

@@ -228,6 +228,7 @@ LogsData& LogsData::get_logs_by_severity_host_source(const std::string severity,
     }
     return *this;
  }
+
  LogsData& LogsData::get_resolve_number(const std::string type){
     std::vector<std::string> data;
     DBComandExecutor resolved_logs_db;
@@ -266,5 +267,19 @@ LogsData& LogsData::get_logs_by_severity_host_source(const std::string severity,
         std::string text=get_text(data,"[GRN]");
         write(fd,text.c_str(),text.length());
     }
+    return *this;
+ }
+ LogsData& LogsData::get_last_n_locations(const std::string nr){
+    DBComandExecutor resolved_logs_db;
+    resolved_logs_db.set_database_path("Data/LocationLogsData.db");
+    std::string text=log_text_protocol("RESTART","GLNL");
+    write(fd,text.c_str(),text.length());
+    std::string sql = std::format("SELECT * FROM logs LIMIT {};",nr);
+    auto logs=resolved_logs_db.get_data(sql.c_str());
+    for(auto log :logs){
+        std::string text=log_text_protocol(log,"GLNL");
+        write(fd,text.c_str(),text.length());
+    }
+    
     return *this;
  }

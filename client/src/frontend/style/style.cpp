@@ -131,7 +131,7 @@ QString side_menu_style(){
     QString Style = R"(
         QLabel#title {
             color: #ecf0f1;
-            font-size: 30px;
+            font-size: 48px;
             font-weight: bold;
         }
         QPushButton {
@@ -140,7 +140,7 @@ QString side_menu_style(){
             border-radius: 5px;
             padding: 8px;
             color: white;
-            font-size: 36px;
+            font-size: 20px;
            
         }
 
