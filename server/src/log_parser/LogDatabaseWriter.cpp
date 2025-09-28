@@ -46,7 +46,9 @@ LogDatabaseWriter::LogDatabaseWriter(){
         "country TEXT,"
         "longitude TEXT,"
         "latitude TEXT,"
-        "severity TEXT"
+        "severity TEXT,"
+        "ip TEXT,"
+        "id INTEGER PRIMARY KEY AUTOINCREMENT"
         ");";
     db_location.set_new_database_path("Data/LocationLogsData.db")
       .run_command(sql.c_str());
@@ -201,12 +203,13 @@ void LogDatabaseWriter::write_logs(int number){
                     if(!is_private_ip(ip)){
                         ip_data->set_ip(match.str(0));
                         //std::cout<<match.str(0)<<" "<<ip_data->get_latitude()<<" " <<ip_data->get_longitude()<<" "<<ip_data->get_city()<<" "<<ip_data->get_county()<<std::endl;
-                        std::string sql=std::format("INSERT INTO logs(city,country,longitude,latitude,severity) VALUES('{}','{}','{}','{}','{}')",
+                        std::string sql=std::format("INSERT INTO logs(city,country,longitude,latitude,severity,ip) VALUES('{}','{}','{}','{}','{}','{}')",
                             ip_data->get_city(),
                             ip_data->get_county(),
                             ip_data->get_longitude(),
                             ip_data->get_latitude(),
-                            get_severity(std::stoi(logs[0]))
+                            get_severity(std::stoi(logs[0])),
+                            ip
                         );
                         db_location.run_command(sql.c_str());
                     }

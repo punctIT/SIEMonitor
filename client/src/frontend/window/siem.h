@@ -10,6 +10,8 @@
 class SiemHomeWindow;
 class IncidentsWindow;
 class AnalyticsWindow;
+class ThreatWindow;
+class SearchWindow;
 class GUI;
 
 class SIEMWindow{
@@ -20,7 +22,9 @@ private:
     SiemHomeWindow* homeWindow;
     IncidentsWindow *incidentsWindow;
     AnalyticsWindow *analyticsWindow;
-    
+    SearchWindow* searchWindow;
+    ThreatWindow* threatWindow;
+
     QGridLayout *main_layout;
     bool toggle_menu;
     void toggle_side_menu();

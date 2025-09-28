@@ -44,8 +44,7 @@ class DBComandExecutor{
                 sqlite3_free(errMsg);
             }
             
-            // Setează timeout pentru lock-uri
-            sqlite3_busy_timeout(db, 5000); // 5 secunde timeout
+            sqlite3_busy_timeout(db, 5000); 
             
             return *this;
         }

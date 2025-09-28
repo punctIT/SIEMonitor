@@ -48,6 +48,7 @@ QWidget * SiemHomeWindow::get_window(){
     layout->addLayout(down_layout,2,0);   
  
     container->setStyleSheet(siem_home_style());
+    container->setObjectName("bg");
     return container;
 }
 void SiemHomeWindow::bind_signals(){

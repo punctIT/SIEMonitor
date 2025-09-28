@@ -28,7 +28,7 @@ QWidget* ResolvedTable::get_chart(){
     logTree= new QTreeWidget(container);
     logTree->setColumnCount(1);
     logTree->resizeColumnToContents(1);
-   
+    logTree->setHeaderLabels({"Resolved"});
     
     layout->addWidget(logTree,0,0);
     return container;

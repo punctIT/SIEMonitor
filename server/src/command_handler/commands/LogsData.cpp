@@ -274,7 +274,7 @@ LogsData& LogsData::get_logs_by_severity_host_source(const std::string severity,
     resolved_logs_db.set_database_path("Data/LocationLogsData.db");
     std::string text=log_text_protocol("RESTART","GLNL");
     write(fd,text.c_str(),text.length());
-    std::string sql = std::format("SELECT * FROM logs LIMIT {};",nr);
+    std::string sql = std::format("SELECT * FROM logs ORDER BY id DESC LIMIT {};",nr);
     auto logs=resolved_logs_db.get_data(sql.c_str());
     for(auto log :logs){
         std::string text=log_text_protocol(log,"GLNL");

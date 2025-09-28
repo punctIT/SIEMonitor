@@ -35,6 +35,7 @@ QWidget* IncidentsWindow::get_filtres_menu(){
     filters->addWidget(search_bl,0,5);
     filters->addWidget(search_entry,0,6);
 
+    
     return container;
 }
 QWidget* IncidentsWindow::get_window(){
@@ -56,6 +57,7 @@ QWidget* IncidentsWindow::get_window(){
     layout->addWidget(incidentTable->get_chart(),3,0);
     bind_signals();
     container->setStyleSheet(incidnets_style());
+    container->setObjectName("bg");
     return container;
 }
 void IncidentsWindow::bind_signals(){
