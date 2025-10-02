@@ -83,8 +83,8 @@ SIEMonitor/
 ## Preview
 
 ![img1](imgs/home_screen.png)
-![img2](imgs/incidents_screen1.png)
-![img3](imgs/incidents_screen2.png)
+![img2](imgs/incidents_screen.png)
+![img3](imgs/map_screen.png)
 
 ## ✨ Key Features
 
